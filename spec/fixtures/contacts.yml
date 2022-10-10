@@ -1,0 +1,20 @@
+cbs_mail:
+  value: info@cbsib.ru
+  type: Email
+cbs_phone:
+  value: 159-753
+  priority: 0
+  type: Phone
+cbs_mobile:
+  value: +7 923 303 9000
+  used: false
+  type: Phone  
+cbs_site:
+  value: cbsib.ru
+  type: SiteUrl
+cbs_telegram:
+  value: "@Laferov"
+  type: Telegram   
+cbs_fax:
+  value: "+7 923 303 9000"
+  type: Fax 

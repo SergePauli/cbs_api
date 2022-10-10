@@ -1,10 +1,6 @@
 class Contact < ApplicationRecord
-  belongs_to :ContactType
-  attr_accessible :name
-
-  acts_as_ati :type, :class_name => ContactType,
-                     :foreign_key => :contact_type_id,
-                     :field_name => :name do |type|
-    "#{type}Contact"
-  end
+  validates :value, presence: { message: ":value should be present" }
+  validates :type, presence: { message: ":type should be present" }
+  validates :type, inclusion: { in: %w(Email Fax Phone SiteUrl Telegram),
+                                message: "%{value} is not a valid" }, allow_nil: false
 end
