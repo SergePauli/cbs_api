@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_12_032117) do
+ActiveRecord::Schema.define(version: 2022_10_13_021023) do
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "value"
+    t.integer "area_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["area_id"], name: "index_addresses_on_area_id"
+  end
 
   create_table "areas", force: :cascade do |t|
     t.string "name"
@@ -37,4 +45,5 @@ ActiveRecord::Schema.define(version: 2022_10_12_032117) do
     t.index ["surname", "name", "patrname"], name: "index_person_names_on_surname_and_name_and_patrname", unique: true
   end
 
+  add_foreign_key "addresses", "areas"
 end

@@ -19,8 +19,8 @@ RSpec.describe Area, type: :model do
     expect(@area.errors[:name]).not_to be_nil
   end
 
-  it "should be 2" do
-    expect(Area.count).to eq 2
+  it "should be 3" do
+    expect(Area.count).to eq 3
   end
 
   it "clears person_names" do

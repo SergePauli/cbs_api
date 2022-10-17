@@ -4,3 +4,6 @@ city:
 region:
   id: 24
   name: "Красноярский край"  
+moscow:
+  id: 77
+  name: "Москва"  
