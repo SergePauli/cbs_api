@@ -74,4 +74,12 @@ RSpec.describe Address, type: :model do
     addresses(:moscow_4).destroy
     expect { addresses(:moscow_4).reload }.to raise_error(ActiveRecord::RecordNotFound)
   end
+
+  it "should be unique" do
+    @address.value = addresses(:one).value
+    @address.area_id = addresses(:one).area_id
+    expect(@address).not_to be_valid
+    expect(@address.errors[:value]).not_to be_nil # "has already been taken"
+    expect(@address.errors[:area]).not_to be_nil # "has already been taken"
+  end
 end

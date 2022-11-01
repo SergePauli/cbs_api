@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe Phone, type: :model do
   fixtures :contacts
 
-  it "should be 2" do
-    expect(Phone.count).to eq 2
+  it "should be 4" do
+    expect(Phone.count).to eq 4
   end
 
   it "should check phonenumber" do

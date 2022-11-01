@@ -1,5 +1,7 @@
 class PersonName < ApplicationRecord
-  validates :name, presence: true
-  validates :surname, presence: true
-  validates :surname, uniqueness: { scope: [:name, :patrname] }
+  belongs_to :person
+  belongs_to :naming
+  validates_associated :person
+  validates_associated :naming
+  validates :person, uniqueness: { scope: :naming }
 end

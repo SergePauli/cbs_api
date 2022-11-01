@@ -6,6 +6,7 @@ class CreateAddresses < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+    add_index :addresses, [:area_id, :value], unique: true
   end
 
   def down

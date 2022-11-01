@@ -1,19 +1,23 @@
 one:
+  id: 1
   value: 'Красноярск, ул.Соликамская, д.313'
-  area_id: 24
+  area_id: 241
 moscow_1:
+  id: 2
   value: 'Москва, пер. Малый Николопесковский, 11/2, кв. 17'
   area_id: 77
-moscow_2:    
+moscow_2: 
+  id: 3   
   value: 'Москва, переулок. Малый Николопесковский, 11/2, кв. 17'
   area_id: 77
-moscow_3:    
+moscow_3:
+  id: 4    
   value: 'Москва, набережная. Малый Николопесковский, 11/2, кв. 17'
   area_id: 77          
 moscow_4:    
   value: 'Москва, аллея. Малый Николопесковский, 11/2, кв. 17'
   area_id: 77            
-moscow_5:    
+moscow_5:      
   value: 'Москва, бул. Малый Николопесковский, 11/2, кв. 17'
   area_id: 77          
 moscow_6:    
@@ -27,4 +31,4 @@ moscow_8:
   area_id: 77
 invalid_value:    
   value: 'fwefwefwefwef'
-  area_id: 24          
+  area_id: 241          

@@ -24,7 +24,7 @@ RSpec.describe Area, type: :model do
   end
 
   it "clears person_names" do
-    areas(:city).destroy
-    expect { areas(:city).reload }.to raise_error(ActiveRecord::RecordNotFound)
+    areas(:region).destroy
+    expect { areas(:region).reload }.to raise_error(ActiveRecord::RecordNotFound)
   end
 end

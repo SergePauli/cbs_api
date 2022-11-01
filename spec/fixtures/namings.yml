@@ -1,0 +1,21 @@
+admin:
+  id: 1
+  surname: "Тестов"
+  name: "Тест"
+  patrname: "Тестович"
+user: 
+  id: 2
+  surname: "Юзерова"
+  name: "Юза"
+  patrname: "Юзеровна"    
+client:
+  id: 3
+  surname: "Иванов"
+  name: "Иван"
+user_new: 
+  id: 4
+  surname: "Тестова"
+  name: "Юза"
+  patrname: "Юзеровна" 
+  
+

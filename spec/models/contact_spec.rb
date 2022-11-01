@@ -27,12 +27,20 @@ RSpec.describe Contact, type: :model do
     expect(@contact.errors[:type]).not_to be_nil
   end
 
-  it "should be 5" do
-    expect(Contact.count).to eq 6
+  it "should be 10" do
+    expect(Contact.count).to eq 11
   end
 
   it "clears contacts" do
-    contacts(:cbs_mail).destroy
-    expect { contacts(:cbs_mail).reload }.to raise_error(ActiveRecord::RecordNotFound)
+    contacts(:some_mail).destroy
+    expect { contacts(:some_mail).reload }.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it "should be unique" do
+    @contact.value = contacts(:cbs_mail).value
+    @contact.type = contacts(:cbs_mail).type
+    expect(@contact).not_to be_valid
+    expect(@contact.errors[:value]).not_to be_nil # "has already been taken"
+    expect(@contact.errors[:type]).not_to be_nil # "has already been taken"
   end
 end

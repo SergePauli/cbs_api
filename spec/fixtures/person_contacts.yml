@@ -1,0 +1,48 @@
+admin_mail:
+  id: 1
+  person_id: 1
+  contact_id: 1
+  priority: 1
+  used: true
+admin_phone:
+  id: 2
+  person_id: 1
+  contact_id: 2
+  priority: 2
+  used: true  
+admin_telegram:
+  id: 3
+  person_id: 1
+  contact_id: 5
+  priority: 3
+  used: true
+admin_phone_old:
+  id: 4
+  person_id: 1
+  contact_id: 3
+  priority: 99
+  used: false     
+user_mail: 
+  id: 5
+  person_id: 2
+  contact_id: 9
+  priority: 1
+  used: true
+user_phone: 
+  id: 8
+  person_id: 2
+  contact_id: 9
+  priority: 2
+  used: true  
+client_mail:
+  id: 9  
+  person_id: 3
+  contact_id: 10
+  priority: 1
+  used: true
+client_mobile: 
+  id: 10
+  person_id: 3
+  contact_id: 7
+  priority: 2
+  used: true

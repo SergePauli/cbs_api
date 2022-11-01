@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe Email, type: :model do
   fixtures :contacts
 
-  it "should be 1" do
-    expect(Email.count).to eq 1
+  it "should be 4" do
+    expect(Email.count).to eq 4
   end
 
   it "should check email format" do
