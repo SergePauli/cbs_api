@@ -14,6 +14,17 @@ RSpec.describe Person, type: :model do
     expect(@person.naming.surname).to eq namings(:user_new).surname
   end
 
+  it "should have one used names associations" do
+    @person = people(:user)
+    @person.person_names[0].used = true
+    expect(@person).not_to be_valid
+    expect(@person.errors[:person_names]).not_to be_nil # "Personal name's data contains more or less then 1 actual record"
+    @person.person_names[0].used = false
+    expect(@person).to be_valid
+    @person.person_names[1].used = false
+    expect(@person).not_to be_valid # "No used names's data"
+  end
+
   it "should have right address associations" do
     @person = people(:client)
     expect(@person.person_addresses.size).to eq 2
