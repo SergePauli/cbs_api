@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe PersonAddress, type: :model do
-  fixtures :person_addresses
+  fixtures :person_addresses, :addresses
 
   before(:each) do
     @person_address = PersonAddress.new
@@ -31,5 +31,14 @@ RSpec.describe PersonAddress, type: :model do
     expect(@person_address).not_to be_valid
     expect(@person_address.errors[:address]).not_to be_nil # "has already been taken"
     expect(@person_address.errors[:person]).not_to be_nil # "has already been taken"
+  end
+
+  it "should not to be create dublicates of address" do
+    @person_address.person_id = person_addresses(:admin).person_id
+    @person_address.address = Address.new
+    @person_address.address.value = addresses(:moscow_1).value
+    @person_address.address.area = addresses(:moscow_1).area
+    expect(@person_address).to be_valid
+    expect(@person_address.address.id).to eq addresses(:moscow_1).id
   end
 end
