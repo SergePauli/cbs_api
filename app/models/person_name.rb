@@ -10,8 +10,8 @@ class PersonName < ApplicationRecord
 
   def ensure_naming_is_unique
     if !!naming && !naming.id
-      naming_hash = naming.attributes.filter { |k, v| v != nil }
-      self.naming = Naming.where(naming_hash).first_or_initialize
+      naming_attributes = naming.attributes.filter { |k, v| v != nil }
+      self.naming = Naming.where(naming_attributes).first_or_initialize
     end
   end
 end
