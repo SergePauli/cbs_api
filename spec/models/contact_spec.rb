@@ -43,4 +43,13 @@ RSpec.describe Contact, type: :model do
     expect(@contact.errors[:value]).not_to be_nil # "has already been taken"
     expect(@contact.errors[:type]).not_to be_nil # "has already been taken"
   end
+
+  it "should return default custom_data :head" do
+    expect(contacts(:cbs_mail).custom_data :head).to eq contacts(:cbs_mail).name
+  end
+
+  it "should return default custom_data :card" do
+    data = contacts(:cbs_mail).custom_data :card
+    expect(data[:type]).to eq contacts(:cbs_mail).type
+  end
 end

@@ -32,12 +32,17 @@ RSpec.describe Naming, type: :model do
     expect(@name.errors[:surname]).not_to be_nil
   end
 
-  it "should be 4" do
-    expect(Naming.count).to eq 4
+  it "should be 5" do
+    expect(Naming.count).to eq 5
+  end
+
+  it "should return default custom_data :head" do
+    expect(namings(:admin).custom_data :head).to eq "Тестов Тест Тестович"
+    expect(namings(:client).custom_data :head).to eq "Иванов Иван"
   end
 
   it "clears namings" do
-    #namings(:admin).destroy
-    #expect { namings(:admin).reload }.to raise_error(ActiveRecord::RecordNotFound)
+    namings(:unused).destroy
+    expect { namings(:unused).reload }.to raise_error(ActiveRecord::RecordNotFound)
   end
 end

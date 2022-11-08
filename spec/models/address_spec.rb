@@ -82,4 +82,13 @@ RSpec.describe Address, type: :model do
     expect(@address.errors[:value]).not_to be_nil # "has already been taken"
     expect(@address.errors[:area]).not_to be_nil # "has already been taken"
   end
+
+  it "should return default custom_data :head" do
+    expect(addresses(:one).custom_data :head).to eq addresses(:one).name
+  end
+
+  it "should return default custom_data :card" do
+    data = addresses(:one).custom_data :card
+    expect(data[:area_id]).to eq addresses(:one).area_id
+  end
 end

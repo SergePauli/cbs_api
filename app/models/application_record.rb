@@ -2,7 +2,7 @@ class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
   def data_sets
-    [:head, :item, :card, :summary, :full]
+    [:head, :item, :card, :summary]
   end
 
   def custom_data(data_set)
@@ -22,10 +22,10 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def summary
-    { created: created_at || nil, updated: updated_at || nil }
+    { created: created_at, updated: updated_at }
   end
 
   def card
-    { head: head, id: id, summary: { created: created_at || nil, updated: updated_at || nil } }
+    { head: head, id: id, summary: summary }
   end
 end
