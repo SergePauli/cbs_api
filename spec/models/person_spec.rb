@@ -46,4 +46,23 @@ RSpec.describe Person, type: :model do
     @person = people(:admin)
     expect(@person.phone.id).to eq contacts(:cbs_phone).id
   end
+
+  it "should return right custom_data :head" do
+    expect(people(:admin).custom_data :head).to include(people(:admin).naming.surname, people(:admin).email.value, people(:admin).naming.name[0] + ".")
+  end
+
+  it "should return right custom_data :card" do
+    data = people(:admin).custom_data :card
+    expect(data[:email][:head]).to eq people(:admin).email.value
+    expect(data[:phone][:head]).to eq people(:admin).phone.value
+    expect(data[:address][:head]).to eq people(:admin).address.value
+    expect(data[:contacts].size).to eq 4
+  end
+
+  it "should return right custom_data :full" do
+    data = people(:admin).custom_data :full
+    expect(data[:contacts].size).to eq 4
+    expect(data[:addresses].size).to eq 1
+    expect(data[:namings].size).to eq 1
+  end
 end

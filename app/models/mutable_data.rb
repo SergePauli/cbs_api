@@ -11,6 +11,14 @@ class MutableData < ApplicationRecord
 
   before_validation :ensure_is_unique
 
+  def head
+    state.head
+  end
+
+  def item
+    super.merge({ used: used, priority: priority })
+  end
+
   private
 
   def ensure_is_unique

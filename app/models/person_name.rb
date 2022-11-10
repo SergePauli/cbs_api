@@ -9,4 +9,8 @@ class PersonName < MutableData
   validates_associated :naming
   validates :person, uniqueness: { scope: :naming }
   alias_attribute :state, :naming # для поддержки MutableData
+
+  def item
+    { id: id, name: naming.head, used: used }
+  end
 end
