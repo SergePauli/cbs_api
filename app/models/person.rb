@@ -41,11 +41,11 @@ class Person < ApplicationRecord
   end
 
   def card
-    super.merge({ email: email.custom_data(:card), phone: phone.custom_data(:card), address: address.custom_data(:card), contacts: person_contacts.map { |el| el.custom_data(:item) } })
+    super.merge({ email: (email ? email.custom_data(:card) : nil), phone: (phone ? phone.custom_data(:card) : nil), naming: naming.head, address: address.custom_data(:card), contacts: person_contacts.map { |el| el.custom_data(:item) } || [] })
   end
 
   def full
-    card.merge({ namings: person_names.map { |el| el.custom_data(:item) }, addresses: person_addresses.map { |el| el.custom_data(:item) } })
+    card.merge({ namings: person_names.map { |el| el.custom_data(:item) } || [], addresses: person_addresses.map { |el| el.custom_data(:item) } || [] })
   end
 
   private

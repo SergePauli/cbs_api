@@ -2,6 +2,7 @@ admin:
   id: 1
   person_id: 1
   naming_id: 1
+  used: true
 user: 
   id: 2
   person_id: 2
@@ -11,6 +12,7 @@ client:
   id: 3  
   person_id: 3
   naming_id: 3
+  used: true
 user_new: 
   id: 4
   person_id: 2

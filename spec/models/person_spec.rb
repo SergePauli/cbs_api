@@ -57,12 +57,17 @@ RSpec.describe Person, type: :model do
     expect(data[:phone][:head]).to eq people(:admin).phone.value
     expect(data[:address][:head]).to eq people(:admin).address.value
     expect(data[:contacts].size).to eq 4
+    contact = data[:contacts][3]
+    expect(contact[:name]).to eq person_contacts(:admin_mail).head
+    expect(contact[:used]).to eq person_contacts(:admin_mail).used
+    expect(contact[:priority]).to eq person_contacts(:admin_mail).priority
   end
 
   it "should return right custom_data :full" do
-    data = people(:admin).custom_data :full
-    expect(data[:contacts].size).to eq 4
+    data = people(:user).custom_data :full
     expect(data[:addresses].size).to eq 1
-    expect(data[:namings].size).to eq 1
+    expect(data[:namings].size).to eq 2
+    naming = data[:namings][0]
+    expect(naming[:used]).to eq person_names(:user).used
   end
 end
