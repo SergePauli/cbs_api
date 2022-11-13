@@ -5,6 +5,7 @@ class CreateAreas < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+    add_index :areas, :name, unique: true
   end
 
   def down

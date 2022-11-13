@@ -1,7 +1,11 @@
 require "rails_helper"
 
 RSpec.describe PersonName, type: :model do
-  fixtures :person_names, :namings
+
+  # унаследовано от ApplicationRecord
+  it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
+
+  fixtures :person_names, :namings, :people
 
   before(:each) do
     @person_name = PersonName.new

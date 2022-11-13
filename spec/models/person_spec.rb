@@ -1,6 +1,13 @@
 require "rails_helper"
 
 RSpec.describe Person, type: :model do
+  # унаследовано от ApplicationRecord
+  it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
+
+  # добавленные методы
+  it { is_expected.to respond_to(:full) }
+  it { is_expected.to respond_to(:email, :phone) }
+
   fixtures :people, :namings, :contacts, :addresses, :person_names, :person_addresses, :person_contacts
 
   it "should be 3" do

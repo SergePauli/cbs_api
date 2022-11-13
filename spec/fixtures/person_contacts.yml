@@ -31,7 +31,7 @@ user_mail:
 user_phone: 
   id: 8
   person_id: 2
-  contact_id: 9
+  contact_id: 8
   priority: 2
   used: true  
 client_mail:

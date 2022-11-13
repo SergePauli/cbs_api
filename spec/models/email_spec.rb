@@ -1,6 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Email, type: :model do
+  # унаследовано от ApplicationRecord
+  it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
+
   fixtures :contacts
 
   it "should be 4" do
