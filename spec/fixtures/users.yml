@@ -1,0 +1,12 @@
+admin:
+  id: 1
+  person_id: 1
+  name: testov_tt
+  role: admin
+  password_digest: rwerert235435dfsd
+user: 
+  id: 2
+  person_id: 2
+  name: testova_uu
+  password_digest: rwerert235435df4543d
+   
