@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_13_021939) do
+ActiveRecord::Schema.define(version: 2022_11_19_032829) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "value"
@@ -94,6 +94,15 @@ ActiveRecord::Schema.define(version: 2022_11_13_021939) do
     t.index ["naming_id"], name: "index_person_names_on_naming_id"
     t.index ["person_id", "naming_id"], name: "index_person_names_on_person_id_and_naming_id", unique: true
     t.index ["person_id"], name: "index_person_names_on_person_id"
+  end
+
+  create_table "positions", force: :cascade do |t|
+    t.string "name"
+    t.string "def_statuses"
+    t.string "def_contract_types"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_positions_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
