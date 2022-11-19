@@ -13,7 +13,7 @@ end
 
 class MailValidator < ActiveModel::Validator
   def validate(record)
-    if !record.email
+    if record.person && record.person.email == nil
       record.errors.add :email, "User email absend"
     end
   end

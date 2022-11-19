@@ -22,4 +22,40 @@ RSpec.describe User, type: :model do
   it "валидация должна быть успешной при отсутствии ошибок" do
     expect(@user).to be_valid
   end
+
+  it "валидация не должна быть успешной при отсутствии name" do
+    @user.name = nil
+    expect(@user).not_to be_valid
+    expect(@user.errors[:name]).not_to be_nil
+  end
+
+  it "валидация не должна быть успешной если name уже занято" do
+    @user.name = users(:user).name
+    expect(@user).not_to be_valid
+    expect(@user.errors[:name]).not_to be_nil
+  end
+
+  it "валидация не должна быть успешной при отсутствии person" do
+    @user.person = nil
+    expect(@user).not_to be_valid
+    expect(@user.errors[:person]).not_to be_nil
+  end
+
+  it "валидация не должна быть успешной при отсутствии email" do
+    @user.person = Person.new
+    expect(@user).not_to be_valid
+    expect(@user.errors[:email]).not_to be_nil
+  end
+
+  it "валидация не должна быть успешной при неверном role" do
+    @user.role = "unknow,user"
+    expect(@user).not_to be_valid
+    @user.role = "unknow"
+    expect(@user).not_to be_valid
+    @user.role = "user admin"
+    expect(@user).not_to be_valid
+    @user.role = "user,admin"
+    expect(@user).to be_valid
+    expect(@user.errors[:email]).not_to be_nil
+  end
 end
