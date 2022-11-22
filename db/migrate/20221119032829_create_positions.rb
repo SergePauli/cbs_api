@@ -3,7 +3,7 @@ class CreatePositions < ActiveRecord::Migration[6.1]
     create_table :positions do |t|
       t.string :name
       t.string :def_statuses
-      t.string :def_contract_types
+      t.string :def_contracts_types
       t.timestamps
     end
     add_index :positions, :name, unique: true

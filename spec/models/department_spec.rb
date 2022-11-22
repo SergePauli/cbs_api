@@ -31,10 +31,10 @@ RSpec.describe Department, type: :model do
     expect(@department.errors[:def_statuses]).not_to be_nil
   end
 
-  it "should be valided def_contract_types" do
+  it "should be valided def_contracts_types" do
     expect(@department).to be_valid
-    @department.def_contract_types = "233,34,44"
+    @department.def_contracts_types = "233,34,44"
     expect(@department).not_to be_valid
-    expect(@department.errors[:def_contract_types]).not_to be_nil
+    expect(@department.errors[:def_contracts_types]).not_to be_nil
   end
 end

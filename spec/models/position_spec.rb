@@ -34,10 +34,10 @@ RSpec.describe Position, type: :model do
     expect(@position.errors[:def_statuses]).not_to be_nil
   end
 
-  it "should be valided def_contract_types" do
+  it "should be valided def_contracts_types" do
     expect(@position).to be_valid
-    @position.def_contract_types = "233,34,44"
+    @position.def_contracts_types = "233,34,44"
     expect(@position).not_to be_valid
-    expect(@position.errors[:def_contract_types]).not_to be_nil
+    expect(@position.errors[:def_contracts_types]).not_to be_nil
   end
 end

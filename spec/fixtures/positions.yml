@@ -1,14 +1,19 @@
 boss_ozi:
   id: 1
   name: "начальник отдела ОЗИ"
-  def_statuses: "0,1,2,3,4,6"
-  def_contract_types: "0,4,6,7,8,9,13"
+
 specialist:
   id: 2
   name: "специалист"
   def_statuses: "0,1,2,3,4,5,6,7,8"
-  def_contract_types: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16" 
+  def_contracts_types: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16"
+
 economist:
   id: 3
   name: "экономист"
+  
+admin:
+  id: 4
+  name: "инженер-программист"  
+  def_contracts_types: "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16"  
   

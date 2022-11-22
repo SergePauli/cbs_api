@@ -4,6 +4,12 @@ RSpec.describe User, type: :model do
   # унаследовано от ApplicationRecord
   it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
 
+  # для NamedRecord
+  it { is_expected.to respond_to(:name) }
+
+  # реализовано в модели
+  it { is_expected.to respond_to(:password_digest, :person, :last_login, :role) }
+
   # добавленные методы
   it { is_expected.to respond_to(:email) }
 

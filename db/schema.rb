@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_19_032829) do
+ActiveRecord::Schema.define(version: 2022_11_19_072237) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "value"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2022_11_19_032829) do
   create_table "departments", force: :cascade do |t|
     t.string "name"
     t.string "def_statuses"
-    t.string "def_contract_types"
+    t.string "def_contracts_types"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_departments_on_name", unique: true
@@ -99,10 +99,26 @@ ActiveRecord::Schema.define(version: 2022_11_19_032829) do
   create_table "positions", force: :cascade do |t|
     t.string "name"
     t.string "def_statuses"
-    t.string "def_contract_types"
+    t.string "def_contracts_types"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_positions_on_name", unique: true
+  end
+
+  create_table "profiles", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "position_id", null: false
+    t.integer "department_id"
+    t.integer "priority", default: 1, null: false
+    t.boolean "used", default: true, null: false
+    t.string "statuses"
+    t.string "contracts_types"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["department_id"], name: "index_profiles_on_department_id"
+    t.index ["position_id"], name: "index_profiles_on_position_id"
+    t.index ["priority"], name: "index_profiles_on_priority"
+    t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -113,6 +129,7 @@ ActiveRecord::Schema.define(version: 2022_11_19_032829) do
     t.datetime "last_login"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_users_on_name", unique: true
     t.index ["person_id"], name: "index_users_on_person_id"
   end
 
@@ -123,5 +140,8 @@ ActiveRecord::Schema.define(version: 2022_11_19_032829) do
   add_foreign_key "person_contacts", "people"
   add_foreign_key "person_names", "namings"
   add_foreign_key "person_names", "people"
+  add_foreign_key "profiles", "departments"
+  add_foreign_key "profiles", "positions"
+  add_foreign_key "profiles", "users"
   add_foreign_key "users", "people"
 end
