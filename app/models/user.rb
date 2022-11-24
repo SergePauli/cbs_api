@@ -20,6 +20,7 @@ class MailValidator < ActiveModel::Validator
 end
 
 class User < NamedRecord
+  after_initialize :new_activation_link
 
   # константы для ролей пользователя
   constants_group :ROLES do
@@ -45,11 +46,17 @@ class User < NamedRecord
 
   # реализация для набора данных card
   def card
-    super.merge({ role: role, person: person.card })
+    super.merge({ role: role, person: person.card, last_login: last_login })
   end
 
   # получение email
   def email
     person.email.value
+  end
+
+  # генерация новой ссылки
+  def new_activation_link
+    self.activation_link = SecureRandom.base64(20)
+    self.activated = false
   end
 end

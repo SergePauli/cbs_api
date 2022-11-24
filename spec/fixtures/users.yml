@@ -4,9 +4,12 @@ admin:
   name: testov_tt
   role: admin
   password_digest: rwerert235435dfsd
+  activation_link: F4Swg+pPa5L7kaJ1tvLZvkpDuW4=
+  activated: true
 user: 
   id: 2
   person_id: 2
   name: testova_uu
   password_digest: rwerert235435df4543d
-   
+  activation_link: duFqQzpXsRuBiL7WHvTYaP83OmQ= 
+  activated: true

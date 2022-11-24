@@ -5,6 +5,8 @@ class CreateUsers < ActiveRecord::Migration[6.1]
       t.string :password_digest
       t.references :person, null: false, foreign_key: true
       t.string :role, null: false, default: "user"
+      t.string :activation_link, null: false, limit: 20
+      t.boolean :activated, null: false, default: false
       t.datetime :last_login
       t.timestamps
     end

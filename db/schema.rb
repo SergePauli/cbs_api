@@ -126,6 +126,8 @@ ActiveRecord::Schema.define(version: 2022_11_19_072237) do
     t.string "password_digest"
     t.integer "person_id", null: false
     t.string "role", default: "user", null: false
+    t.string "activation_link", limit: 20, null: false
+    t.boolean "activated", default: false, null: false
     t.datetime "last_login"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

@@ -8,7 +8,7 @@ RSpec.describe User, type: :model do
   it { is_expected.to respond_to(:name) }
 
   # реализовано в модели
-  it { is_expected.to respond_to(:password_digest, :person, :last_login, :role) }
+  it { is_expected.to respond_to(:password_digest, :person, :last_login, :role, :activation_link, :activated, :new_activation_link) }
 
   # добавленные методы
   it { is_expected.to respond_to(:email) }
@@ -19,6 +19,13 @@ RSpec.describe User, type: :model do
     expect(User::ADMIN).to eq "admin"
     expect(User::USER).to eq "user"
     expect(User::ROLES).to eq ["admin", "user"]
+  end
+
+  it "должна генерироваться ссылка на активацию при создании экземпляра" do
+    @user = User.new
+    expect(@user.activation_link).not_to be_nil
+    expect(@user.activation_link.size).to eq 28
+    expect(@user.activated).to eq false
   end
 
   before(:each) do
@@ -63,5 +70,21 @@ RSpec.describe User, type: :model do
     @user.role = "user,admin"
     expect(@user).to be_valid
     expect(@user.errors[:email]).not_to be_nil
+  end
+
+  it "метод Head должен возвращать имя пользователя и заголовок его персональных данных" do
+    expect(@user.head).to eq "#{@user.name} #{@user.person.head}"
+  end
+
+  it "метод Card должен возвращать роли пользователя" do
+    expect(@user.card[:role]).to eq @user.role
+  end
+
+  it "метод Card должен возвращать последний вход в систему" do
+    expect(@user.card[:last_login]).to eq @user.last_login
+  end
+
+  it "метод Card должен возвращать card персоны" do
+    expect(@user.card[:person]).to eq @user.person.card
   end
 end
