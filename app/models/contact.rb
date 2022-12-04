@@ -10,4 +10,8 @@ class Contact < ApplicationRecord
   def card
     super.merge({ type: type })
   end
+
+  def self.permitted_params
+    super | [:value, :name, :type]
+  end
 end

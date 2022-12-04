@@ -1,25 +1,40 @@
+# Валидатор наборов ФИО
 class NameValidator < ActiveModel::Validator
   def validate(record)
     used_count = 0
     record.person_names.each { |person_name| used_count += 1 if person_name.used }
     if used_count != 1
-      record.errors.add :person_names, "Personal name's data contains more or less then 1 actual record"
+      record.errors.add :person_names, "Персональные данные содержат более одного действующего набора ФИО"
     end
   end
 end
 
+# Персональные данные участников (фио, адрес, контакты)
 class Person < ApplicationRecord
-  has_many :person_names, dependent: :destroy
+  has_many :person_names, inverse_of: :person, dependent: :destroy, autosave: true
   has_one :person_name, -> { where(used: true).order("id DESC") }
   has_one :naming, through: :person_name
 
-  has_many :person_contacts, -> { order("priority DESC") }, dependent: :destroy
+  has_many :person_contacts, -> { order("priority DESC") }, inverse_of: :person, autosave: true, dependent: :destroy
 
-  has_many :person_addresses, dependent: :destroy
+  has_many :person_addresses, dependent: :destroy, inverse_of: :person
   has_one :person_address, -> { where(used: true).order("priority DESC") }
   has_one :address, through: :person_address
 
   validates_with NameValidator
+
+  # begin Принимаем атрибуты для связанных моделей
+  accepts_nested_attributes_for :person_names, allow_destroy: true
+
+  accepts_nested_attributes_for :person_addresses, allow_destroy: true
+
+  accepts_nested_attributes_for :person_contacts, allow_destroy: true
+  # получаем массив разрешенных параметров запросов на обновление
+  def self.permitted_params
+    super | [person_addresses_attributes: PersonAddress.permitted_params, person_contacts_attributes: PersonContact.permitted_params, person_names_attributes: PersonName.permitted_params]
+  end
+
+  # end
 
   def data_sets
     super.push(:full)

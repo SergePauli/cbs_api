@@ -19,6 +19,10 @@ class MutableData < ApplicationRecord
     super.merge({ used: used, priority: priority })
   end
 
+  def self.permitted_params
+    super | [:used, :priority, :_destroy]
+  end
+
   private
 
   def ensure_is_unique

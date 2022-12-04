@@ -3,10 +3,18 @@ class ApplicationRecord < ActiveRecord::Base
 
   self.abstract_class = true
 
+  # типовые опции для рендера данных модели
   def data_sets
-    [:head, :item, :card, :summary]
+    [:head, # только наименование
+     :item, # элемент меню
+     :card, # карточка
+     :summary # аудит изменений
+]
   end
 
+  # кастомизация рендеринга модели в контроллере
+  # принимает строку data_set - соответствующую одному из значений data_sets
+  # возвращает кастомный объект соответствующий data_set
   def custom_data(data_set)
     if data_sets.include?(data_set)
       method = method(data_set)
@@ -14,6 +22,8 @@ class ApplicationRecord < ActiveRecord::Base
     end
     false
   end
+
+  #begin Дефолтная реализация методов для кастомного рендеринга
 
   def head
     name || to_s
@@ -29,5 +39,12 @@ class ApplicationRecord < ActiveRecord::Base
 
   def card
     { head: head, id: id, summary: summary }
+  end
+
+  #end Дефолтная реализация методов для кастомного рендеринга
+
+  # разрешенные для обработки параметры запросов на изменение модели
+  def self.permitted_params
+    [:id]
   end
 end

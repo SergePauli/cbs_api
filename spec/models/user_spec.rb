@@ -24,7 +24,7 @@ RSpec.describe User, type: :model do
   it "должна генерироваться ссылка на активацию при создании экземпляра" do
     @user = User.new
     expect(@user.activation_link).not_to be_nil
-    expect(@user.activation_link.size).to eq 28
+    expect(@user.activation_link.size).to eq 34
     expect(@user.activated).to eq false
   end
 
@@ -36,8 +36,12 @@ RSpec.describe User, type: :model do
     expect(@user).to be_valid
   end
 
-  it "валидация не должна быть успешной при отсутствии name" do
+  it "валидация не должна быть успешной при отсутствии или неверном name" do
     @user.name = nil
+    expect(@user).not_to be_valid
+    @user.name = "inncorect login"
+    expect(@user).not_to be_valid
+    @user.name = "inc*rrect_l*gin"
     expect(@user).not_to be_valid
     expect(@user.errors[:name]).not_to be_nil
   end

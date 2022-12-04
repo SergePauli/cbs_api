@@ -2,19 +2,22 @@
 class RoleValidator < ActiveModel::Validator
   def validate(record)
     return if !record.role
+    notValid = ""
     if !record.role.split(",").reduce(true) do |valid, el|
       valid = User::ROLES.include? el if valid
+      notValid += " #{el}" unless valid
       valid
     end
-      record.errors.add :role, "User role contains not valid value"
+      record.errors.add :role, "Указаные роли пользователя недопустимы: #{notValid}"
     end
   end
 end
 
+# проверка наличия email у пользователя
 class MailValidator < ActiveModel::Validator
   def validate(record)
     if record.person && record.person.email == nil
-      record.errors.add :email, "User email absend"
+      record.errors.add :email, "У пользователя отсутствует email"
     end
   end
 end
@@ -36,7 +39,8 @@ class User < NamedRecord
   validates_associated :person
 
   # валидация ролей пользователя
-  validates :role, format: { with: /\A\w(,\w)*/, message: "invalid roles array" }, allow_nil: true
+  validates :name, format: { with: /\A[a-z0-9_-]{3,16}\z/, message: "недопустимое имя пользователя" }
+  validates :role, format: { with: /\A\w(,\w)*/, message: "неверный массив ролей пользователя" }, allow_nil: true
   validates_with RoleValidator, MailValidator
 
   # реализация для набора данных head
@@ -56,7 +60,16 @@ class User < NamedRecord
 
   # генерация новой ссылки
   def new_activation_link
-    self.activation_link = SecureRandom.base64(20)
-    self.activated = false
+    self.activation_link ||= SecureRandom.urlsafe_base64(25)
   end
+
+  # begin Принимаем атрибуты для связанных моделей
+  accepts_nested_attributes_for :person
+
+  # получаем массив разрешенных параметров запросов на обновление
+  def self.permitted_params
+    super | [:role, :password, :password_confirmation, person_attributes: Person.permitted_params]
+  end
+
+  # end
 end

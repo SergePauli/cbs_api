@@ -6,4 +6,8 @@ class Naming < ApplicationRecord
   def head
     "#{surname} #{name} #{patrname}".strip
   end
+
+  def self.permitted_params
+    super | [:name, :surname, :patrname]
+  end
 end

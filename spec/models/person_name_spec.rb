@@ -49,4 +49,11 @@ RSpec.describe PersonName, type: :model do
     expect(@person_name).to be_valid
     expect(@person_name.naming.id).to eq namings(:client).id
   end
+
+  it "должна создаваться запись c nested attributes" do
+    @person_name = PersonName.new({ person_id: 1, used: false, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } })
+    @person_name.save
+    expect(@person_name).not_to be_nil
+    expect(@person_name).to be_valid
+  end
 end

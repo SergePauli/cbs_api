@@ -47,4 +47,11 @@ RSpec.describe PersonAddress, type: :model do
     expect(@person_address).to be_valid
     expect(@person_address.address.id).to eq addresses(:moscow_1).id
   end
+
+  it "должна создаваться запись c nested attributes" do
+    @person_address = PersonAddress.new({ person_id: 1, used: false, address_attributes: { value: "г.Красноярск, пр-кт. Свободный, д.55", area_id: 24 } })
+    @person_address.save
+    expect(@person_address).not_to be_nil
+    expect(@person_address).to be_valid
+  end
 end

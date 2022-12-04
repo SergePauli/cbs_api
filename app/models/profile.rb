@@ -25,4 +25,15 @@ class Profile < MutableData
                   statuses: statuses || position.def_statuses || (department ? department.def_statuses : nil),
                   contracts_types: contracts_types || position.def_contracts_types || (department ? department.def_contracts_types : nil) })
   end
+
+  # begin Принимаем атрибуты для связанных моделей
+  accepts_nested_attributes_for :user
+  accepts_nested_attributes_for :position
+
+  # получаем массив разрешенных параметров запросов на обновление
+  def self.permitted_params
+    super | [:department_id, :statuses, :contracts_types, user_attributes: User.permitted_params, position_attributes: Position.permitted_params]
+  end
+
+  # end
 end

@@ -77,4 +77,12 @@ RSpec.describe Person, type: :model do
     naming = data[:namings][0]
     expect(naming[:used]).to eq person_names(:user).used
   end
+
+  let (:new_person) {
+    Person.create(person_contacts_attributes: [{ contact_attributes: { value: "test@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }], person_addresses_attributes: [{ used: false, address_attributes: { value: "г.Красноярск, пр-кт. Свободный, д.55", area_id: 24 } }])
+  }
+  it "должна создаваться запись c nested attributes" do
+    expect(new_person).to be_valid
+    expect(new_person.email).not_to be_nil
+  end
 end
