@@ -5,7 +5,7 @@ class Auth::RegistrationController < ApplicationController
   def registration
     @profile = Profile.new(profile_params)
     if @profile.save
-      #ApplicationMailer.with(user_id: @user.id).confirmation_mail.deliver_later
+      ApplicationMailer.with(user_id: @profile.user_id).confirmation_mail.deliver_later
       render status: :ok
     else
       render json: { errors: @profile.errors.full_messages }, status: :unprocessable_entity
@@ -18,8 +18,8 @@ class Auth::RegistrationController < ApplicationController
     if @user && !@user.activated
       @user.activated = true
       if @user.save
-        #ApplicationMailer.with(email: @user.email, to: Rails.configuration.admin_mail).welcome_mail.deliver_later
-        #ApplicationMailer.with(email: @user.email, to: @user.email).welcome_mail.deliver_later
+        ApplicationMailer.with(email: @user.email, to: Rails.configuration.admin_mail).welcome_mail.deliver_later
+        ApplicationMailer.with(email: @user.email, to: @user.email).welcome_mail.deliver_later
         redirect_to "http://#{Rails.configuration.client_url}/message/Аккаунт успешно активирован"
       end
     elsif @user && @user.activated
