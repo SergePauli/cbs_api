@@ -25,8 +25,8 @@ class ApplicationMailer < ActionMailer::Base
 
   #отправка письма со ссылкой на смену пароля
   def pass_renew_mail
-    @email = params[:email]
+    @name = params[:name]
     @url = "http://#{Rails.configuration.client_url}/pass_renew/#{params[:link]}"
-    mail(to: @email, subject: "Запрос на смену пароля")
+    mail(to: params[:to], subject: "Запрос на смену пароля")
   end
 end

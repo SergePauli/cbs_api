@@ -23,7 +23,7 @@ class MailValidator < ActiveModel::Validator
 end
 
 class User < NamedRecord
-  after_initialize :new_activation_link
+  before_create :before_create
 
   # константы для ролей пользователя
   constants_group :ROLES do
@@ -59,8 +59,13 @@ class User < NamedRecord
   end
 
   # генерация новой ссылки
-  def new_activation_link
-    self.activation_link ||= SecureRandom.urlsafe_base64(25)
+  def self.new_activation_link
+    SecureRandom.urlsafe_base64(25)
+  end
+
+  # колбэк при создании записи
+  def before_create
+    self.activation_link = User.new_activation_link
   end
 
   # begin Принимаем атрибуты для связанных моделей

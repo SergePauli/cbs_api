@@ -8,7 +8,7 @@ RSpec.describe User, type: :model do
   it { is_expected.to respond_to(:name) }
 
   # реализовано в модели
-  it { is_expected.to respond_to(:password_digest, :person, :last_login, :role, :activation_link, :activated, :new_activation_link) }
+  it { is_expected.to respond_to(:password_digest, :person, :last_login, :role, :activation_link, :activated) }
 
   # добавленные методы
   it { is_expected.to respond_to(:email) }
@@ -21,11 +21,10 @@ RSpec.describe User, type: :model do
     expect(User::ROLES).to eq ["admin", "user"]
   end
 
-  it "должна генерироваться ссылка на активацию при создании экземпляра" do
-    @user = User.new
-    expect(@user.activation_link).not_to be_nil
-    expect(@user.activation_link.size).to eq 34
-    expect(@user.activated).to eq false
+  it "должен генерироваться код активации(восстановления)" do
+    @link = User.new_activation_link
+    expect(@link).not_to be_nil
+    expect(@link.size).to eq 34
   end
 
   before(:each) do
