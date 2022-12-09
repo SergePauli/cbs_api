@@ -20,7 +20,7 @@ class ApplicationMailer < ActionMailer::Base
   def welcome_mail
     @email = params[:email]
     @app_name = Rails.configuration.app_name
-    mail(to: params[:to], subject: "Аккаунт был активирован")
+    mail(to: params[:to], copy: Rails.configuration.admin_mail, subject: "Аккаунт был активирован")
   end
 
   #отправка письма со ссылкой на смену пароля

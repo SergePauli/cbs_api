@@ -23,7 +23,6 @@ class Auth::RegistrationController < ApplicationController
       @user.activated = true
       @user.activation_link = User.new_activation_link #прежний код активации(восстановления) теперь не действителен - генерируем новый
       if @user.save
-        ApplicationMailer.with(email: @user.email, to: Rails.configuration.admin_mail).welcome_mail.deliver_later
         ApplicationMailer.with(email: @user.email, to: @user.email).welcome_mail.deliver_later
         redirect_to "http://#{Rails.configuration.client_url}/message/Аккаунт успешно активирован"
       end

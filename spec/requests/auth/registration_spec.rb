@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Auth::Registrations", type: :request do
   fixtures :departments, :users
-  let (:test_user) { test_user }
+  let (:test_user) { users(:user) }
 
   it "При неверных параметрах, экшин /auth/registration должен возвращать :unprocessable_entity и ошибки" do
     headers = { "ACCEPT" => "application/json" }
