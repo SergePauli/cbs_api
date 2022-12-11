@@ -12,35 +12,22 @@ class JsonWebToken
   REFRESHTIME = 1
 
   class << self
-    # генерация токена обновлений
-    def refresh_token(payload)
+    def new_tokens(payload)
+      # генерация токена обновлений
       exp = LIFETIME.hours.from_now.to_i
-      generate_token(payload, exp)
-    end
+      tokens = { refresh: generate_token(payload, exp) }
 
-    # генерация токена доступа
-    def access_token(payload)
+      # генерация токена доступа
       exp = REFRESHTIME.hours.from_now.to_i
       generate_token(payload, exp)
+      tokens[:access] = generate_token(payload, exp)
+      tokens
     end
 
     # валидируем токен
     def validate_token(token)
       body = JWT.decode(token, SECRET, true, { algorithm: "HS256" })[0]
       HashWithIndifferentAccess.new body
-    end
-
-    # удаляем токен обновлений из Redis
-    def remove_token(user_id)
-      REDIS.del("token:#{user_id}")
-    end
-
-    # обновляем или сохраняем токен обновлений в Redis
-    def save_token(user_id)
-      exp = LIFETIME.hours.from_now.to_i
-      token = generate_token(user_id, exp)
-      REDIS.set("token:#{user_id}", token, ex: exp)
-      token
     end
 
     private

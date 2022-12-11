@@ -3,13 +3,13 @@ admin:
   person_id: 1
   name: testov_tt
   role: admin
-  password_digest: rwerert235435dfsd
+  password_digest: $2a$04$iOfhwahFymCs5weB3BNH/uXkTG65HR.qpW.bNhEjFP3ftli3o5DQC
   activation_link: F4Swg+pPa5L7kaJ1tvLZvkpDuW4=
   activated: true
 user: 
   id: 2
   person_id: 2
   name: testova_uu
-  password_digest: rwerert235435df4543d
+  password_digest: $2a$04$iOfhwahFymCs5weB3BNH/uXkTG65HR.qpW.bNhEjFP3ftli3o5DQC
   activation_link: duFqQzpXsRuBiL7WHvTYaP83OmQ= 
   activated: false

@@ -9,4 +9,9 @@ Rails.application.routes.draw do
     post "/pwd_renew", action: "pwd_renew"
   end
   # Авторизация
+  scope "auth", controller: "auth/authentication" do
+    post "/login", action: "login"
+    get "/logout", action: "logout"
+    get "/refresh", action: "refresh"
+  end
 end

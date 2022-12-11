@@ -1,5 +1,4 @@
 class Auth::RegistrationController < ApplicationController
-  include ActionController::Cookies
 
   # POST auth/registration
   # создает профиль пользователя с неактивированным аккаунтом,
