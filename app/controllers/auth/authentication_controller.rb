@@ -1,5 +1,7 @@
-class Auth::AuthenticationController < ApplicationController
+class Auth::AuthenticationController < PrivateController
   include ActionController::Cookies
+
+  skip_before_action :authenticate_request, except: :logout
 
   # POST "auth/login"
   # авторизует пользователя :name проверяя пароль в  :password

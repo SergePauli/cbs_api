@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::API
-  attr_reader :current_user
 
   ## API Universal Exception Handling
   class ApiError < StandardError

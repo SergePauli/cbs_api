@@ -58,19 +58,24 @@ RSpec.describe "Auth::Authentications", type: :request do
     end
   end
   describe "GET /auth/logout" do
-    let (:token) {
-      REDIS.hkeys("tokens")[0]
+    let (:tokens) {
+      dto = { id: test_user.id, email: test_user.email, role: test_user.role, logged: test_user.last_login }
+      tokens = JsonWebToken.new_tokens(dto)
+      REDIS.hset "tokens", tokens[:refresh], dto[:id]
+      cookies[:refresh_token] = { value: tokens[:refresh], expires: JsonWebToken::LIFETIME.hour, httponly: true }
+      tokens
     }
     it "должен очищать информацию о токенах и возвращать :ok" do
-      cookies[:refresh_token] = token
-      get "/auth/logout"
+      cookies[:refresh_token] = tokens[:refresh]
+      headers = { "Authorization" => "Bearer #{tokens[:access]}" }
+      get "/auth/logout", headers: headers
       expect(response).to have_http_status(:ok)
       expect(cookies[:refresh_token]).to eq ""
-      expect(REDIS.hget("tokens", token)).to be_nil
+      expect(REDIS.hget("tokens", tokens[:refresh])).to be_nil
     end
-    it "должен возвращать :unauthorized для неавторизованого запроса" do
+    it "должен возвращать :bad_request для неавторизованого запроса" do
       get "/auth/logout"
-      expect(response).to have_http_status(:unauthorized)
+      expect(response).to have_http_status(:bad_request)
     end
   end
 end
