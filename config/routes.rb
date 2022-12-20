@@ -14,4 +14,12 @@ Rails.application.routes.draw do
     get "/logout", action: "logout"
     get "/refresh", action: "refresh"
   end
+  # Универсальный контроллер
+  scope "model/:model_name", controller: "model/universal" do
+    post "/", action: "index"
+    post "/add", action: "create"
+    get "/", action: "show"
+    put "/:id", action: "update"
+    delete "/:id", action: "destroy"
+  end
 end
