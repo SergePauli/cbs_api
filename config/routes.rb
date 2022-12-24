@@ -15,11 +15,11 @@ Rails.application.routes.draw do
     get "/refresh", action: "refresh"
   end
   # Универсальный контроллер
-  scope "model/:model_name", controller: "model/universal" do
-    post "/", action: "index"
-    post "/add", action: "create"
-    get "/", action: "show"
-    put "/:id", action: "update"
-    delete "/:id", action: "destroy"
+  scope "model", controller: "model/universal" do
+    post "/:model_name", action: "index"
+    post "/add/:model_name", action: "create"
+    get "/:model_name", action: "show"
+    put "/:model_name/:id", action: "update"
+    delete "/:model_name/:id", action: "destroy"
   end
 end

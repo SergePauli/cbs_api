@@ -16,6 +16,10 @@ gem "puma", "~> 5.0"
 gem "jwt"
 # Use Redis adapter to run Action Cable in production
 gem "redis", "~> 4.0"
+
+#enables the creation of both simple and advanced search forms for your Ruby on Rails application
+gem "ransack"
+
 # Use Active Model has_secure_password
 gem "bcrypt", "~> 3.1.7"
 

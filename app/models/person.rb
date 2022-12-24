@@ -23,6 +23,8 @@ class Person < ApplicationRecord
 
   validates_with NameValidator
 
+  validates :person_contacts, presence: true
+
   # begin Принимаем атрибуты для связанных моделей
   accepts_nested_attributes_for :person_names, allow_destroy: true
 
@@ -56,7 +58,7 @@ class Person < ApplicationRecord
   end
 
   def card
-    super.merge({ email: (email ? email.custom_data(:card) : nil), phone: (phone ? phone.custom_data(:card) : nil), naming: naming.head, address: address.custom_data(:card), contacts: person_contacts.map { |el| el.custom_data(:item) } || [] })
+    super.merge({ email: (email ? email.custom_data(:card) : nil), phone: (phone ? phone.custom_data(:card) : nil), naming: naming.head, address: (address ? address.custom_data(:card) : nil), contacts: person_contacts.map { |el| el.custom_data(:item) } || [] })
   end
 
   def full

@@ -2,10 +2,12 @@ require "rails_helper"
 
 RSpec.describe "Auth::Authentications", type: :request do
   fixtures :users
-  let(:test_user) {
+
+  let (:test_user) {
     REDIS.del "tokens"
     users(:admin)
   }
+
   describe "POST /auth/login" do
     it "При неверном пароле, экшин должен возвращать :unauthorized" do
       headers = { "ACCEPT" => "application/json" }
