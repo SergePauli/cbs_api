@@ -48,7 +48,6 @@ RSpec.describe "Model::Universals", type: :request do
       post "/model/Person", params: { q: { person_names_naming_surname_eq: test_person.naming.surname }, data_set: "item", offset: 0, limit: 2 }, headers: headers
       expect(response).to have_http_status(:ok)
       expect(response.body).to include test_person.item.to_json
-      #puts response.body
     end
   end
   describe "GET model/Person" do
@@ -71,7 +70,6 @@ RSpec.describe "Model::Universals", type: :request do
       post "/model/add/Person", params: { Person: { person_contacts_attributes: [{ contact_attributes: { value: "test@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, data_set: "card" }, headers: headers
       expect(response).to have_http_status(:ok)
       expect(response.body).to include "test@mail.ru"
-      #puts response.body
     end
     it "должен возвращать ошибку :unprocessable_entity, если не указан ни один из контактов" do
       post "/model/add/Person", params: { Person: { person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, data_set: "card" }, headers: headers
@@ -83,7 +81,6 @@ RSpec.describe "Model::Universals", type: :request do
       put "/model/Person/1", params: { Person: { person_contacts_attributes: [{ contact_attributes: { value: "test2@mail.ru", type: "Email" }, used: true }] }, data_set: "card" }, headers: headers
       expect(response).to have_http_status(:ok)
       expect(response.body).to include "test2@mail.ru"
-      #puts response.body
     end
     it "должен возвращать ошибку :bad_request, если не указаны параметры изменения модели" do
       put "/model/Person/1", params: { data_set: "card" }, headers: headers
@@ -94,8 +91,8 @@ RSpec.describe "Model::Universals", type: :request do
     it "должен удалить запись, вернуть удаленную запись и статус :ok" do
       delete "/model/Contact/#{contacts(:some_mail).id}", headers: headers
       expect(response).to have_http_status(:ok)
-      #expect(response.body).to include "test2@mail.ru"
-      puts response.body
+      expect(response.body).to include contacts(:some_mail).value
+      expect { contacts(:some_mail).reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
     it "должен возвращать ошибку :unprocessable_entity, при попытке удаления связанной записи" do
       delete "/model/Person/1", headers: headers
