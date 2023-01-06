@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_19_072237) do
+ActiveRecord::Schema.define(version: 2023_01_04_035433) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "value"
@@ -26,6 +26,26 @@ ActiveRecord::Schema.define(version: 2022_11_19_072237) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_areas_on_name", unique: true
+  end
+
+  create_table "audits", force: :cascade do |t|
+    t.string "obj_uuid", null: false
+    t.integer "action", limit: 1, null: false
+    t.integer "obj_type", limit: 1, null: false
+    t.string "obj_name", null: false
+    t.string "field_name"
+    t.string "detail"
+    t.string "before"
+    t.string "after"
+    t.integer "severity", limit: 1, null: false
+    t.integer "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["action"], name: "index_audits_on_action"
+    t.index ["obj_type"], name: "index_audits_on_obj_type"
+    t.index ["obj_uuid"], name: "index_audits_on_obj_uuid"
+    t.index ["severity"], name: "index_audits_on_severity"
+    t.index ["user_id"], name: "index_audits_on_user_id"
   end
 
   create_table "contacts", force: :cascade do |t|
