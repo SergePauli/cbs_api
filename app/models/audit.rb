@@ -9,40 +9,40 @@ class Audit < ApplicationRecord
 
   validates :obj_uuid, presence: true
   validates :obj_name, presence: true
-  validates :obj_type, presence: true
-  validates :action, presence: true
+  validates :obj_type, presence: true, inclusion: { in: obj_types.keys }
+  validates :action, presence: true, inclusion: { in: actions.keys }
   validates :user, presence: true
   validates_associated :user
 
-  def self.action_name(action)
-    case action
-    when :contragent
+  def obj_type_name
+    case obj_type
+    when "contragent"
       "Контрагент"
-    when :contract
+    when "contract"
       "Контракт"
-    when :employee
+    when "employee"
       "Сотрудник"
     end
   end
 
-  def self.obj_type_name(obj_type)
-    case obj_type
-    when :added
+  def action_name
+    case action
+    when "added"
       "Добавлен"
-    when :updated
+    when "updated"
       "Изменен"
-    when :removed
+    when "removed"
       "Удален"
-    when :archived
+    when "archived"
       "Архив"
-    when :imported
+    when "imported"
       "Импорт"
     end
   end
 
   # реализация для набора данных head
   def head
-    "#{created_at.strftime("%d.%m.%Y %H:%M")} #{Audit.action_name action}: #{Audit.obj_type_name obj_type} #{obj_name}"
+    "#{created_at.strftime("%d.%m.%Y %H:%M")} #{action_name}: #{obj_type_name} #{obj_name}"
   end
 
   # реализация для набора данных card

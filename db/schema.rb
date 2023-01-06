@@ -37,14 +37,12 @@ ActiveRecord::Schema.define(version: 2023_01_04_035433) do
     t.string "detail"
     t.string "before"
     t.string "after"
-    t.integer "severity", limit: 1, null: false
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["action"], name: "index_audits_on_action"
     t.index ["obj_type"], name: "index_audits_on_obj_type"
     t.index ["obj_uuid"], name: "index_audits_on_obj_uuid"
-    t.index ["severity"], name: "index_audits_on_severity"
     t.index ["user_id"], name: "index_audits_on_user_id"
   end
 
