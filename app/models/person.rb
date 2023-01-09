@@ -24,6 +24,7 @@ class Person < ApplicationRecord
   validates_with NameValidator
 
   validates :person_contacts, presence: true
+  validates :inn, format: { with: /[0-9]{12}/, message: "Неверный код ИНН" }, allow_nil: true
 
   # begin Принимаем атрибуты для связанных моделей
   accepts_nested_attributes_for :person_names, allow_destroy: true
@@ -33,7 +34,7 @@ class Person < ApplicationRecord
   accepts_nested_attributes_for :person_contacts, allow_destroy: true
   # получаем массив разрешенных параметров запросов на обновление
   def self.permitted_params
-    super | [person_addresses_attributes: PersonAddress.permitted_params, person_contacts_attributes: PersonContact.permitted_params, person_names_attributes: PersonName.permitted_params]
+    super | [:inn, person_addresses_attributes: PersonAddress.permitted_params, person_contacts_attributes: PersonContact.permitted_params, person_names_attributes: PersonName.permitted_params]
   end
 
   # end
@@ -58,7 +59,7 @@ class Person < ApplicationRecord
   end
 
   def card
-    super.merge({ email: (email ? email.custom_data(:card) : nil), phone: (phone ? phone.custom_data(:card) : nil), naming: naming.head, address: (address ? address.custom_data(:card) : nil), contacts: person_contacts.map { |el| el.custom_data(:item) } || [] })
+    super.merge({ inn: inn, email: (email ? email.custom_data(:card) : nil), phone: (phone ? phone.custom_data(:card) : nil), naming: naming.head, address: (address ? address.custom_data(:card) : nil), contacts: person_contacts.map { |el| el.custom_data(:item) } || [] })
   end
 
   def full

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_04_035433) do
+ActiveRecord::Schema.define(version: 2023_01_06_120014) do
 
   create_table "addresses", force: :cascade do |t|
     t.string "value"
@@ -72,7 +72,19 @@ ActiveRecord::Schema.define(version: 2023_01_04_035433) do
     t.index ["surname", "name", "patrname"], name: "index_namings_on_surname_and_name_and_patrname", unique: true
   end
 
+  create_table "organizations", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "full_name"
+    t.string "inn", limit: 10
+    t.string "kpp", limit: 9
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["full_name"], name: "index_organizations_on_full_name"
+    t.index ["inn", "kpp"], name: "index_organizations_on_inn_and_kpp", unique: true
+  end
+
   create_table "people", force: :cascade do |t|
+    t.string "inn", limit: 12
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
