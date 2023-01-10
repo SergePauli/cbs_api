@@ -10,11 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_06_120014) do
+ActiveRecord::Schema.define(version: 2023_01_09_074803) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "addresses", force: :cascade do |t|
     t.string "value"
-    t.integer "area_id", null: false
+    t.bigint "area_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["area_id", "value"], name: "index_addresses_on_area_id_and_value", unique: true
@@ -29,15 +32,15 @@ ActiveRecord::Schema.define(version: 2023_01_06_120014) do
   end
 
   create_table "audits", force: :cascade do |t|
-    t.string "obj_uuid", null: false
-    t.integer "action", limit: 1, null: false
-    t.integer "obj_type", limit: 1, null: false
+    t.uuid "obj_uuid", null: false
+    t.integer "action", limit: 2, null: false
+    t.integer "obj_type", limit: 2, null: false
     t.string "obj_name", null: false
     t.string "field_name"
     t.string "detail"
     t.string "before"
     t.string "after"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["action"], name: "index_audits_on_action"
@@ -52,6 +55,15 @@ ActiveRecord::Schema.define(version: 2023_01_06_120014) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["value", "type"], name: "index_contacts_on_value_and_type", unique: true
+  end
+
+  create_table "contragents", force: :cascade do |t|
+    t.uuid "obj_uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.integer "obj_type", limit: 2, null: false
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["obj_type"], name: "index_contragents_on_obj_type"
   end
 
   create_table "departments", force: :cascade do |t|
@@ -90,8 +102,8 @@ ActiveRecord::Schema.define(version: 2023_01_06_120014) do
   end
 
   create_table "person_addresses", force: :cascade do |t|
-    t.integer "person_id", null: false
-    t.integer "address_id", null: false
+    t.bigint "person_id", null: false
+    t.bigint "address_id", null: false
     t.integer "priority", default: 1, null: false
     t.boolean "used", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
@@ -103,8 +115,8 @@ ActiveRecord::Schema.define(version: 2023_01_06_120014) do
   end
 
   create_table "person_contacts", force: :cascade do |t|
-    t.integer "person_id", null: false
-    t.integer "contact_id", null: false
+    t.bigint "person_id", null: false
+    t.bigint "contact_id", null: false
     t.integer "priority", default: 1, null: false
     t.boolean "used", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
@@ -116,8 +128,8 @@ ActiveRecord::Schema.define(version: 2023_01_06_120014) do
   end
 
   create_table "person_names", force: :cascade do |t|
-    t.integer "person_id", null: false
-    t.integer "naming_id", null: false
+    t.bigint "person_id", null: false
+    t.bigint "naming_id", null: false
     t.boolean "used", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -136,9 +148,9 @@ ActiveRecord::Schema.define(version: 2023_01_06_120014) do
   end
 
   create_table "profiles", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "position_id", null: false
-    t.integer "department_id"
+    t.bigint "user_id", null: false
+    t.bigint "position_id", null: false
+    t.bigint "department_id"
     t.integer "priority", default: 1, null: false
     t.boolean "used", default: true, null: false
     t.string "statuses"
@@ -154,9 +166,9 @@ ActiveRecord::Schema.define(version: 2023_01_06_120014) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "password_digest"
-    t.integer "person_id", null: false
+    t.bigint "person_id", null: false
     t.string "role", default: "user", null: false
-    t.string "activation_link", limit: 20, null: false
+    t.string "activation_link", null: false
     t.boolean "activated", default: false, null: false
     t.datetime "last_login"
     t.datetime "created_at", precision: 6, null: false

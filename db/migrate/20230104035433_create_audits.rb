@@ -1,7 +1,7 @@
 class CreateAudits < ActiveRecord::Migration[6.1]
   def up
     create_table :audits do |t|
-      t.string :obj_uuid, index: true, null: false
+      t.uuid :obj_uuid, index: true, null: false
       t.integer :action, limit: 1, index: true, null: false
       t.integer :obj_type, limit: 1, index: true, null: false
       t.string :obj_name, null: false
