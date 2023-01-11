@@ -4,6 +4,7 @@ class CreateContragents < ActiveRecord::Migration[6.1]
       t.uuid :obj_uuid, unique: true, null: false, default: -> { "gen_random_uuid()" }
       t.integer :obj_type, limit: 1, index: true, null: false
       t.string :description
+      t.belongs_to :person
       t.timestamps
     end
   end

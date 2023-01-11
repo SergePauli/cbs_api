@@ -34,7 +34,9 @@ RSpec.describe Audit, type: :model do
   end
 
   let (:valid_audit) {
-    Audit.new({ action: :added, obj_type: :contragent, obj_uuid: SecureRandom.uuid, obj_name: "test", user_id: 1 })
+    audit = Audit.new({ action: :added, obj_type: :contragent, obj_uuid: "cb972f50-37ef-43db-a871-2fbd48e60b1e", obj_name: "test", user_id: 1 })
+    audit.save
+    audit
   }
 
   it "должна быть валидной при наличии всех обязательных аттрибутов" do
@@ -46,14 +48,10 @@ RSpec.describe Audit, type: :model do
     expect(valid_audit).not_to be_valid
     expect(valid_audit.errors[:user]).not_to be_nil
   end
-
   it "метод :head должен возвращать время действия, действие, тип объекта и его наименования" do
-    valid_audit.save
     expect(valid_audit.head).to include("Добавлен: Контрагент test")
   end
   it "метод :card должен возвращать время действия, действие, тип объекта и его наименования" do
-    valid_audit.save
-    puts valid_audit.card
     expect(valid_audit.card[:head]).to include("Добавлен: Контрагент test")
   end
 end
