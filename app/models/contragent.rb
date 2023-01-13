@@ -12,9 +12,13 @@ class Contragent < ApplicationRecord
   validates_associated :person
   accepts_nested_attributes_for :person
 
-  # контакты
+  # общие контакты
   has_many :contragent_contacts, -> { order("priority DESC") }, inverse_of: :contragent, autosave: true, dependent: :destroy
   accepts_nested_attributes_for :contragent_contacts, allow_destroy: true
+
+  # сотрудники
+  has_many :employees, -> { order("priority DESC") }, inverse_of: :contragent, autosave: true, dependent: :destroy
+  accepts_nested_attributes_for :employees, allow_destroy: true
 
   # адреса
   has_many :contragent_addresses, dependent: :destroy, inverse_of: :contragent
@@ -55,11 +59,12 @@ class Contragent < ApplicationRecord
     "#{obj_type_name}: #{name}"
   end
 
+  # карточка контрагента
   def card
-    super.merge({ requisites: requisites.card, description: description, obj_uuid: obj_uuid, audits: audits.map { |el| el.item } || [], contacts: contragent_contacts.map { |el| el.item } || [], addresses: contragent_addresses.map { |el| el.item } || [] })
+    super.merge({ requisites: requisites.card, description: description, obj_uuid: obj_uuid, audits: audits.map { |el| el.item } || [], contacts: contragent_contacts.map { |el| el.item } || [], addresses: contragent_addresses.map { |el| el.item } || [], employees: employees.map { |el| el.item } || [] })
   end
 
   def self.permitted_params
-    super | [:person_id, :description, :obj_uuid, :obj_type, audit_attributes: Audit.permitted_params, contragent_organizations: ContragentOrganization.permitted_params, contragent_contacts_attributes: ContragentContact.permitted_params, person_attributes: Person.permitted_params, contragent_addresses_attributes: ContragentAddress.permitted_params]
+    super | [:person_id, :description, :obj_uuid, :obj_type, audit_attributes: Audit.permitted_params, contragent_organizations: ContragentOrganization.permitted_params, contragent_contacts_attributes: ContragentContact.permitted_params, person_attributes: Person.permitted_params, employee_attributes: Employee.permitted_params, contragent_addresses_attributes: ContragentAddress.permitted_params]
   end
 end

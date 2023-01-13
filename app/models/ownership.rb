@@ -1,0 +1,2 @@
+class Ownership < NamedRecord
+end

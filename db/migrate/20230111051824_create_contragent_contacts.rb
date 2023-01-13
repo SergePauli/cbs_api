@@ -8,6 +8,7 @@ class CreateContragentContacts < ActiveRecord::Migration[6.1]
       t.string :description
       t.timestamps
     end
+    add_index :contragent_contacts, [:contragent_id, :contact_id], unique: true
   end
 
   def down
