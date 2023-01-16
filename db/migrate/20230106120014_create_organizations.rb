@@ -9,7 +9,7 @@ class CreateOrganizations < ActiveRecord::Migration[6.1]
       t.string :ogrn, limit: 13
       t.string :okpo, limit: 10
       t.string :oktmo, limit: 11
-      t.string :okved, limit: 5
+      t.string :okved, limit: 10
       t.string :okogu, limit: 9
       t.string :okfc, limit: 3
       t.string :okopf, limit: 8

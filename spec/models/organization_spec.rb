@@ -7,7 +7,7 @@ RSpec.describe Organization, type: :model do
   # добавленные методы
   it { is_expected.to respond_to(:name, :inn, :full_name, :kpp) }
 
-  fixtures :organizations
+  fixtures :organizations, :ownerships
 
   let (:kraskom) {
     organizations(:kraskom)

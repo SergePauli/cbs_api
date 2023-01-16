@@ -7,7 +7,7 @@ class CreateContragentOrganizations < ActiveRecord::Migration[6.1]
       t.boolean :used, null: false, default: true
       t.timestamps
     end
-    add_index :contragent_organizations, [:contragent_id, :organization_id], unique: true
+    add_index :contragent_organizations, [:contragent_id, :organization_id], unique: true, name: "by_contr_org_ids"
   end
 
   def down

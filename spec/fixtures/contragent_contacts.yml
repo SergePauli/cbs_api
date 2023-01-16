@@ -1,0 +1,14 @@
+org_mail:
+  id: 1  
+  contragent_id: 1
+  contact_id: 10
+  description: "общая почта"
+  priority: 1
+  used: true
+org_mobile: 
+  id: 2
+  contragent_id: 1
+  contact_id: 7
+  description: "тел. директора"
+  priority: 2
+  used: true

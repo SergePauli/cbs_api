@@ -41,4 +41,4 @@ client_mail:
 some_mail:
   id: 11
   value: some@mail.ru
-  type: Email         
+  type: Email     

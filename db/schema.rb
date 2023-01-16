@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_09_074803) do
+ActiveRecord::Schema.define(version: 2023_01_12_110004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,13 +57,59 @@ ActiveRecord::Schema.define(version: 2023_01_09_074803) do
     t.index ["value", "type"], name: "index_contacts_on_value_and_type", unique: true
   end
 
+  create_table "contragent_addresses", force: :cascade do |t|
+    t.bigint "contragent_id", null: false
+    t.bigint "address_id", null: false
+    t.integer "priority", default: 1, null: false
+    t.boolean "used", default: true, null: false
+    t.integer "kind", limit: 2, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address_id"], name: "index_contragent_addresses_on_address_id"
+    t.index ["contragent_id", "address_id", "kind"], name: "by_contr_addr_ids", unique: true
+    t.index ["contragent_id"], name: "index_contragent_addresses_on_contragent_id"
+    t.index ["kind"], name: "index_contragent_addresses_on_kind"
+    t.index ["priority"], name: "index_contragent_addresses_on_priority"
+  end
+
+  create_table "contragent_contacts", force: :cascade do |t|
+    t.bigint "contragent_id", null: false
+    t.bigint "contact_id", null: false
+    t.integer "priority", default: 1, null: false
+    t.boolean "used", default: true, null: false
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contact_id"], name: "index_contragent_contacts_on_contact_id"
+    t.index ["contragent_id", "contact_id"], name: "index_contragent_contacts_on_contragent_id_and_contact_id", unique: true
+    t.index ["contragent_id"], name: "index_contragent_contacts_on_contragent_id"
+  end
+
+  create_table "contragent_organizations", force: :cascade do |t|
+    t.bigint "contragent_id", null: false
+    t.bigint "organization_id", null: false
+    t.integer "priority", default: 1, null: false
+    t.boolean "used", default: true, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contragent_id", "organization_id"], name: "by_contr_org_ids", unique: true
+    t.index ["contragent_id"], name: "index_contragent_organizations_on_contragent_id"
+    t.index ["organization_id"], name: "index_contragent_organizations_on_organization_id"
+  end
+
   create_table "contragents", force: :cascade do |t|
     t.uuid "obj_uuid", default: -> { "gen_random_uuid()" }, null: false
     t.integer "obj_type", limit: 2, null: false
     t.string "description"
+    t.string "bank_name"
+    t.string "bank_bik", limit: 10
+    t.string "bank_account", limit: 30
+    t.string "bank_cor_account", limit: 30
+    t.bigint "person_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["obj_type"], name: "index_contragents_on_obj_type"
+    t.index ["person_id"], name: "index_contragents_on_person_id"
   end
 
   create_table "departments", force: :cascade do |t|
@@ -73,6 +119,20 @@ ActiveRecord::Schema.define(version: 2023_01_09_074803) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_departments_on_name", unique: true
+  end
+
+  create_table "employees", force: :cascade do |t|
+    t.bigint "person_id", null: false
+    t.bigint "contragent_id", null: false
+    t.bigint "position_id"
+    t.integer "priority", default: 1, null: false
+    t.boolean "used", default: true, null: false
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contragent_id"], name: "index_employees_on_contragent_id"
+    t.index ["person_id"], name: "index_employees_on_person_id"
+    t.index ["position_id"], name: "index_employees_on_position_id"
   end
 
   create_table "namings", force: :cascade do |t|
@@ -89,10 +149,27 @@ ActiveRecord::Schema.define(version: 2023_01_09_074803) do
     t.string "full_name"
     t.string "inn", limit: 10
     t.string "kpp", limit: 9
+    t.string "ogrn", limit: 13
+    t.string "okpo", limit: 10
+    t.string "oktmo", limit: 11
+    t.string "okved", limit: 10
+    t.string "okogu", limit: 9
+    t.string "okfc", limit: 3
+    t.string "okopf", limit: 8
+    t.bigint "ownership_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["full_name"], name: "index_organizations_on_full_name"
     t.index ["inn", "kpp"], name: "index_organizations_on_inn_and_kpp", unique: true
+    t.index ["ownership_id"], name: "index_organizations_on_ownership_id"
+  end
+
+  create_table "ownerships", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "full_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_ownerships_on_name", unique: true
   end
 
   create_table "people", force: :cascade do |t|
@@ -178,6 +255,16 @@ ActiveRecord::Schema.define(version: 2023_01_09_074803) do
   end
 
   add_foreign_key "addresses", "areas"
+  add_foreign_key "contragent_addresses", "addresses"
+  add_foreign_key "contragent_addresses", "contragents"
+  add_foreign_key "contragent_contacts", "contacts"
+  add_foreign_key "contragent_contacts", "contragents"
+  add_foreign_key "contragent_organizations", "contragents"
+  add_foreign_key "contragent_organizations", "organizations"
+  add_foreign_key "employees", "contragents"
+  add_foreign_key "employees", "people"
+  add_foreign_key "employees", "positions"
+  add_foreign_key "organizations", "ownerships"
   add_foreign_key "person_addresses", "addresses"
   add_foreign_key "person_addresses", "people"
   add_foreign_key "person_contacts", "contacts"
