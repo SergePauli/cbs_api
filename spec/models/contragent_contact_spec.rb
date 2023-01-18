@@ -24,7 +24,7 @@ RSpec.describe ContragentContact, type: :model do
     expect(@contragent_contact.errors[:contragent]).not_to be_nil
   end
 
-  it "Должна быть невалидной с невылидным id контакта" do
+  it "Должна быть невалидной с невалидным id контакта" do
     @contragent_contact.contragent_id = contragent_contacts(:org_mail).contragent_id
     expect(@contragent_contact).not_to be_valid
     expect(@contragent_contact.errors[:contact]).not_to be_nil
@@ -33,7 +33,7 @@ RSpec.describe ContragentContact, type: :model do
     expect(@contragent_contact.errors[:contact]).not_to be_nil
   end
 
-  it "Комбинация id контакта и контрагента" do
+  it "должна быть уникальной комбинация id контакта и контрагента" do
     @contragent_contact.contragent_id = contragent_contacts(:org_mail).contragent_id
     @contragent_contact.contact_id = contragent_contacts(:org_mail).contact_id
     expect(@contragent_contact).not_to be_valid

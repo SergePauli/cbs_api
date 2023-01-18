@@ -95,21 +95,18 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.index ["contragent_id", "organization_id"], name: "by_contr_org_ids", unique: true
     t.index ["contragent_id"], name: "index_contragent_organizations_on_contragent_id"
     t.index ["organization_id"], name: "index_contragent_organizations_on_organization_id"
+    t.index ["used", "organization_id"], name: "by_used_org_ids", unique: true
   end
 
   create_table "contragents", force: :cascade do |t|
     t.uuid "obj_uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.integer "obj_type", limit: 2, null: false
     t.string "description"
     t.string "bank_name"
     t.string "bank_bik", limit: 10
     t.string "bank_account", limit: 30
     t.string "bank_cor_account", limit: 30
-    t.bigint "person_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["obj_type"], name: "index_contragents_on_obj_type"
-    t.index ["person_id"], name: "index_contragents_on_person_id"
   end
 
   create_table "departments", force: :cascade do |t|

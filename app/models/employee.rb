@@ -14,8 +14,12 @@ class Employee < MutableData
     contact.type
   end
 
-  def item
-    super.merge({ description: description })
+  def name
+    "#{person.name} #{position.name}"
+  end
+
+  def card
+    super.merge({ description: description, person: person.card, position: position.item })
   end
 
   def self.permitted_params

@@ -5,7 +5,7 @@ RSpec.describe Contragent, type: :model do
   it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
 
   # добавленные методы
-  it { is_expected.to respond_to(:obj_type, :obj_uuid, :name) }
+  it { is_expected.to respond_to(:obj_uuid, :name) }
 
   fixtures :contragents, :contragent_organizations, :contacts, :organizations
 
@@ -21,7 +21,7 @@ RSpec.describe Contragent, type: :model do
   end
 
   it "Должна выдавать корректный набор head" do
-    expect(kraskom.head).to eq "#{kraskom.obj_type_name}: #{kraskom.name}"
+    expect(kraskom.head).to eq kraskom.name
   end
 
   it "Должна выдавать корректный набор item" do

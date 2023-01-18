@@ -1,0 +1,21 @@
+kraskom_real: 
+  id: 1
+  contragent_id: 1
+  address_id: 2
+  priority: 2
+  kind: 1
+  used: true
+kraskom_reg:
+  id: 2  
+  contragent_id: 1
+  address_id: 3
+  used: true
+  kind: 0
+  priority: 1
+med_rzd:
+  id: 3  
+  contragent_id: 2
+  address_id: 1  
+  used: true
+  priority: 2
+  kind: 0

@@ -1,5 +1,5 @@
 class ContragentAddress < MutableData
-  belongs_to :contragent, inverse_of: :person_addresses
+  belongs_to :contragent, inverse_of: :contragent_addresses
   belongs_to :address
   validates_associated :contragent
   validates_associated :address
