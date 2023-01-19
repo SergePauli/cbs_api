@@ -4,7 +4,7 @@ RSpec.describe ContragentAddress, type: :model do
   # унаследовано от ApplicationRecord
   it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
 
-  # для совместимости с MutableData и добавленый
+  # для совместимости с MutableData и добавленый аттрибут :kind
   it { is_expected.to respond_to(:state, :used, :priority, :kind) }
 
   fixtures :contragent_addresses, :addresses, :contragents
@@ -31,15 +31,17 @@ RSpec.describe ContragentAddress, type: :model do
     expect(@contragent_address.errors[:address]).not_to be_nil
   end
 
-  it "should be uniq" do
+  it "Должна быть уникальной комбинация ID контрагента, адреса и типа адреса" do
     @contragent_address.contragent_id = contragent_addresses(:kraskom_real).contragent_id
     @contragent_address.address_id = contragent_addresses(:kraskom_real).address_id
+    @contragent_address.kind = :real
     expect(@contragent_address).not_to be_valid
     expect(@contragent_address.errors[:address]).not_to be_nil # "has already been taken"
     expect(@contragent_address.errors[:contragent]).not_to be_nil # "has already been taken"
+    expect(@contragent_address.errors[:real]).not_to be_nil # "has already been taken"
   end
 
-  it "should not to be create dublicates of address" do
+  it "Не должено создаваться дублирующих записей адреса" do
     @contragent_address.contragent_id = contragent_addresses(:med_rzd).contragent_id
     @contragent_address.address = Address.new
     @contragent_address.address.value = addresses(:moscow_1).value
