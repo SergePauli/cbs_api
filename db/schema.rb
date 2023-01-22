@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.bigint "address_id", null: false
     t.integer "priority", default: 1, null: false
     t.boolean "used", default: true, null: false
-    t.integer "kind", limit: 2, null: false
+    t.integer "kind", limit: 2, default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["address_id"], name: "index_contragent_addresses_on_address_id"
@@ -125,8 +125,10 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.integer "priority", default: 1, null: false
     t.boolean "used", default: true, null: false
     t.string "description"
+    t.uuid "obj_uuid", default: -> { "gen_random_uuid()" }, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["contragent_id", "person_id", "position_id"], name: "index_employees_on_contragent_id_and_person_id_and_position_id", unique: true
     t.index ["contragent_id"], name: "index_employees_on_contragent_id"
     t.index ["person_id"], name: "index_employees_on_person_id"
     t.index ["position_id"], name: "index_employees_on_position_id"

@@ -74,13 +74,12 @@ RSpec.describe Person, type: :model do
 
   it "should return right custom_data :card" do
     data = person_admin.custom_data :card
-    expect(data[:email][:head]).to eq people(:admin).email.value
-    expect(data[:phone][:head]).to eq people(:admin).phone.value
-    expect(data[:address][:head]).to eq people(:admin).address.value
-    expect(data[:contacts].size).to eq 4
-    contact = data[:contacts][3]
+    expect(data[:email][:name]).to eq people(:admin).email.value
+    expect(data[:phone][:name]).to eq people(:admin).phone.value
+    expect(data[:address][:name]).to eq people(:admin).address.name
+    expect(data[:contacts].size).to eq people(:admin).person_contacts.size - 1
+    contact = data[:contacts][2]
     expect(contact[:name]).to eq person_contacts(:admin_mail).head
-    expect(contact[:used]).to eq person_contacts(:admin_mail).used
     expect(contact[:priority]).to eq person_contacts(:admin_mail).priority
   end
 
@@ -89,7 +88,7 @@ RSpec.describe Person, type: :model do
     expect(data[:addresses].size).to eq 1
     expect(data[:namings].size).to eq 2
     naming = data[:namings][0]
-    expect(naming[:used]).to eq person_names(:user).used
+    expect(naming[:name]).to eq person_names(:user).head
   end
 
   let (:new_person) {

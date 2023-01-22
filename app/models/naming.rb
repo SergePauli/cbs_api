@@ -4,7 +4,7 @@ class Naming < ApplicationRecord
   validates :surname, uniqueness: { scope: [:name, :patrname] }
 
   def head
-    "#{surname} #{name} #{patrname}".strip
+    "#{surname} #{name} #{patrname.blank? ? "" : patrname}".strip
   end
 
   def self.permitted_params

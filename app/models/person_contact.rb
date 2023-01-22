@@ -13,6 +13,10 @@ class PersonContact < MutableData
     contact.type
   end
 
+  def item
+    super.merge(type: type)
+  end
+
   def self.permitted_params
     super | [:person_id, :contact_id, contact_attributes: Contact.permitted_params]
   end

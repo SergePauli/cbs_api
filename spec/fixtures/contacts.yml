@@ -1,6 +1,6 @@
 cbs_mail:
   id: 1
-  value: info@cbsib.ru
+  value: info@test.ru
   type: Email
 cbs_phone:
   id: 2
@@ -12,11 +12,11 @@ cbs_mobile:
   type: Phone  
 cbs_site:
   id: 4
-  value: cbsib.ru
+  value: test.ru
   type: SiteUrl
 cbs_telegram:
   id: 5
-  value: "@Laferov"
+  value: "@Testov"
   type: Telegram   
 cbs_fax:
   id: 6

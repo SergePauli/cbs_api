@@ -12,7 +12,7 @@ class PersonName < MutableData
   accepts_nested_attributes_for :naming
 
   def item
-    { id: id, name: naming.head, used: used }
+    { id: id, name: naming.head }
   end
 
   def self.permitted_params

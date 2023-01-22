@@ -11,6 +11,10 @@ class Contact < ApplicationRecord
     super.merge({ type: type })
   end
 
+  def item
+    super.merge({ type: type })
+  end
+
   def self.permitted_params
     super | [:value, :name, :type]
   end

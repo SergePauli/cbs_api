@@ -16,7 +16,7 @@ class MutableData < ApplicationRecord
   end
 
   def item
-    super.merge({ used: used, priority: priority })
+    super.merge({ priority: priority })
   end
 
   def self.permitted_params

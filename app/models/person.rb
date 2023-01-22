@@ -58,8 +58,12 @@ class Person < ApplicationRecord
     result += " " + contact if contact
   end
 
+  def name
+    person_name.head
+  end
+
   def card
-    super.merge({ email: (email ? email.custom_data(:card) : nil), phone: (phone ? phone.custom_data(:card) : nil), naming: naming.head, address: (address ? address.custom_data(:card) : nil), contacts: person_contacts.map { |el| el.custom_data(:item) } || [] })
+    super.merge({ email: (email ? email.item : nil), phone: (phone ? phone.item : nil), name: name, address: (address ? address.item : nil), contacts: person_contacts.filter { |el| el.used }.map { |el| el.custom_data(:item) } || [] })
   end
 
   def full

@@ -32,6 +32,7 @@ RSpec.describe Contragent, type: :model do
 
   it "Должна выдавать корректный набор card" do
     data = kraskom.card
+    puts data
     expect(data[:id]).to eq kraskom.id
     expect(data[:head]).to eq kraskom.head
     expect(data[:contacts].size).to eq 2

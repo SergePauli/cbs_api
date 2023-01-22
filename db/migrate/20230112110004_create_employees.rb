@@ -7,8 +7,10 @@ class CreateEmployees < ActiveRecord::Migration[6.1]
       t.integer :priority, null: false, default: 1
       t.boolean :used, null: false, default: true
       t.string :description
+      t.uuid :obj_uuid, unique: true, null: false, default: -> { "gen_random_uuid()" }
       t.timestamps
     end
+    add_index :employees, [:contragent_id, :person_id, :position_id], unique: true
   end
 
   def down
