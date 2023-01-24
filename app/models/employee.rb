@@ -19,11 +19,11 @@ class Employee < MutableData
   end
 
   def item
-    { id: id, name: name, position: position.name, contacts: person.person_contacts.filter { |el| el.used }.map { |el| el.custom_data(:item) } || [] }
+    { id: id, priority: priority, name: name, position: position.name, contacts: person.person_contacts.filter { |el| el.used }.map { |el| el.custom_data(:item) } || [] }
   end
 
   def card
-    super.merge({ description: description, person: person.card, position: position.item, contragent: contragent.item })
+    super.merge({ priority: priority, description: description, person: person.card, position: position.item, contragent: contragent.item })
   end
 
   def self.permitted_params

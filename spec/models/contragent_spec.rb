@@ -7,7 +7,7 @@ RSpec.describe Contragent, type: :model do
   # добавленные методы
   it { is_expected.to respond_to(:obj_uuid, :name) }
 
-  fixtures :contragents, :contragent_organizations, :contacts, :organizations
+  fixtures :contragents, :contragent_organizations, :contragent_addresses, :contacts, :organizations, :employees
 
   let (:kraskom) {
     contragent = contragents(:kraskom)
@@ -32,12 +32,19 @@ RSpec.describe Contragent, type: :model do
 
   it "Должна выдавать корректный набор card" do
     data = kraskom.card
-    puts data
+    #puts data
     expect(data[:id]).to eq kraskom.id
     expect(data[:head]).to eq kraskom.head
     expect(data[:contacts].size).to eq 2
     expect(data[:contacts][0][:name]).to eq contacts(:client_mobile).value
     expect(data[:audits].size).to eq 1
+    expect(data[:requisites][:organization][:inn]).to eq organizations(:kraskom).inn
+    expect(data[:addresses].size).to eq 2
+    expect(data[:addresses][0][:kind]).to eq contragent_addresses(:kraskom_real).kind
+    expect(data[:addresses][0][:id]).to eq contragent_addresses(:kraskom_real).id
+    expect(data[:employees].size).to eq 2
+    expect(data[:employees][0][:id]).to eq employees(:client).id
+    expect(data[:obj_uuid]).to eq kraskom.obj_uuid
   end
 
   it "Должна выдавать корректный набор financial" do

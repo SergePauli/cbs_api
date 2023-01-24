@@ -35,7 +35,7 @@ class Contragent < ApplicationRecord
 
   # карточка контрагента
   def card
-    super.merge({ requisites: contragent_organization.card, description: description, obj_uuid: obj_uuid, audits: audits.map { |el| el.item } || [], contacts: contragent_contacts.map { |el| el.item } || [], addresses: contragent_addresses.map { |el| el.item } || [], employees: employees.map { |el| el.item } || [] })
+    super.merge({ requisites: contragent_organization.card, description: description, obj_uuid: obj_uuid, audits: audits.map { |el| el.item } || [], contacts: contragent_contacts.filter { |el| el.used }.map { |el| el.item } || [], addresses: contragent_addresses.filter { |el| el.used }.map { |el| el.item } || [], employees: employees.filter { |el| el.used }.map { |el| el.item } || [] })
   end
 
   # налоговые и банковские реквизиты контрагента
