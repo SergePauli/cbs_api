@@ -78,5 +78,8 @@ module CbsApi
 
     # почта администратора приложения
     config.admin_mail = ENV["ADMIN_USER"]
+
+    # локаль
+    config.i18n.default_locale = :ru
   end
 end
