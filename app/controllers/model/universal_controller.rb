@@ -50,11 +50,19 @@ class Model::UniversalController < PrivateController
   def create
     @res = @model_class.new permitted_params
     if @res.save
-      # if @model_class.trackable?
-      #   @res_a = Audit.new(guid: @res.guid, action: :added, table: params[:model_name],
-      #                      severity: :success, user_id: @current_user[:data][:id], detail: @res.to_s)
-      #   @res_a.save!
-      # end
+      if @model_class.respond_to? :obj_uuid # поддержка аудита изменений
+        if params[:audits] # есть записи с клиента
+          params[:audits].each do |audit|
+            res_a = Audit.new({ action: :added, obj_type: audit[:obj_type], obj_uuid: @res.obj_uuid, obj_name: audit[:obj_name] || @res.head, user_id: @current_user[:data][:id], detail: audit[:detail] || nil })
+            res_a.save!
+          end
+        else # генерим аудит автоматически
+          res_a = Audit.new(guid: @res.obj_uuid, action: :added, obj_type: params[:model_name].downcase,
+                            obj_name: @res.head, user_id: @current_user[:data][:id])
+          render json: { errors: res_a.errors.full_messages }, status: 500 unless res_a.save
+        end
+      end
+
       if params[:data_set].blank?
         render json: @res
       else

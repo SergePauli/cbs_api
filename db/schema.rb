@@ -32,11 +32,10 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
   end
 
   create_table "audits", force: :cascade do |t|
-    t.uuid "obj_uuid", null: false
+    t.string "auditable_type"
+    t.bigint "auditable_id"
     t.integer "action", limit: 2, null: false
-    t.integer "obj_type", limit: 2, null: false
-    t.string "obj_name", null: false
-    t.string "field_name"
+    t.string "auditable_field"
     t.string "detail"
     t.string "before"
     t.string "after"
@@ -44,8 +43,7 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["action"], name: "index_audits_on_action"
-    t.index ["obj_type"], name: "index_audits_on_obj_type"
-    t.index ["obj_uuid"], name: "index_audits_on_obj_uuid"
+    t.index ["auditable_type", "auditable_id"], name: "index_audits_on_auditable"
     t.index ["user_id"], name: "index_audits_on_user_id"
   end
 

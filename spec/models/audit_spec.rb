@@ -4,13 +4,16 @@ RSpec.describe Audit, type: :model do
   # унаследовано от ApplicationRecord
   it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
 
+  # обеспечение полиморфной связи
+  it { is_expected.to have_db_column(:auditable_id).of_type(:integer) }
+  it { is_expected.to have_db_column(:auditable_type).of_type(:string) }
+
+  it { is_expected.to belong_to(:auditable) }
+
+  fixtures :employees
+
   before(:each) do
     @audit = Audit.new
-  end
-
-  it "должна быть невалидной при отсутствии :obj_uuid в списке ошибок должно быть сообщение" do
-    expect(@audit).not_to be_valid
-    expect(@audit.errors[:obj_uuid]).not_to be_nil
   end
 
   it "должна быть невалидной при отсутствии :action в списке ошибок должно быть сообщение" do
@@ -18,23 +21,17 @@ RSpec.describe Audit, type: :model do
     expect(@audit.errors[:action]).not_to be_nil
   end
 
-  it "должна быть невалидной при отсутствии :obj_type в списке ошибок должно быть сообщение" do
-    expect(@audit).not_to be_valid
-    expect(@audit.errors[:obj_type]).not_to be_nil
-  end
-
-  it "должна быть невалидной при отсутствии :obj_name в списке ошибок должно быть сообщение" do
-    expect(@audit).not_to be_valid
-    expect(@audit.errors[:obj_name]).not_to be_nil
-  end
-
   it "должна быть невалидной при отсутствии :user в списке ошибок должно быть сообщение" do
     expect(@audit).not_to be_valid
     expect(@audit.errors[:user]).not_to be_nil
   end
 
+  let (:employee) {
+    employees(:user)
+  }
+
   let (:valid_audit) {
-    audit = Audit.new({ action: :added, obj_type: :contragent, obj_uuid: "cb972f50-37ef-43db-a871-2fbd48e60b1e", obj_name: "test", user_id: 1 })
+    audit = Audit.new({ action: :added, auditable: employee, user_id: 1 })
     audit.save
     audit
   }
@@ -49,9 +46,9 @@ RSpec.describe Audit, type: :model do
     expect(valid_audit.errors[:user]).not_to be_nil
   end
   it "метод :head должен возвращать время действия, действие, тип объекта и его наименования" do
-    expect(valid_audit.head).to include("Добавлен: Контрагент test")
+    expect(valid_audit.head).to include("Добавлен: сотрудник")
   end
   it "метод :card должен возвращать время действия, действие, тип объекта и его наименования" do
-    expect(valid_audit.card[:head]).to include("Добавлен: Контрагент test")
+    expect(valid_audit.card[:head]).to include("Добавлен: сотрудник")
   end
 end

@@ -1,4 +1,8 @@
 class Employee < MutableData
+  # аудит изменений
+  #has_many :audits, primary_key: "obj_uuid", foreign_key: "obj_uuid"
+  include Auditable
+
   belongs_to :contragent, inverse_of: :employees
   belongs_to :person
   belongs_to :position
@@ -23,7 +27,7 @@ class Employee < MutableData
   end
 
   def card
-    super.merge({ priority: priority, description: description, person: person.card, position: position.item, contragent: contragent.item })
+    super.merge({ priority: priority, description: description, person: person.card, position: position.item, contragent: contragent.item, audits: audits.map { |el| el.item } || [] })
   end
 
   def self.permitted_params

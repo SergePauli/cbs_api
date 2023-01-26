@@ -1,6 +1,7 @@
 class Contragent < ApplicationRecord
   # аудит изменений
-  has_many :audits, primary_key: "obj_uuid", foreign_key: "obj_uuid"
+  #has_many :audits, primary_key: "obj_uuid", foreign_key: "obj_uuid"
+  include Auditable
 
   # привязка к реквизитам
   has_many :contragent_organizations, inverse_of: :contragent, dependent: :destroy, autosave: true
@@ -44,6 +45,6 @@ class Contragent < ApplicationRecord
   end
 
   def self.permitted_params
-    super | [:description, :obj_uuid, audit_attributes: Audit.permitted_params, contragent_organizations: ContragentOrganization.permitted_params, contragent_contacts_attributes: ContragentContact.permitted_params, employee_attributes: Employee.permitted_params, contragent_addresses_attributes: ContragentAddress.permitted_params]
+    super | [:description, :obj_uuid, contragent_organizations: ContragentOrganization.permitted_params, contragent_contacts_attributes: ContragentContact.permitted_params, employee_attributes: Employee.permitted_params, contragent_addresses_attributes: ContragentAddress.permitted_params]
   end
 end

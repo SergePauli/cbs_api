@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Model::Universals", type: :request do
-  fixtures :users, :people, :contacts
+  fixtures :users, :people, :contacts, :positions, :contragents
 
   let (:test_user) {
     REDIS.del "tokens"
@@ -97,6 +97,16 @@ RSpec.describe "Model::Universals", type: :request do
     it "должен возвращать ошибку :unprocessable_entity, при попытке удаления связанной записи" do
       delete "/model/Person/1", headers: headers
       expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
+
+  # модели с аудитом изменений
+  describe "POST model/add/Employee без записей аудита" do
+    it "должен возвращать добавленную запись с автоматически сгенерированой информацией о добавлении и статус :ok" do
+      post "/model/add/Employee", params: { Employee: { contragent_id: contragents(:kraskom).id, position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] } }, data_set: "card" }, headers: headers
+      puts response.body
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include "test@mail.ru"
     end
   end
 end

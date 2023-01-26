@@ -11,7 +11,7 @@ RSpec.describe Contragent, type: :model do
 
   let (:kraskom) {
     contragent = contragents(:kraskom)
-    contragent.audits.push(Audit.new({ action: :added, obj_type: :contragent, obj_uuid: "cb972f50-37ef-43db-a871-2fbd48e60b1e", obj_name: "test", user_id: 1 }))
+    contragent.audits.push(Audit.new({ action: :added, auditable: contragent, user_id: 1 }))
     contragent.save
     contragent
   }
