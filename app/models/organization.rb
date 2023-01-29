@@ -1,5 +1,8 @@
 # реквизиты организаций
 class Organization < NamedRecord
+  # аудит изменений
+  include Auditable
+
   belongs_to :ownership
   validates :name, presence: true
   validates :inn, presence: true, format: { with: /[0-9]{10}/, message: "Неверный код ИНН" }
@@ -20,7 +23,7 @@ class Organization < NamedRecord
   end
 
   def card
-    super.merge({ name: name, full_name: full_name, inn: inn, kpp: kpp, ownership: ownership.item })
+    super.merge({ name: name, full_name: full_name, inn: inn, kpp: kpp, ownership: ownership.item, audits: audits.map { |el| el.item } || [] })
   end
 
   # бухгалтерско-коммерческий набор

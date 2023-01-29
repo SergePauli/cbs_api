@@ -1,157 +1,48 @@
 {
-  head: "ООО \"Крабком\"",
-  id: 1,
-  :summary=>{
-    :created=>Sun,
-    22 Jan 2023 03: 53: 31.226514000 UTC +00: 00,
-    :updated=>Sun,
-    22 Jan 2023 03: 53: 31.226514000 UTC +00: 00
+  "head": "Аполонов Апалон Григорьевич, специалист",
+  "id": 4,
+  "summary": {
+    "created": "2023-01-27T05:22:33.817Z",
+    "updated": "2023-01-27T05:22:33.817Z"
   },
-  :requisites=>{
-    :head=>"ООО \"Крабком\"",
-    :id=>1,
-    :summary=>{
-      :created=>Sun,
-      22 Jan 2023 03: 53: 31.670276000 UTC +00: 00,
-      :updated=>Sun,
-      22 Jan 2023 03: 53: 31.670276000 UTC +00: 00
+  "priority": 1,
+  "description": null,
+  "person": {
+    "head": "Аполонов А.Г. test@mail.ru",
+    "id": 7,
+    "summary": {
+      "created": "2023-01-27T05:22:33.806Z",
+      "updated": "2023-01-27T05:22:33.806Z"
     },
-    :organization=>{
-      :head=>"ООО \"Крабком\"",
-      :id=>1,
-      :summary=>{
-        :created=>Sun,
-        22 Jan 2023 03: 53: 31.678394000 UTC +00: 00,
-        :updated=>Sun,
-        22 Jan 2023 03: 53: 31.678394000 UTC +00: 00
-      },
-      :name=>"ООО \"Крабком\"",
-      :full_name=>"ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"КРАБ ЖИЛИЩНО-КОММУНАЛЬНЫЙ КОМПЛЕКС\"",
-      :inn=>"2466114215",
-      :kpp=>"246601001",
-      :ownership=>{
-        :id=>1,
-        :name=>"ООО"
+    "email": {
+      "id": 16,
+      "name": "test@mail.ru",
+      "type": "Email"
+    },
+    "phone": null,
+    "name": "Аполонов Апалон Григорьевич",
+    "address": null,
+    "contacts": [
+      {
+        "id": 15,
+        "name": "test@mail.ru",
+        "priority": 1,
+        "type": "Email"
       }
-    }
+    ]
   },
-  :description=>nil,
-  :obj_uuid=>"cb972f50-37ef-43db-a871-2fbd48e60b1e",
-  :audits=>[
+  "position": {
+    "id": 2,
+    "name": "специалист"
+  },
+  "contragent": {
+    "id": 1,
+    "name": "ООО \"Крабком\""
+  },
+  "audits": [
     {
-      :id=>287,
-      :name=>"22.01.2023 03:53 Добавлен: Контрагент test"
-    }
-  ],
-  :contacts=>[
-    {
-      :id=>2,
-      :name=>"+7 925 303 9000",
-      :used=>true,
-      :priority=>2,
-      :description=>"тел. директора"
-    },
-    {
-      :id=>1,
-      :name=>"some_client@mail.ru",
-      :used=>true,
-      :priority=>1,
-      :description=>"общая почта"
-    }
-  ],
-  :addresses=>[
-    {
-      :id=>1,
-      :name=>"Москва, пер. Малый Николопесковский, 11/2, кв. 17",
-      :used=>true,
-      :priority=>2,
-      :kind=>"registred"
-    },
-    {
-      :id=>2,
-      :name=>"Москва, переулок. Малый Николопесковский, 11/2, кв. 17",
-      :used=>true,
-      :priority=>1,
-      :kind=>"real"
-    }
-  ],
-  :employees=>[
-    {
-      :id=>3,
-      :name=>nil,
-      :position=>"начальник отдела ОЗИ",
-      :contacts=>[
-        {
-          :id=>10,
-          :name=>"+7 925 303 9000",
-          :used=>true,
-          :priority=>2,
-          :type=>"Phone"
-        },
-        {
-          :id=>9,
-          :name=>"some_client@mail.ru",
-          :used=>true,
-          :priority=>1,
-          :type=>"Email"
-        }
-      ]
-    },
-    {
-      :id=>2,
-      :name=>"Тестова Юза Юзеровна",
-      :position=>"экономист",
-      :contacts=>[
-        {
-          :id=>8,
-          :name=>"+7 925 808 8000",
-          :used=>true,
-          :priority=>2,
-          :type=>"Phone"
-        },
-        {
-          :id=>5,
-          :name=>"user@cbsib.ru",
-          :used=>true,
-          :priority=>1,
-          :type=>"Email"
-        }
-      ]
-    },
-    {
-      :id=>1,
-      :name=>"Тестов Тест Тестович",
-      :position=>"инженер-программист",
-      :contacts=>[
-        {
-          :id=>4,
-          :name=>"+7 923 303 9000",
-          :used=>false,
-          :priority=>99,
-          :type=>"Phone"
-        },
-        {
-          :id=>3,
-          :name=>"@Testov",
-          :used=>true,
-          :priority=>3,
-          :type=>"Telegram"
-        },
-        {
-          :id=>2,
-          :name=>"159-753",
-          :used=>true,
-          :priority=>2,
-          :type=>"Phone"
-        },
-        {
-          :id=>1,
-          :name=>"info@test.ru",
-          :used=>true,
-          :priority=>1,
-          :type=>"Email"
-        }
-      ]
+      "id": 90,
+      "name": "27.01.2023 05:22 Добавлен: сотрудник Аполонов Апалон Григорьевич, специалист"
     }
   ]
 }

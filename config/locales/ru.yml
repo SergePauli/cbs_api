@@ -12,5 +12,12 @@ ru:
   removed: "Удален"
   archived: "Отключен"
   imported: "Импортирован"
-  
-  
+  activerecord:
+    errors:
+      models:
+        profile:
+          attributes:
+            position:
+              required: "Не указана ДОЛЖНОСТЬ"
+            user:  
+              required: "Не указан ПОЛЬЗОВАТЕЛЬ"

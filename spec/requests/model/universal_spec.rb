@@ -101,12 +101,14 @@ RSpec.describe "Model::Universals", type: :request do
   end
 
   # модели с аудитом изменений
-  describe "POST model/add/Employee без записей аудита" do
+  describe "POST model/add/Employee" do
     it "должен возвращать добавленную запись с автоматически сгенерированой информацией о добавлении и статус :ok" do
-      post "/model/add/Employee", params: { Employee: { contragent_id: contragents(:kraskom).id, position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] } }, data_set: "card" }, headers: headers
-      puts response.body
+      post "/model/add/Employee", params: { Employee: { contragent_id: contragents(:kraskom).id, position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test400@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] } }, data_set: "card" }, headers: headers
+      expect(Audit.count).to eq 2
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include "test@mail.ru"
+      expect(response.body).to include "test400@mail.ru"
+      expect(response.body).to include "Аполонов Апалон Григорьевич"
+      expect(response.body).to include "Добавлен: сотрудник"
     end
   end
 end

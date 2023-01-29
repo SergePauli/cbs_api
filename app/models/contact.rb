@@ -1,4 +1,7 @@
 class Contact < ApplicationRecord
+  # аудит изменений
+  include Auditable
+
   validates :value, presence: { message: ":value should be present" }
   validates :type, presence: { message: ":type should be present" }
   validates :type, inclusion: { in: %w(Email Fax Phone SiteUrl Telegram),
@@ -8,7 +11,7 @@ class Contact < ApplicationRecord
   alias_attribute :name, :value
 
   def card
-    super.merge({ type: type })
+    super.merge({ type: type, audits: audits })
   end
 
   def item

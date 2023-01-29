@@ -1,6 +1,5 @@
 class Contragent < ApplicationRecord
   # аудит изменений
-  #has_many :audits, primary_key: "obj_uuid", foreign_key: "obj_uuid"
   include Auditable
 
   # привязка к реквизитам

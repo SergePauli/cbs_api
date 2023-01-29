@@ -50,19 +50,8 @@ class Model::UniversalController < PrivateController
   def create
     @res = @model_class.new permitted_params
     if @res.save
-      if @model_class.respond_to? :obj_uuid # поддержка аудита изменений
-        if params[:audits] # есть записи с клиента
-          params[:audits].each do |audit|
-            res_a = Audit.new({ action: :added, obj_type: audit[:obj_type], obj_uuid: @res.obj_uuid, obj_name: audit[:obj_name] || @res.head, user_id: @current_user[:data][:id], detail: audit[:detail] || nil })
-            res_a.save!
-          end
-        else # генерим аудит автоматически
-          res_a = Audit.new(guid: @res.obj_uuid, action: :added, obj_type: params[:model_name].downcase,
-                            obj_name: @res.head, user_id: @current_user[:data][:id])
-          render json: { errors: res_a.errors.full_messages }, status: 500 unless res_a.save
-        end
-      end
-
+      check_audit_creation(@res)
+      check_attributes(@res, params[params[:model_name]])
       if params[:data_set].blank?
         render json: @res
       else
@@ -149,6 +138,37 @@ class Model::UniversalController < PrivateController
       @res = @model_class.find params[:id]
     rescue ActiveRecord::RecordNotFound
       raise ApiError.new("Запись не найдена для ID=#{params[:id]}", :not_found)
+    end
+  end
+
+  # проверка на аудит добавления
+  # регистрируем вновь созданные записи, требующие аудит
+  def check_audit_creation(obj)
+    if (obj.respond_to? :audits) && obj.audits.empty?
+      audit = Audit.new({ action: :added, auditable: obj, user_id: @current_user[:data][:id] })
+      audit.save
+      obj.audits.push(audit)
+    end
+  end
+
+  # рекурсивно получаем элементы списка или дочерние атрибуты,
+  # и тоже проверяем на поддержку аудита
+  def check_attributes(obj, params)
+    params.each do |k, v|
+      if k.include?("_attributes")
+        child = obj.method(k.gsub("_attributes", "")).call
+        if v.class.name === "ActionController::Parameters"
+          check_audit_creation(child)
+          check_attributes(child, v)
+        elsif v.class.name === "Array"
+          i = 0
+          v.each { |el|
+            check_audit_creation(child[i])
+            check_attributes(child[i], el)
+            i += 1
+          }
+        end
+      end
     end
   end
 end

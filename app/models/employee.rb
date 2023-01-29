@@ -1,6 +1,5 @@
 class Employee < MutableData
   # аудит изменений
-  #has_many :audits, primary_key: "obj_uuid", foreign_key: "obj_uuid"
   include Auditable
 
   belongs_to :contragent, inverse_of: :employees
