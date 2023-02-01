@@ -9,8 +9,8 @@ RSpec.describe "Auth::Registrations", type: :request do
     post "/auth/registration", params: { profile: { user: nil, position: nil } }, headers: headers
     expect(response.content_type).to eq("application/json; charset=utf-8")
     expect(response).to have_http_status(:unprocessable_entity)
-    expect(response.body).to include("Не указана ДОЛЖНОСТЬ")
-    expect(response.body).to include("Не указан ПОЛЬЗОВАТЕЛЬ")
+    expect(response.body).to include("Не присвоена ДОЛЖНОСТЬ")
+    expect(response.body).to include("Не присвоен ПОЛЬЗОВАТЕЛЬ")
   end
 
   it "При верных параметрах, экшин /auth/registration должен создавать профиль пользователя, возвращая статус :ok" do

@@ -18,6 +18,10 @@ ru:
         profile:
           attributes:
             position:
-              required: "Не указана ДОЛЖНОСТЬ"
+              required: "Не присвоена ДОЛЖНОСТЬ"
             user:  
-              required: "Не указан ПОЛЬЗОВАТЕЛЬ"
+              required: "Не присвоен ПОЛЬЗОВАТЕЛЬ"
+        employee:
+          attributes:
+            contragent:
+              required: "Не присвоен КОНТРАГЕНТ"

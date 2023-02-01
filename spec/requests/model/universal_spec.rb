@@ -110,5 +110,12 @@ RSpec.describe "Model::Universals", type: :request do
       expect(response.body).to include "Аполонов Апалон Григорьевич"
       expect(response.body).to include "Добавлен: сотрудник"
     end
+
+    it "должен возвращать ошибку :unprocessable_entity, записей аудита не должно создаваться" do
+      post "/model/add/Employee", params: { Employee: { contragent_id: 999, position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test400@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] } }, data_set: "card" }, headers: headers
+      expect(Audit.count).to eq 0
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.body).to include "Не присвоен КОНТРАГЕНТ"
+    end
   end
 end
