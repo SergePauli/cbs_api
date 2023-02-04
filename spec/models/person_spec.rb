@@ -88,11 +88,11 @@ RSpec.describe Person, type: :model do
     expect(data[:addresses].size).to eq 1
     expect(data[:namings].size).to eq 2
     naming = data[:namings][0]
-    expect(naming[:name]).to eq person_names(:user).head
+    expect(naming[:name]).to eq person_names(:user).naming.head
   end
 
   let (:new_person) {
-    Person.create(person_contacts_attributes: [{ contact_attributes: { value: "test@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }], person_addresses_attributes: [{ used: false, address_attributes: { value: "г.Красноярск, пр-кт. Свободный, д.55", area_id: 24 } }])
+    Person.create(person_contacts_attributes: [{ list_key: SecureRandom.uuid, contact_attributes: { value: "test@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, list_key: SecureRandom.uuid, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }], person_addresses_attributes: [{ used: false, address_attributes: { value: "г.Красноярск, пр-кт. Свободный, д.55", area_id: 24 }, list_key: SecureRandom.uuid }])
   }
   it "должна создаваться запись c nested attributes" do
     expect(new_person).to be_valid

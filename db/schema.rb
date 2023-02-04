@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.integer "priority", default: 1, null: false
     t.boolean "used", default: true, null: false
     t.integer "kind", limit: 2, default: 0, null: false
+    t.uuid "list_key", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["address_id"], name: "index_contragent_addresses_on_address_id"
@@ -76,6 +77,7 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.integer "priority", default: 1, null: false
     t.boolean "used", default: true, null: false
     t.string "description"
+    t.uuid "list_key", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["contact_id"], name: "index_contragent_contacts_on_contact_id"
@@ -88,6 +90,7 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.bigint "organization_id", null: false
     t.integer "priority", default: 1, null: false
     t.boolean "used", default: true, null: false
+    t.uuid "list_key", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["contragent_id", "organization_id"], name: "by_contr_org_ids", unique: true
@@ -123,7 +126,7 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.integer "priority", default: 1, null: false
     t.boolean "used", default: true, null: false
     t.string "description"
-    t.uuid "obj_uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.uuid "list_key", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["contragent_id", "person_id", "position_id"], name: "index_employees_on_contragent_id_and_person_id_and_position_id", unique: true
@@ -180,6 +183,7 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.bigint "address_id", null: false
     t.integer "priority", default: 1, null: false
     t.boolean "used", default: true, null: false
+    t.uuid "list_key", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["address_id"], name: "index_person_addresses_on_address_id"
@@ -193,6 +197,7 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.bigint "contact_id", null: false
     t.integer "priority", default: 1, null: false
     t.boolean "used", default: true, null: false
+    t.uuid "list_key", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["contact_id"], name: "index_person_contacts_on_contact_id"
@@ -205,6 +210,7 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.bigint "person_id", null: false
     t.bigint "naming_id", null: false
     t.boolean "used", default: true, null: false
+    t.uuid "list_key", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["naming_id"], name: "index_person_names_on_naming_id"
@@ -229,6 +235,7 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.boolean "used", default: true, null: false
     t.string "statuses"
     t.string "contracts_types"
+    t.uuid "list_key", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["department_id"], name: "index_profiles_on_department_id"

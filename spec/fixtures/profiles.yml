@@ -3,9 +3,11 @@ admin:
   user_id: 1
   position_id: 4
   contracts_types: "9,10,11,12,13,14,15,16"
+  list_key: "7c69f63a-87f6-431d-9c5a-12df1004a449"
 user: 
   id: 2
   user_id: 2
   position_id: 3
   department_id: 1
+  list_key: "241fde4a-ab4e-451b-9290-d551dc90290b"
   

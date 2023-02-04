@@ -5,6 +5,7 @@ kraskom_real:
   priority: 2
   kind: 1
   used: true
+  list_key: "38fdfe7e-6eec-4ec4-bbf0-aa1b8500f3f5"
 kraskom_reg:
   id: 2  
   contragent_id: 1
@@ -12,6 +13,7 @@ kraskom_reg:
   used: true
   kind: 0
   priority: 1
+  list_key: "138e1f6b-be0e-4f4d-ac40-9fd454b46fce"
 med_rzd:
   id: 3  
   contragent_id: 2
@@ -19,3 +21,4 @@ med_rzd:
   used: true
   priority: 2
   kind: 0
+  list_key: "22a65347-0b33-45dc-abd1-97ae77c42d89"

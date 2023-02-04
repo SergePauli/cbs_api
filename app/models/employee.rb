@@ -18,7 +18,9 @@ class Employee < MutableData
   end
 
   def head
-    "#{person.name}, #{position.name}"
+    tmp = "#{person.name}, #{position.name}"
+    tmp = "*" + tmp unless used
+    tmp
   end
 
   def item

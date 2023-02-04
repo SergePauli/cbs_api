@@ -9,10 +9,11 @@
 class MutableData < ApplicationRecord
   self.abstract_class = true
 
+  validates :list_key, presence: true, uniqueness: true
   before_validation :ensure_is_unique
 
   def head
-    state.head
+    used ? state.head : "*" + state.head
   end
 
   def item
@@ -20,7 +21,7 @@ class MutableData < ApplicationRecord
   end
 
   def self.permitted_params
-    super | [:used, :priority, :_destroy]
+    super | [:used, :priority, :list_key, :_destroy]
   end
 
   def secure_addition(obj)

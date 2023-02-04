@@ -11,6 +11,7 @@ RSpec.describe ContragentAddress, type: :model do
 
   before(:each) do
     @contragent_address = ContragentAddress.new
+    @contragent_address.list_key = SecureRandom.uuid
   end
 
   it "Должна быть невалидной c невалидным id контрагента" do
@@ -52,7 +53,7 @@ RSpec.describe ContragentAddress, type: :model do
   end
 
   it "должна создаваться запись c nested attributes" do
-    @contragent_address = ContragentAddress.new({ contragent_id: 2, used: false, kind: :registred, address_attributes: { value: "г.Красноярск, пр-кт. Свободный, д.55", area_id: 24 } })
+    @contragent_address = ContragentAddress.new({ contragent_id: 2, used: false, kind: :registred, address_attributes: { value: "г.Красноярск, пр-кт. Свободный, д.55", area_id: 24 }, list_key: SecureRandom.uuid })
     @contragent_address.save
     expect(@contragent_address).not_to be_nil
     expect(@contragent_address).to be_valid

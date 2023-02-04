@@ -5,6 +5,7 @@ org_mail:
   description: "общая почта"
   priority: 1
   used: true
+  list_key: "8120fc77-a8e6-4172-9f08-11ec79e86dd7"
 org_mobile: 
   id: 2
   contragent_id: 1
@@ -12,3 +13,4 @@ org_mobile:
   description: "тел. директора"
   priority: 2
   used: true
+  list_key: "93b91470-6e06-42fe-841b-946695f4fff2"

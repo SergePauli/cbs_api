@@ -6,6 +6,7 @@ class CreateContragentContacts < ActiveRecord::Migration[6.1]
       t.integer :priority, null: false, default: 1
       t.boolean :used, null: false, default: true
       t.string :description
+      t.uuid :list_key, null: false
       t.timestamps
     end
     add_index :contragent_contacts, [:contragent_id, :contact_id], unique: true

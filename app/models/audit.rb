@@ -13,13 +13,17 @@ class Audit < ApplicationRecord
     I18n.t auditable_type
   end
 
+  def auditable_field_local
+    I18n.t auditable_field
+  end
+
   def action_name_local
     I18n.t action
   end
 
   # реализация для набора данных head
   def head
-    "#{created_at.strftime("%d.%m.%Y %H:%M")} #{action_name_local}: #{auditable_type_local} #{auditable.head}"
+    "#{created_at.strftime("%d.%m.%Y %H:%M")} #{action_name_local}: #{auditable_field.blank? ? auditable_type_local : auditable_field_local + " в " + auditable_type_local} #{auditable.head}"
   end
 
   # реализация для набора данных card
@@ -29,6 +33,6 @@ class Audit < ApplicationRecord
 
   # атрибуты для добавления
   def self.permitted_params
-    [:id, :action, :obj_name, :auditable_field, :detail, :before, :after, :user_id, :_destroy]
+    [:id, :action, :auditable_field, :detail, :before, :after, :user_id, :_destroy]
   end
 end

@@ -15,7 +15,9 @@ class Profile < MutableData
 
   # реализация для набора данных head
   def head
-    "#{user.name} #{position.name}"
+    tmp = "#{user.name} #{position.name}"
+    tmp = "*" + tmp unless used
+    tmp
   end
 
   # реализация для набора данных card

@@ -5,15 +5,18 @@ admin:
   priority: 1 
   position_id: 4
   used: false
+  list_key: "7c69f63a-87f6-431d-9c5a-12df1004a449"
 user: 
   id: 2
   person_id: 2
   contragent_id: 1
   priority: 2
   position_id: 3
+  list_key: "241fde4a-ab4e-451b-9290-d551dc90290b"
 client:
   id: 3  
   person_id: 3
   contragent_id: 1
   priority: 3
   position_id: 1
+  list_key: "fa370e96-4759-4145-9588-b31d6aaef380"

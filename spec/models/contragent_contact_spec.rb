@@ -13,6 +13,7 @@ RSpec.describe ContragentContact, type: :model do
 
   before(:each) do
     @contragent_contact = ContragentContact.new
+    @contragent_contact.list_key = SecureRandom.uuid
   end
 
   it "Должна быть невалидной c невалидным id контрагента" do

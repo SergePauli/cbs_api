@@ -11,6 +11,7 @@ RSpec.describe PersonAddress, type: :model do
 
   before(:each) do
     @person_address = PersonAddress.new
+    @person_address.list_key = SecureRandom.uuid
   end
 
   it "should require person" do
@@ -49,7 +50,7 @@ RSpec.describe PersonAddress, type: :model do
   end
 
   it "должна создаваться запись c nested attributes" do
-    @person_address = PersonAddress.new({ person_id: 1, used: false, address_attributes: { value: "г.Красноярск, пр-кт. Свободный, д.55", area_id: 24 } })
+    @person_address = PersonAddress.new({ person_id: 1, used: false, address_attributes: { value: "г.Красноярск, пр-кт. Свободный, д.55", area_id: 24 }, list_key: SecureRandom.uuid })
     @person_address.save
     expect(@person_address).not_to be_nil
     expect(@person_address).to be_valid

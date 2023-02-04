@@ -11,6 +11,7 @@ RSpec.describe ContragentOrganization, type: :model do
 
   before(:each) do
     @contragent_organization = ContragentOrganization.new
+    @contragent_organization.list_key = SecureRandom.uuid
   end
 
   it "Должна быть невалидной c невалидным id контрагента" do
@@ -50,7 +51,7 @@ RSpec.describe ContragentOrganization, type: :model do
   end
 
   it "должна создаваться запись c nested attributes" do
-    @contragent_organization = ContragentOrganization.new({ contragent_id: 1, used: false, organization_attributes: { name: "ООО 'Рога и копыта'", full_name: "Тестовая организация", ownership_id: 1, inn: "2466114217" } })
+    @contragent_organization = ContragentOrganization.new({ contragent_id: 1, used: false, organization_attributes: { name: "ООО 'Рога и копыта'", full_name: "Тестовая организация", ownership_id: 1, inn: "2466114217" }, list_key: SecureRandom.uuid })
     @contragent_organization.save
     expect(@contragent_organization).not_to be_nil
     expect(@contragent_organization).to be_valid

@@ -4,45 +4,53 @@ admin_mail:
   contact_id: 1
   priority: 1
   used: true
+  list_key: "241fde4a-ab4e-451b-9290-d551dc90290b"
 admin_phone:
   id: 2
   person_id: 1
   contact_id: 2
   priority: 2
   used: true  
+  list_key: "fa370e96-4759-4145-9588-b31d6aaef380"
 admin_telegram:
   id: 3
   person_id: 1
   contact_id: 5
   priority: 3
   used: true
+  list_key: "f0e80897-f449-45c2-b37c-e6ede7793a06"
 admin_phone_old:
   id: 4
   person_id: 1
   contact_id: 3
   priority: 99
-  used: false     
+  used: false 
+  list_key: "7e379573-beab-463d-a1cb-9f9b62651b3d"   
 user_mail: 
   id: 5
   person_id: 2
   contact_id: 9
   priority: 1
   used: true
+  list_key: "b48a9091-7fc8-4498-a2ca-41cd56ff7104"
 user_phone: 
   id: 8
   person_id: 2
   contact_id: 8
   priority: 2
-  used: true  
+  used: true 
+  list_key: "93b91470-6e06-42fe-841b-946695f4fff2" 
 client_mail:
   id: 9  
   person_id: 3
   contact_id: 10
   priority: 1
   used: true
+  list_key: "8120fc77-a8e6-4172-9f08-11ec79e86dd7"
 client_mobile: 
   id: 10
   person_id: 3
   contact_id: 7
   priority: 2
   used: true
+  list_key: "7c69f63a-87f6-431d-9c5a-12df1004a449"

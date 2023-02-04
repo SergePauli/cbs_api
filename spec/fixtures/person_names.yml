@@ -3,18 +3,22 @@ admin:
   person_id: 1
   naming_id: 1
   used: true
+  list_key: "fa370e96-4759-4145-9588-b31d6aaef380"
 user: 
   id: 2
   person_id: 2
   naming_id: 2
   used: false
+  list_key: "b48a9091-7fc8-4498-a2ca-41cd56ff7104"
 client:
   id: 3  
   person_id: 3
   naming_id: 3
   used: true
+  list_key: "7e379573-beab-463d-a1cb-9f9b62651b3d"
 user_new: 
   id: 4
   person_id: 2
   naming_id: 4 
   used: true 
+  list_key: "7c69f63a-87f6-431d-9c5a-12df1004a449"

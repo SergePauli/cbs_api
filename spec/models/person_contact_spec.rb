@@ -12,6 +12,7 @@ RSpec.describe PersonContact, type: :model do
 
   before(:each) do
     @person_contact = PersonContact.new
+    @person_contact.list_key = SecureRandom.uuid
   end
 
   it "should require person" do

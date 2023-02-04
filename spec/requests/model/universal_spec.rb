@@ -67,18 +67,18 @@ RSpec.describe "Model::Universals", type: :request do
   end
   describe "POST model/add/:model_name" do
     it "должен возвращать добавленную запись и статус :ok" do
-      post "/model/add/Person", params: { Person: { person_contacts_attributes: [{ contact_attributes: { value: "test@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, data_set: "card" }, headers: headers
+      post "/model/add/Person", params: { Person: { person_contacts_attributes: [{ contact_attributes: { value: "test@mail.ru", type: "Email" }, used: true, list_key: SecureRandom.uuid }], person_names_attributes: [{ used: true, list_key: SecureRandom.uuid, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, data_set: "card" }, headers: headers
       expect(response).to have_http_status(:ok)
       expect(response.body).to include "test@mail.ru"
     end
     it "должен возвращать ошибку :unprocessable_entity, если не указан ни один из контактов" do
-      post "/model/add/Person", params: { Person: { person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, data_set: "card" }, headers: headers
+      post "/model/add/Person", params: { Person: { person_names_attributes: [{ used: true, list_key: SecureRandom.uuid, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, data_set: "card" }, headers: headers
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
   describe "PUT model/:model_name/:id" do
     it "должен измененную запись и статус :ok" do
-      put "/model/Person/1", params: { Person: { person_contacts_attributes: [{ contact_attributes: { value: "test2@mail.ru", type: "Email" }, used: true }] }, data_set: "card" }, headers: headers
+      put "/model/Person/1", params: { Person: { person_contacts_attributes: [{ contact_attributes: { value: "test2@mail.ru", type: "Email" }, used: true, list_key: SecureRandom.uuid }] }, data_set: "card" }, headers: headers
       expect(response).to have_http_status(:ok)
       expect(response.body).to include "test2@mail.ru"
     end
@@ -103,7 +103,8 @@ RSpec.describe "Model::Universals", type: :request do
   # модели с аудитом изменений
   describe "POST model/add/Employee" do
     it "должен возвращать добавленную запись с автоматически сгенерированой информацией о добавлении и статус :ok" do
-      post "/model/add/Employee", params: { Employee: { contragent_id: contragents(:kraskom).id, position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test400@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] } }, data_set: "card" }, headers: headers
+      post "/model/add/Employee", params: { Employee: { contragent_id: contragents(:kraskom).id, position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test400@mail.ru", type: "Email" }, used: true, list_key: SecureRandom.uuid }], person_names_attributes: [{ used: true, list_key: SecureRandom.uuid, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, list_key: SecureRandom.uuid }, data_set: "card" }, headers: headers
+
       expect(Audit.count).to eq 2
       expect(response).to have_http_status(:ok)
       expect(response.body).to include "test400@mail.ru"
@@ -112,10 +113,20 @@ RSpec.describe "Model::Universals", type: :request do
     end
 
     it "должен возвращать ошибку :unprocessable_entity, записей аудита не должно создаваться" do
-      post "/model/add/Employee", params: { Employee: { contragent_id: 999, position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test400@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] } }, data_set: "card" }, headers: headers
+      post "/model/add/Employee", params: { Employee: { list_key: SecureRandom.uuid, contragent_id: 999, position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test400@mail.ru", type: "Email" }, used: true, list_key: SecureRandom.uuid }], person_names_attributes: [{ used: true, list_key: SecureRandom.uuid, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] } }, data_set: "card" }, headers: headers
       expect(Audit.count).to eq 0
       expect(response).to have_http_status(:unprocessable_entity)
       expect(response.body).to include "Не присвоен КОНТРАГЕНТ"
+    end
+  end
+  describe "PUT model/Contragent/:id" do
+    it "должен возвращать измененную запись с автоматической регистрацией всех изменений и статус :ok" do
+      put "/model/Contragent/#{contragents(:kraskom).id}", params: { Contragent: { id: contragents(:kraskom).id, employees_attributes: [{ position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test400@mail.ru", type: "Email" }, used: true, list_key: SecureRandom.uuid }], person_names_attributes: [{ used: true, list_key: SecureRandom.uuid, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, list_key: SecureRandom.uuid }] }, data_set: "card" }, headers: headers
+      expect(response).to have_http_status(:ok)
+      expect(Audit.count).to eq 3
+      3.times do |i|
+        puts Audit.offset(i).first.head
+      end
     end
   end
 end

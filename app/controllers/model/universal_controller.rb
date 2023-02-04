@@ -69,16 +69,14 @@ class Model::UniversalController < PrivateController
   # :data_set задает типовой набор данных на выходе (:item, :card и т.д.)
   # возвращает экземпляр модели <model_name> или ошибку
   def update
-    #audits = []
-    # if @model_class.trackable? && !params[:audits].blank?
-    #   params[:audits].each do |audit|
-    #     audits.push(Audit.new(guid: @res.guid, action: :updated, table: params[:model_name], field: audit[:field], after: audit[:after], before: audit[:before], severity: :success, summary: @res.to_s, detail: audit[:detail], user_id: @current_user[:data][:id]))
-    #   end
-    # end
+    old_map = create_string_values_map if (@res.respond_to? :audits)
     if @res.update(permitted_params)
-      @res.touch
-      #Audit.import audits if !audits.blank?
-      find_record
+      if (@res.respond_to? :audits)
+        @res.reload
+        new_map = create_string_values_map
+        check_audit_updating(new_map, old_map)
+        check_attributes(@res, params[params[:model_name]])
+      end
       if params[:data_set].blank?
         render json: @res
       else
@@ -151,6 +149,54 @@ class Model::UniversalController < PrivateController
     end
   end
 
+  # проверка на аудит обновления
+  # регистрируем изменение записи, с признаком аудита
+  def check_audit_updating(new_map, old_map)
+    new_map.each do |k, v|
+      before = old_map[k]
+      #print k, " ", before, " "
+      #puts v
+      if v != before
+        audit = Audit.new({ action: :updated, auditable_field: k, before: before, after: v, auditable: @res, user_id: @current_user[:data][:id] })
+        audit.save
+        @res.audits.push(audit)
+      end
+    end
+  end
+
+  # генерируем строковую карту значений
+  def create_string_values_map
+    result = {}
+    params[params[:model_name]].each do |k, v|
+      #print k, " ", v.class.name, " "
+      #puts v
+      if k.include? "_id"
+        child = @res.method(k.gsub("_id", "")).call
+        result[k] = child.blank? ? "" : child.head
+      elsif (k.include?("_attributes") && (v.class.name === "Array"))
+        field = k.gsub("_attributes", "")
+        child = @res.method(field).call
+        all_string = child.reduce("") { |all_string, el| all_string + "{" + el.head + "} " }
+        result[field] = all_string[0..-1]
+      elsif k.include?("_attributes")
+        field = k.gsub("_attributes", "")
+        child = @res.method(field).call
+        result[field] = child.blank? ? "" : child.head
+      elsif (k != "id")
+        child = @res.method(k).call
+        if (child.class === "Date")
+          result[k] = child.strftime("%d.%m.%Y")
+        elsif (child.class === "DateTime")
+          result[k] = child.strftime("%d.%m.%Y %H:%M")
+        else
+          result[k] = child.to_s
+        end
+      end
+    end
+    #puts result
+    result
+  end
+
   # рекурсивно получаем элементы списка или дочерние атрибуты,
   # и тоже проверяем на поддержку аудита
   def check_attributes(obj, params)
@@ -161,12 +207,11 @@ class Model::UniversalController < PrivateController
           check_audit_creation(child)
           check_attributes(child, v)
         elsif v.class.name === "Array"
-          i = 0
-          v.each { |el|
-            check_audit_creation(child[i])
-            check_attributes(child[i], el)
-            i += 1
-          }
+          v.each do |el|
+            element = child.filter { |objct| objct.list_key === el[:list_key] }
+            check_audit_creation(element[0])
+            check_attributes(element[0], el)
+          end
         end
       end
     end

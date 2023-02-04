@@ -2,19 +2,23 @@ admin:
   id: 1
   person_id: 1
   address_id: 1
+  list_key: "7e379573-beab-463d-a1cb-9f9b62651b3d"
 user: 
   id: 2
   person_id: 2
   address_id: 2
+  list_key: "f0e80897-f449-45c2-b37c-e6ede7793a06"
 client:
   id: 3  
   person_id: 3
   address_id: 3
   used: true
   priority: 1
+  list_key: "fa370e96-4759-4145-9588-b31d6aaef380"
 client_new:
   id: 4  
   person_id: 3
   address_id: 1  
   used: true
   priority: 2
+  list_key: "241fde4a-ab4e-451b-9290-d551dc90290b"

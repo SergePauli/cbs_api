@@ -5,6 +5,7 @@ class CreateContragentOrganizations < ActiveRecord::Migration[6.1]
       t.references :organization, null: false, foreign_key: true
       t.integer :priority, null: false, default: 1
       t.boolean :used, null: false, default: true
+      t.uuid :list_key, null: false
       t.timestamps
     end
     add_index :contragent_organizations, [:contragent_id, :organization_id], unique: true, name: "by_contr_org_ids"

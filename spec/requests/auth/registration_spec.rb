@@ -15,7 +15,7 @@ RSpec.describe "Auth::Registrations", type: :request do
 
   it "При верных параметрах, экшин /auth/registration должен создавать профиль пользователя, возвращая статус :ok" do
     headers = { "ACCEPT" => "application/json" }
-    post "/auth/registration", params: { profile: { department_id: 1, position_attributes: { name: "тестировщик" }, user_attributes: { name: "tester", password: "sfd4rwetcvgfdg", password_confirmation: "sfd4rwetcvgfdg", person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test@mail.ru", type: "Email" }, used: true }], person_names_attributes: [{ used: true, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] } } } }, headers: headers
+    post "/auth/registration", params: { profile: { department_id: 1, list_key: SecureRandom.uuid, position_attributes: { name: "тестировщик" }, user_attributes: { name: "tester", password: "sfd4rwetcvgfdg", password_confirmation: "sfd4rwetcvgfdg", person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test@mail.ru", type: "Email" }, used: true, list_key: SecureRandom.uuid }], person_names_attributes: [{ used: true, list_key: SecureRandom.uuid, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] } } } }, headers: headers
     expect(response).to have_http_status(:ok)
     @profile = Profile.includes(:position).where(position: { name: "тестировщик" }).first
     @user = @profile.user

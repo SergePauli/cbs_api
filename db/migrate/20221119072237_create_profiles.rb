@@ -8,6 +8,7 @@ class CreateProfiles < ActiveRecord::Migration[6.1]
       t.boolean :used, null: false, default: true
       t.string :statuses
       t.string :contracts_types
+      t.uuid :list_key, null: false
       t.timestamps
     end
     add_index :profiles, :priority
