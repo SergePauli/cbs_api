@@ -9,7 +9,6 @@ class CreateContragentAddresses < ActiveRecord::Migration[6.1]
       t.uuid :list_key, null: false
       t.timestamps
     end
-    add_index :contragent_addresses, [:contragent_id, :address_id, :kind], unique: true, name: "by_contr_addr_ids"
   end
 
   def down

@@ -154,8 +154,6 @@ class Model::UniversalController < PrivateController
   def check_audit_updating(new_map, old_map)
     new_map.each do |k, v|
       before = old_map[k]
-      #print k, " ", before, " "
-      #puts v
       if v != before
         audit = Audit.new({ action: :updated, auditable_field: k, before: before, after: v, auditable: @res, user_id: @current_user[:data][:id] })
         audit.save
@@ -168,11 +166,10 @@ class Model::UniversalController < PrivateController
   def create_string_values_map
     result = {}
     params[params[:model_name]].each do |k, v|
-      #print k, " ", v.class.name, " "
-      #puts v
       if k.include? "_id"
-        child = @res.method(k.gsub("_id", "")).call
-        result[k] = child.blank? ? "" : child.head
+        field = k.gsub("_id", "")
+        child = @res.method(field).call
+        result[field] = child.blank? ? "" : child.head
       elsif (k.include?("_attributes") && (v.class.name === "Array"))
         field = k.gsub("_attributes", "")
         child = @res.method(field).call
@@ -184,16 +181,17 @@ class Model::UniversalController < PrivateController
         result[field] = child.blank? ? "" : child.head
       elsif (k != "id")
         child = @res.method(k).call
-        if (child.class === "Date")
+        if (child.class.name === "Date")
           result[k] = child.strftime("%d.%m.%Y")
-        elsif (child.class === "DateTime")
+        elsif (child.class.name === "DateTime")
           result[k] = child.strftime("%d.%m.%Y %H:%M")
+        elsif (child.class.name === "TrueClass" || child.class.name === "FalseClass")
+          result[k] = I18n.t child.to_s
         else
           result[k] = child.to_s
         end
       end
     end
-    #puts result
     result
   end
 

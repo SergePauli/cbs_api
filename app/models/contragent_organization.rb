@@ -6,9 +6,13 @@ class ContragentOrganization < MutableData
   validates_associated :contragent
   validates_associated :organization
   validates :contragent, uniqueness: { scope: :organization }
-  validates :organization, uniqueness: { scope: :used }
+  validates :used, uniqueness: { scope: [:contragent], message: "Контрагент уже имеет использующийся набор реквизитов" }, if: -> { used? }
   alias_attribute :state, :organization # для поддержки MutableData
   accepts_nested_attributes_for :organization
+
+  def name
+    organization.head
+  end
 
   def item
     super.merge({ organization: organization.item })

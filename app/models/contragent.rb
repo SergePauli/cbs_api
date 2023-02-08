@@ -44,6 +44,6 @@ class Contragent < ApplicationRecord
   end
 
   def self.permitted_params
-    super | [:description, :obj_uuid, contragent_organizations: ContragentOrganization.permitted_params, contragent_contacts_attributes: ContragentContact.permitted_params, employees_attributes: Employee.permitted_params, contragent_addresses_attributes: ContragentAddress.permitted_params]
+    super | [:bank_name, :bank_bik, :bank_account, :bank_cor_account, :description, :obj_uuid, contragent_organizations_attributes: ContragentOrganization.permitted_params, contragent_contacts_attributes: ContragentContact.permitted_params, employees_attributes: Employee.permitted_params, contragent_addresses_attributes: ContragentAddress.permitted_params]
   end
 end

@@ -1,19 +1,43 @@
 ru:
+  false: "нет"
+  true: "да"
+  name: "наименование"
+  value: "значение"
+  type: "тип"
+  full_name: "полное наименование"
   Contract: "контракт"
   Contragent: "контрагент"
+  contragent: "контрагент"
+  contragent_addresses: "список адресов"
+  contragent_contacts: "список контактов"
   Organization: "организация"
+  contragent_organizations: "набор реквизитов"
   Employee: "сотрудник"
   employees: "список сотрудников"
   Person: "персональные данные"
+  person: "персональные данные"
+  Position: "должность"
+  position: "должность"
   Contact: "контакт" 
-  contacts: "список контактов" 
+  contacts: "контакты" 
   User: "пользователь"
   Address: "адрес"
-  added: "Добавлен"
-  updated: "Изменен"
-  removed: "Удален"
-  archived: "Отключен"
-  imported: "Импортирован"
+  added: "Добавлен(а)"
+  updated: "Изменен(а)"
+  removed: "Удален(а)"
+  archived: "Архивирован(а)"
+  imported: "Импортирован(а)"
+  invalid: "Неверное значение"
+  used: "признак использования"
+  real: "фактический"
+  priority: "приоритет"
+  registred: "регистрации"
+  bank_name: "банк"
+  bank_bik: "БИК банка"
+  bank_account: "банк. счет"
+  bank_cor_account: "корр. счет" 
+  description: "описание"
+
   activerecord:
     errors:
       models:
@@ -24,6 +48,17 @@ ru:
             user:  
               required: "Не присвоен ПОЛЬЗОВАТЕЛЬ"
         employee:
-          attributes:
+          attributes: 
             contragent:
               required: "Не присвоен КОНТРАГЕНТ"
+        contragent_address: 
+          attributes:
+            contragent:
+              required: "Не присвоен КОНТРАГЕНТ"                
+              invalid: "Неверное значение ID КОНТРАГЕНТА"
+            address:
+              required: "Не присвоен АДРЕС"  
+            list_key: 
+              blank: "Не присвоен уникальный ключ списка"  
+            kind:  
+              taken: "Данный ТИП адреса уже присутствует у КОНТРАГЕНТА"     

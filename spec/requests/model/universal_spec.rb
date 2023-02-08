@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Model::Universals", type: :request do
-  fixtures :users, :people, :contacts, :positions, :contragents
+  fixtures :users, :people, :contacts, :positions, :contragents, :employees
 
   let (:test_user) {
     REDIS.del "tokens"
@@ -109,7 +109,7 @@ RSpec.describe "Model::Universals", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include "test400@mail.ru"
       expect(response.body).to include "Аполонов Апалон Григорьевич"
-      expect(response.body).to include "Добавлен: сотрудник"
+      expect(response.body).to include "Добавлен(а): сотрудник"
     end
 
     it "должен возвращать ошибку :unprocessable_entity, записей аудита не должно создаваться" do
@@ -119,13 +119,25 @@ RSpec.describe "Model::Universals", type: :request do
       expect(response.body).to include "Не присвоен КОНТРАГЕНТ"
     end
   end
+  describe "PUT model/Employee/:id" do
+    it "должен возвращать измененную запись с автоматической регистрацией всех изменений и статус :ok" do
+      put "/model/Employee/#{employees(:client).id}", params: { Employee: { id: employees(:client).id, position_id: positions(:IT_security).id, used: false }, data_set: "card" }, headers: headers
+      #puts response.body
+      expect(response).to have_http_status(:ok)
+      expect(Audit.count).to eq 2
+      2.times do |i|
+        puts Audit.offset(i).first.card
+      end
+    end
+  end
   describe "PUT model/Contragent/:id" do
     it "должен возвращать измененную запись с автоматической регистрацией всех изменений и статус :ok" do
-      put "/model/Contragent/#{contragents(:kraskom).id}", params: { Contragent: { id: contragents(:kraskom).id, employees_attributes: [{ position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test400@mail.ru", type: "Email" }, used: true, list_key: SecureRandom.uuid }], person_names_attributes: [{ used: true, list_key: SecureRandom.uuid, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, list_key: SecureRandom.uuid }] }, data_set: "card" }, headers: headers
+      put "/model/Contragent/#{contragents(:kraskom).id}", params: { Contragent: { id: contragents(:kraskom).id, bank_bik: "040407700", contragent_organizations_attributes: [{ id: 1, priority: 5, organization_id: 3 }], employees_attributes: [{ position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test400@mail.ru", type: "Email" }, used: true, list_key: SecureRandom.uuid }], person_names_attributes: [{ used: true, list_key: SecureRandom.uuid, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, list_key: SecureRandom.uuid }], contragent_addresses_attributes: [{ used: false, kind: :registred, address_attributes: { value: "г.Красноярск, пр-кт. Свободный, д.55", area_id: 24 }, list_key: SecureRandom.uuid }] }, data_set: "card" }, headers: headers
+      #puts response.body
       expect(response).to have_http_status(:ok)
-      expect(Audit.count).to eq 3
-      3.times do |i|
-        puts Audit.offset(i).first.head
+      expect(Audit.count).to eq 6
+      5.times do |i|
+        #puts Audit.offset(i).first.card
       end
     end
   end

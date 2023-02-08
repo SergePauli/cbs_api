@@ -28,7 +28,7 @@ class Audit < ApplicationRecord
 
   # реализация для набора данных card
   def card
-    super.merge({ action: action, auditable: auditable.head, auditable_type: auditable_type, auditable_field: auditable_field, detail: detail, before: before, after: after, user: user.item })
+    super.merge({ action: action, auditable: auditable.item, auditable_type: auditable_type, auditable_field: auditable_field, detail: detail, before: before, after: after, user: user.item })
   end
 
   # атрибуты для добавления

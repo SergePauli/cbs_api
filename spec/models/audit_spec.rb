@@ -45,10 +45,10 @@ RSpec.describe Audit, type: :model do
     expect(valid_audit).not_to be_valid
     expect(valid_audit.errors[:user]).not_to be_nil
   end
-  it "метод :head должен возвращать время действия, действие, тип объекта и его наименования" do
-    expect(valid_audit.head).to include("Добавлен: сотрудник")
-  end
-  it "метод :card должен возвращать время действия, действие, тип объекта и его наименования" do
-    expect(valid_audit.card[:head]).to include("Добавлен: сотрудник")
+  it "должна содержать время действия, действие, ссылки на объекта аудита и пользователя" do
+    expect(valid_audit.head).to include("Добавлен(а): сотрудник")
+    expect(valid_audit.card[:user][:id]).to eq 1
+    expect(valid_audit.auditable.id).to eq employees(:user).id
+    expect(valid_audit.card[:summary][:created]).not_to be_nil
   end
 end

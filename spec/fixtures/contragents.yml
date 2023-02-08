@@ -2,9 +2,9 @@ kraskom:
   id: 1
   obj_uuid: cb972f50-37ef-43db-a871-2fbd48e60b1e 
   bank_name: 'Красноярское отделение 8646 ПАО Сбербанк г. Красноярск'
-  bank_account: 40702810031280034033
-  bank_cor_account: 30101810800000000627
-  bank_bik: 040407627
+  bank_account: '40702810031280034033'
+  bank_cor_account: '30101810800000000627'
+  bank_bik: '040407627'
 med_rzd:
   id: 2
   obj_uuid: cb972f50-37ef-43db-a871-2fbd48e60b1d

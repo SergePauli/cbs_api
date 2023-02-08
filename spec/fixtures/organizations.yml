@@ -17,3 +17,9 @@ med_rzd:
   inn: 2440006102
   kpp: 244001001
   ownership_id: 2
+krabcom:
+  id: 3
+  name: 'ООО "Крабком-2"'   
+  inn: 2440006103
+  kpp: 244001002
+  ownership_id: 1  
