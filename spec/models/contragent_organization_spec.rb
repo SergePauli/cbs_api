@@ -4,8 +4,8 @@ RSpec.describe ContragentOrganization, type: :model do
   # унаследовано от ApplicationRecord
   it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
 
-  # для совместимости с MutableData
-  it { is_expected.to respond_to(:state, :used) }
+  # для совместимости с MutableData и Singleable
+  it { is_expected.to respond_to(:state, :used, :main_model_id) }
 
   fixtures :contragents, :contragent_organizations, :organizations
 
