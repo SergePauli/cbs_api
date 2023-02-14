@@ -1,6 +1,9 @@
 require "rails_helper"
 
 RSpec.describe ContragentOrganization, type: :model do
+  # поддерживает правило одной используемой записи
+  it_behaves_like "singleable"
+
   # унаследовано от ApplicationRecord
   it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
 
