@@ -1,8 +1,9 @@
+# список исполнителей для отделов
 class Performer < MutableData
   # аудит изменений
   include Auditable
 
-  belongs_to :department, inverse_of: :performers
+  belongs_to :department
   belongs_to :person
   belongs_to :position
   validates_associated :department

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_12_110004) do
+ActiveRecord::Schema.define(version: 2023_02_13_095807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -178,6 +178,22 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "performers", force: :cascade do |t|
+    t.bigint "person_id", null: false
+    t.bigint "department_id", null: false
+    t.bigint "position_id"
+    t.integer "priority", default: 1, null: false
+    t.boolean "used", default: true, null: false
+    t.string "description"
+    t.uuid "list_key", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["department_id", "person_id", "position_id"], name: "index_performers_on_department_id_and_person_id_and_position_id", unique: true
+    t.index ["department_id"], name: "index_performers_on_department_id"
+    t.index ["person_id"], name: "index_performers_on_person_id"
+    t.index ["position_id"], name: "index_performers_on_position_id"
+  end
+
   create_table "person_addresses", force: :cascade do |t|
     t.bigint "person_id", null: false
     t.bigint "address_id", null: false
@@ -269,6 +285,9 @@ ActiveRecord::Schema.define(version: 2023_01_12_110004) do
   add_foreign_key "employees", "people"
   add_foreign_key "employees", "positions"
   add_foreign_key "organizations", "ownerships"
+  add_foreign_key "performers", "departments"
+  add_foreign_key "performers", "people"
+  add_foreign_key "performers", "positions"
   add_foreign_key "person_addresses", "addresses"
   add_foreign_key "person_addresses", "people"
   add_foreign_key "person_contacts", "contacts"
