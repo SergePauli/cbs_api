@@ -262,11 +262,13 @@ ActiveRecord::Schema.define(version: 2023_02_16_055525) do
 
   create_table "task_kinds", force: :cascade do |t|
     t.string "name"
+    t.string "code", limit: 2
     t.string "description"
     t.float "cost"
     t.integer "duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["code"], name: "index_task_kinds_on_code"
   end
 
   create_table "users", force: :cascade do |t|
