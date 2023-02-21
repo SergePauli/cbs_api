@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_16_055525) do
+ActiveRecord::Schema.define(version: 2023_02_19_063050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,26 @@ ActiveRecord::Schema.define(version: 2023_02_16_055525) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["value", "type"], name: "index_contacts_on_value_and_type", unique: true
+  end
+
+  create_table "contracts", force: :cascade do |t|
+    t.bigint "contragent_id", null: false, comment: "контрагент"
+    t.bigint "task_kind_id", null: false, comment: "тип контракта"
+    t.bigint "status_id", null: false, comment: "статус"
+    t.integer "order", default: 1, null: false, comment: "сквозной номер, относительно года и типа"
+    t.integer "year", null: false, comment: "год контракта"
+    t.string "code", limit: 2, null: false, comment: "код типа контракта"
+    t.boolean "governmental", default: false, null: false, comment: "госконтракт?"
+    t.date "signed_at", comment: "дата контракта (подписания)"
+    t.float "cost", comment: "сумма контракта"
+    t.float "tax", comment: "НДС"
+    t.date "funded_at", comment: "дата бухгалтерского закрытия"
+    t.date "completed_at", comment: "дата закрытия"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contragent_id"], name: "index_contracts_on_contragent_id"
+    t.index ["status_id"], name: "index_contracts_on_status_id"
+    t.index ["task_kind_id"], name: "index_contracts_on_task_kind_id"
   end
 
   create_table "contragent_addresses", force: :cascade do |t|
@@ -260,6 +280,12 @@ ActiveRecord::Schema.define(version: 2023_02_16_055525) do
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
+  create_table "statuses", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "task_kinds", force: :cascade do |t|
     t.string "name"
     t.string "code", limit: 2
@@ -286,6 +312,9 @@ ActiveRecord::Schema.define(version: 2023_02_16_055525) do
   end
 
   add_foreign_key "addresses", "areas"
+  add_foreign_key "contracts", "contragents"
+  add_foreign_key "contracts", "statuses"
+  add_foreign_key "contracts", "task_kinds"
   add_foreign_key "contragent_addresses", "addresses"
   add_foreign_key "contragent_addresses", "contragents"
   add_foreign_key "contragent_contacts", "contacts"

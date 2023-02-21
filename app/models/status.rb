@@ -1,0 +1,2 @@
+class Status < NamedRecord
+end

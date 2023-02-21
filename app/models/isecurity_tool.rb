@@ -1,0 +1,2 @@
+class IsecurityTool < ApplicationRecord
+end
