@@ -1,3 +1,4 @@
+# исполнители работы этапа
 class CreateStagePerformers < ActiveRecord::Migration[6.1]
   def up
     create_table :stage_performers do |t|
