@@ -18,6 +18,6 @@ class PersonContact < MutableData
   end
 
   def self.permitted_params
-    super | [:person_id, :contact_id, contact_attributes: Contact.permitted_params]
+    super | [:person_id, :contact_id] | [contact_attributes: Contact.permitted_params]
   end
 end

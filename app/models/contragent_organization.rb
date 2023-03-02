@@ -27,6 +27,6 @@ class ContragentOrganization < MutableData
   end
 
   def self.permitted_params
-    super | [:contragent_id, :organization_id, organization_attributes: Organization.permitted_params]
+    super | [:contragent_id, :organization_id] | [organization_attributes: Organization.permitted_params]
   end
 end

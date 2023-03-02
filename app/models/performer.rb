@@ -33,6 +33,6 @@ class Performer < MutableData
   end
 
   def self.permitted_params
-    super | [:department_id, :person_id, :position_id, :description, person_attributes: Person.permitted_params, position_attributes: Position.permitted_params]
+    super | [:department_id, :person_id, :position_id, :description] | [person_attributes: Person.permitted_params] | [position_attributes: Position.permitted_params]
   end
 end

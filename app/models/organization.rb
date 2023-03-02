@@ -32,6 +32,6 @@ class Organization < NamedRecord
   end
 
   def self.permitted_params
-    super | [:name, :full_name, :inn, :kpp, :ogrn, :okpo, :oktmo, :okved, :okogu, :okfc, :okopf, ownership: Ownership.permitted_params]
+    super | [:name, :full_name, :inn, :kpp, :ogrn, :okpo, :oktmo, :okved, :okogu, :okfc, :okopf] | [ownership: Ownership.permitted_params]
   end
 end

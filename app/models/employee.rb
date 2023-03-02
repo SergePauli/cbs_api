@@ -32,6 +32,6 @@ class Employee < MutableData
   end
 
   def self.permitted_params
-    super | [:contragent_id, :person_id, :position_id, :description, person_attributes: Person.permitted_params, position_attributes: Position.permitted_params]
+    super | [:contragent_id, :person_id, :position_id, :description] | [person_attributes: Person.permitted_params] | [position_attributes: Position.permitted_params]
   end
 end

@@ -21,6 +21,6 @@ class PersonName < MutableData
   end
 
   def self.permitted_params
-    super | [:person_id, :naming_id, naming_attributes: Naming.permitted_params]
+    super | [:person_id, :naming_id] | [naming_attributes: Naming.permitted_params]
   end
 end

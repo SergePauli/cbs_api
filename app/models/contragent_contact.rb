@@ -18,6 +18,6 @@ class ContragentContact < MutableData
   end
 
   def self.permitted_params
-    super | [:contragent_id, :contact_id, :description, contact_attributes: Contact.permitted_params]
+    super | [:contragent_id, :contact_id, :description] | [contact_attributes: Contact.permitted_params]
   end
 end

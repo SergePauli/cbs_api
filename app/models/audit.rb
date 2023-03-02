@@ -1,7 +1,10 @@
 class Audit < ApplicationRecord
+
+  # Персонализация авторства
+  include Personable
+
   belongs_to :auditable, polymorphic: true
   belongs_to :user
-  has_one :person, through: :user
 
   enum action: [:added, :updated, :removed, :archived, :imported]
 
@@ -33,6 +36,6 @@ class Audit < ApplicationRecord
 
   # атрибуты для добавления
   def self.permitted_params
-    [:id, :action, :auditable_field, :detail, :before, :after, :user_id, :_destroy]
+    super | [:action, :auditable_field, :detail, :before, :after, :user_id, :_destroy]
   end
 end

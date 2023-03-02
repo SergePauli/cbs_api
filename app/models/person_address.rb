@@ -10,6 +10,6 @@ class PersonAddress < MutableData
   accepts_nested_attributes_for :address
 
   def self.permitted_params
-    super | [:person_id, :address_id, address_attributes: Address.permitted_params]
+    super | [:person_id, :address_id] | [address_attributes: Address.permitted_params]
   end
 end

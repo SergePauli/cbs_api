@@ -23,6 +23,6 @@ class ContragentAddress < MutableData
   end
 
   def self.permitted_params
-    super | [:contragent_id, :kind, :address_id, address_attributes: Address.permitted_params]
+    super | [:contragent_id, :kind, :address_id] | [address_attributes: Address.permitted_params]
   end
 end
