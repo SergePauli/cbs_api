@@ -2,6 +2,9 @@ class Contragent < ApplicationRecord
   # аудит изменений
   include Auditable
 
+  # Комментирование
+  include Commentable
+
   # привязка к реквизитам
   has_many :contragent_organizations, inverse_of: :contragent, dependent: :destroy, autosave: true
   has_one :contragent_organization, -> { where(used: true).order("id DESC") }
@@ -43,7 +46,8 @@ class Contragent < ApplicationRecord
     { bank_name: bank_name, bank_bik: bank_bik, bank_account: bank_account, bank_cor_account: bank_cor_account }.merge(contragent_organization.organization.financial)
   end
 
+  # поддержка универсального контроллера
   def self.permitted_params
-    super | [:bank_name, :bank_bik, :bank_account, :bank_cor_account, :description, :obj_uuid, contragent_organizations_attributes: ContragentOrganization.permitted_params, contragent_contacts_attributes: ContragentContact.permitted_params, employees_attributes: Employee.permitted_params, contragent_addresses_attributes: ContragentAddress.permitted_params]
+    super | [:bank_name, :bank_bik, :bank_account, :bank_cor_account, :description, :obj_uuid] | [contragent_organizations_attributes: ContragentOrganization.permitted_params] | [contragent_contacts_attributes: ContragentContact.permitted_params] | [employees_attributes: Employee.permitted_params] | [contragent_addresses_attributes: ContragentAddress.permitted_params] | [comments_attributes: Comment.permitted_params]
   end
 end

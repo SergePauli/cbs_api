@@ -39,7 +39,7 @@ ru:
   bank_account: "банк. счет"
   bank_cor_account: "корр. счет" 
   description: "описание"
-
+  
   activerecord:
     errors:
       models:
@@ -64,3 +64,8 @@ ru:
               blank: "Не присвоен уникальный ключ списка"  
             kind:  
               taken: "Данный ТИП адреса уже присутствует у КОНТРАГЕНТА"     
+        comment:
+          attributes:
+            commentable:
+              required: "Не указан комментируемый объект"
+             
