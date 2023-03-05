@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Model::Universals", type: :request do
-  fixtures :users, :people, :contacts, :positions, :contragents, :employees
+  fixtures :users, :people, :contacts, :positions, :contragents, :employees, :profiles
 
   let (:test_user) {
     REDIS.del "tokens"
@@ -132,13 +132,10 @@ RSpec.describe "Model::Universals", type: :request do
   end
   describe "PUT model/Contragent/:id" do
     it "должен возвращать измененную запись с автоматической регистрацией всех изменений и статус :ok" do
-      put "/model/Contragent/#{contragents(:kraskom).id}", params: { Contragent: { id: contragents(:kraskom).id, bank_bik: "040407700", contragent_organizations_attributes: [{ organization_id: 3, used: true, list_key: "b48a9091-7fc8-4498-a2ca-41cd56ff7105" }], employees_attributes: [{ position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test400@mail.ru", type: "Email" }, used: true, list_key: SecureRandom.uuid }], person_names_attributes: [{ used: true, list_key: SecureRandom.uuid, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, list_key: SecureRandom.uuid }], contragent_addresses_attributes: [{ used: false, kind: :registred, address_attributes: { value: "г.Красноярск, пр-кт. Свободный, д.55", area_id: 24 }, list_key: SecureRandom.uuid }] }, data_set: "card" }, headers: headers
+      put "/model/Contragent/#{contragents(:kraskom).id}", params: { Contragent: { id: contragents(:kraskom).id, bank_bik: "040407700", contragent_organizations_attributes: [{ organization_id: 3, used: true, list_key: "b48a9091-7fc8-4498-a2ca-41cd56ff7105" }], employees_attributes: [{ position_id: positions(:specialist).id, person_attributes: { person_contacts_attributes: [{ contact_attributes: { value: "test400@mail.ru", type: "Email" }, used: true, list_key: SecureRandom.uuid }], person_names_attributes: [{ used: true, list_key: SecureRandom.uuid, naming_attributes: { name: "Апалон", surname: "Аполонов", patrname: "Григорьевич" } }] }, list_key: SecureRandom.uuid }], contragent_addresses_attributes: [{ used: false, kind: :registred, address_attributes: { value: "г.Красноярск, пр-кт. Свободный, д.55", area_id: 24 }, list_key: SecureRandom.uuid }], comments_attributes: [{ content: "test comment", profile_id: profiles(:user).id }] }, data_set: "card" }, headers: headers
       #puts response.body
       expect(response).to have_http_status(:ok)
       expect(Audit.count).to eq 6
-      5.times do |i|
-        #puts Audit.offset(i).first.card
-      end
     end
   end
 end

@@ -41,4 +41,21 @@ RSpec.describe Comment, type: :model do
     comment.destroy
     expect(Comment.count).to eq 0
   end
+
+  it "должна быть невалидной при невалидном :profile в списке ошибок должно быть сообщение" do
+    comment.profile_id = 999
+    expect(comment).not_to be_valid
+    expect(comment.errors[:profile]).not_to be_nil
+  end
+  it "должна содержать время комментирования, автора коммента, ссылки на объект комментирования и профиль пользователя" do
+    comment.save
+    expect(comment.commentable.id).to eq contragents(:kraskom).id
+    expect(comment.head).to include("Тестова Ю.Ю.")
+    data = comment.card
+    expect(data[:person][:id]).to eq comment.person.id
+    expect(data[:profile][:id]).to eq profiles(:user).id
+    expect(data[:department][:id]).to eq comment.department.id
+    expect(data[:content]).to eq "test comment"
+    expect(data[:summary][:created]).not_to be_nil
+  end
 end

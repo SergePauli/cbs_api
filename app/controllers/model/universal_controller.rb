@@ -166,6 +166,7 @@ class Model::UniversalController < PrivateController
   def create_string_values_map
     result = {}
     params[params[:model_name]].each do |k, v|
+      break if Auditable::no_audit_for.include?(k)
       if k.include? "_id"
         field = k.gsub("_id", "")
         child = @res.method(field).call
@@ -199,7 +200,7 @@ class Model::UniversalController < PrivateController
   # и тоже проверяем на поддержку аудита
   def check_attributes(obj, params)
     params.each do |k, v|
-      if k.include?("_attributes")
+      if k.include?("_attributes") && !Auditable::no_audit_for.include?(k)
         child = obj.method(k.gsub("_attributes", "")).call
         if v.class.name === "ActionController::Parameters"
           check_audit_creation(child)

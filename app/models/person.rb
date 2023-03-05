@@ -51,11 +51,16 @@ class Person < ApplicationRecord
     get_contact_by_type "Phone"
   end
 
-  def head
+  def initials
     result = "#{naming.surname} #{naming.name[0]}."
-    result += naming.patrname[0] + "." if naming.patrname
+    result += naming.patrname[0] + "." unless naming.patrname.blank?
+    result
+  end
+
+  def head
+    result = initials
     contact = email.value || phone.value
-    result += " " + contact if contact
+    result += " " + contact if contact != nil
   end
 
   def name
