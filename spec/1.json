@@ -46,3 +46,17 @@
     }
   ]
 }
+
+{
+  "id": 105,
+  "name": "05.03.2023 01:03 Тестова Ю.Ю.",
+  "commentable": {
+    "id": 1,
+    "name": "ООО \"Крабком-2\""
+  },
+  "department": {
+    "id": 1,
+    "name": "ОЗИ"
+  },
+  "content": "test comment"
+}
