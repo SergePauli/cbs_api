@@ -122,12 +122,8 @@ RSpec.describe "Model::Universals", type: :request do
   describe "PUT model/Employee/:id" do
     it "должен возвращать измененную запись с автоматической регистрацией всех изменений и статус :ok" do
       put "/model/Employee/#{employees(:client).id}", params: { Employee: { id: employees(:client).id, position_id: positions(:IT_security).id, used: false }, data_set: "card" }, headers: headers
-      #puts response.body
       expect(response).to have_http_status(:ok)
       expect(Audit.count).to eq 2
-      # 2.times do |i|
-      #   puts Audit.offset(i).first.card
-      # end
     end
   end
   describe "PUT model/Contragent/:id" do

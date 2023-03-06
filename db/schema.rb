@@ -386,6 +386,8 @@ ActiveRecord::Schema.define(version: 2023_02_22_092603) do
 
   create_table "statuses", force: :cascade do |t|
     t.string "name"
+    t.string "description"
+    t.integer "order"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

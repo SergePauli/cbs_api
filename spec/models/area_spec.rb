@@ -4,6 +4,8 @@ RSpec.describe Area, type: :model do
 
   # унаследовано от ApplicationRecord
   it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
+  # обеспечение Named
+  it { is_expected.to have_db_column(:name).of_type(:string) }
 
   fixtures :areas
 

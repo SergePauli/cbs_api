@@ -1,0 +1,36 @@
+projecting:
+  id: 0
+  name: "В проекте"  
+  order: 1
+signing:
+  id: 1
+  name: "Согласование"
+  order: 2
+signed:
+  id: 2
+  name: "Подписан"
+  order: 3
+pending:
+  id: 3
+  name: "Бух.закрытие"
+  description: "Выполнены работы, высланы счета и результаты, но нет оплаты"
+  order: 5
+done:
+  id: 4  
+  name: "Выполнен"
+  description: "Выполнены работы исполнителя" 
+  order: 5 
+closed:
+  id: 5
+  name: "Закрыт"
+  description: "Исполнены обязательства всех сторон"  
+  order: 4
+annulled:
+  id: 6
+  name: "Аннулирован"
+  order: 3
+frozen:
+  id: 7
+  name: "Заморожен"  
+  order: 4
+
