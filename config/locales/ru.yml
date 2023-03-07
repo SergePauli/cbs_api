@@ -39,6 +39,9 @@ ru:
   bank_account: "банк. счет"
   bank_cor_account: "корр. счет" 
   description: "описание"
+  order: "порядок"
+  Status: "статус"
+  status: "статус"
   
   activerecord:
     errors:

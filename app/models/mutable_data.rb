@@ -20,6 +20,10 @@ class MutableData < ApplicationRecord
     super.merge({ priority: priority })
   end
 
+  def card
+    super.merge({ priority: priority, used: used, list_key: list_key })
+  end
+
   def self.permitted_params
     super | [:used, :priority, :list_key, :_destroy]
   end

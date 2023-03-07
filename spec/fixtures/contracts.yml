@@ -1,0 +1,8 @@
+krabcom_01_23_01:
+  id: 1
+  contragent_id: 1
+  task_kind_id: 2
+  status_id: 1
+  code: "01"
+  order: 1
+  year: 23

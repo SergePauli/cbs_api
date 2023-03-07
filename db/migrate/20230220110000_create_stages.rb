@@ -4,7 +4,8 @@ class CreateStages < ActiveRecord::Migration[6.1]
     create_table :stages do |t|
       t.references :contract, null: false, foreign_key: true, comment: "контракт"
       t.references :task_kind, null: false, foreign_key: true, comment: "тип работы"
-      t.references :status, null: false, foreign_key: true, comment: "статус"
+      t.references :status, foreign_key: true, comment: "статус"
+      t.integer :priority, null: false, default: 0, comment: "очередность этапа, если 0,то договор - обычный"
       t.float :cost, comment: "сумма этапа"
       t.date :deadline, comment: "срок выполнения"
       t.date :funded_at, comment: "дата бухгалтерского закрытия"

@@ -7,6 +7,11 @@ RSpec.describe TaskKind, type: :model do
   # добавлено
   it { is_expected.to respond_to(:description, :cost, :duration) }
 
+  # обеспечение Named
+  it { is_expected.to have_db_column(:name).of_type(:string) }
+
+  it { is_expected.to have_db_column(:description).of_type(:string) }
+
   fixtures :task_kinds
 
   let (:new_value) {
@@ -41,7 +46,7 @@ RSpec.describe TaskKind, type: :model do
   end
 
   it "должна удаляться" do
-    to_destroy = task_kinds(:exam)
+    to_destroy = task_kinds(:documents)
     to_destroy.destroy
     expect { to_destroy.reload }.to raise_error(ActiveRecord::RecordNotFound)
   end

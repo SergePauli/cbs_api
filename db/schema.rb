@@ -98,7 +98,6 @@ ActiveRecord::Schema.define(version: 2023_02_22_092603) do
     t.date "signed_at", comment: "дата контракта (подписания)"
     t.integer "deadline_kind", comment: "вид срока"
     t.float "cost", comment: "сумма контракта"
-    t.float "tax", comment: "НДС"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["contragent_id"], name: "index_contracts_on_contragent_id"
@@ -365,7 +364,8 @@ ActiveRecord::Schema.define(version: 2023_02_22_092603) do
   create_table "stages", force: :cascade do |t|
     t.bigint "contract_id", null: false, comment: "контракт"
     t.bigint "task_kind_id", null: false, comment: "тип работы"
-    t.bigint "status_id", null: false, comment: "статус"
+    t.bigint "status_id", comment: "статус"
+    t.integer "priority", default: 0, null: false, comment: "очередность этапа, если 0,то договор - обычный"
     t.float "cost", comment: "сумма этапа"
     t.date "deadline", comment: "срок выполнения"
     t.date "funded_at", comment: "дата бухгалтерского закрытия"
@@ -406,6 +406,8 @@ ActiveRecord::Schema.define(version: 2023_02_22_092603) do
   create_table "tasks", force: :cascade do |t|
     t.bigint "stage_id", null: false, comment: "этап"
     t.bigint "task_kind_id", null: false, comment: "тип работы, задачи"
+    t.integer "priority", default: 1, null: false
+    t.boolean "used", default: true, null: false
     t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

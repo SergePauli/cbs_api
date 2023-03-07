@@ -11,7 +11,6 @@ class CreateContracts < ActiveRecord::Migration[6.1]
       t.date :signed_at, comment: "дата контракта (подписания)"
       t.integer :deadline_kind, comment: "вид срока"
       t.float :cost, comment: "сумма контракта"
-      t.float :tax, comment: "НДС"
 
       t.timestamps
     end

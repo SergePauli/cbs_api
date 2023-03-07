@@ -4,6 +4,8 @@ class CreateTasks < ActiveRecord::Migration[6.1]
     create_table :tasks do |t|
       t.references :stage, null: false, foreign_key: true, comment: "этап"
       t.references :task_kind, null: false, foreign_key: true, comment: "тип работы, задачи"
+      t.integer :priority, null: false, default: 1
+      t.boolean :used, null: false, default: true
       t.uuid :list_key, null: false, comment: "служебный ключ списка, для логгирования"
       t.timestamps
     end
