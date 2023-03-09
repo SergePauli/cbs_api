@@ -42,7 +42,11 @@ ru:
   order: "порядок"
   Status: "статус"
   status: "статус"
-  
+  cost: "стоимость"
+  Task: "задача"
+  task: "задача"
+  Task_kind: "Вид задачи"
+  task_kind: "Вид задачи"
   activerecord:
     errors:
       models:
