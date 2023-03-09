@@ -16,7 +16,7 @@ RSpec.describe Task, type: :model do
   it { is_expected.to have_db_column(:stage_id).of_type(:integer) }
   it { is_expected.to have_db_column(:task_kind_id).of_type(:integer) }
 
-  fixtures :tasks, :task_kinds, :stages
+  fixtures :tasks, :task_kinds, :stages, :contracts
 
   let (:task_new) {
     Task.new

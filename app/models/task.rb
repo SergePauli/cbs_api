@@ -1,7 +1,4 @@
 class Task < MutableData
-  # аудит изменений
-  include Auditable
-
   belongs_to :stage
   belongs_to :task_kind
   validates_associated :stage
