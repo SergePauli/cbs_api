@@ -1,4 +1,7 @@
 class TaskKind < NamedRecord
+  # аудит изменений
+  include Auditable
+
   validates :code, format: { with: /[0-9]{2}/,
                              message: "Указан неверный код типа контракта" }, allow_nil: true
 
