@@ -1,0 +1,12 @@
+asked:
+  id: 1
+  name: "Запрошен счет"  
+  order: 1
+arrived:
+  id: 2
+  name: "Пришло"
+  order: 2
+payed:
+  id: 3
+  name: "Оплачен"
+  order: 3
