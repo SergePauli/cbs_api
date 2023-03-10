@@ -1,6 +1,9 @@
 require "rails_helper"
 
 RSpec.describe Status, type: :model do
+  # поддерживает аудит изменений
+  it_behaves_like "auditable"
+
   # унаследовано от ApplicationRecord
   it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
 
