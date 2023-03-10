@@ -1,0 +1,18 @@
+d_l:
+  id: 1
+  name: "Dallas Lock"
+  unit: "шт."
+  priority: 2
+  used: true
+s_d:
+  id: 2
+  name: "Secret Disk"
+  unit: "шт."
+  priority: 3
+  used: true  
+s_n:
+  id: 3
+  name: "Secret Net"
+  unit: "шт."
+  priority: 1
+  used: true   
