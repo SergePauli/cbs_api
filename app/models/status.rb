@@ -1,4 +1,7 @@
 class Status < NamedRecord
+  # аудит изменений
+  include Auditable
+
   # реализация для набора данных :item
   def item
     super.merge({ description: description })
@@ -7,5 +10,9 @@ class Status < NamedRecord
   # реализация для набора данных card
   def card
     super.merge({ description: description, order: order })
+  end
+
+  def self.permitted_params
+    super | [:description, :order]
   end
 end
