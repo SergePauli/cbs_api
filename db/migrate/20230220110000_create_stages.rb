@@ -16,6 +16,7 @@ class CreateStages < ActiveRecord::Migration[6.1]
       t.boolean :is_sended, comment: "документы высланы"
       t.date :ride_out_at, comment: "дата выезда"
       t.boolean :is_ride_out, comment: "признак выезда к контрагенту"
+      t.boolean :used, null: false, default: true
 
       t.uuid :list_key, null: false, comment: "служебный ключ списка, для логгирования"
       t.timestamps
