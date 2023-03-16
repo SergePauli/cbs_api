@@ -45,8 +45,7 @@ RSpec.describe PersonAddress, type: :model do
     @person_address.address = Address.new
     @person_address.address.value = addresses(:moscow_1).value
     @person_address.address.area = addresses(:moscow_1).area
-    expect(@person_address).to be_valid
-    expect(@person_address.address.id).to eq addresses(:moscow_1).id
+    expect(@person_address).not_to be_valid
   end
 
   it "должна создаваться запись c nested attributes" do

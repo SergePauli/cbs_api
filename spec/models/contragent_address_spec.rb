@@ -56,8 +56,7 @@ RSpec.describe ContragentAddress, type: :model do
     contragent_address.address.value = addresses(:moscow_1).value
     contragent_address.address.area = addresses(:moscow_1).area
     contragent_address.kind = :registred
-    expect(contragent_address).to be_valid
-    expect(contragent_address.address.id).to eq addresses(:moscow_1).id
+    expect(contragent_address).not_to be_valid
   end
 
   it "должна создаваться запись c nested attributes" do

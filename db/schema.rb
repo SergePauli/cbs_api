@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_22_092603) do
+ActiveRecord::Schema.define(version: 2023_03_10_034553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -186,11 +186,12 @@ ActiveRecord::Schema.define(version: 2023_02_22_092603) do
 
   create_table "isecurity_tools", force: :cascade do |t|
     t.string "name", null: false, comment: "наименование"
-    t.integer "unit", null: false, comment: "ед. измерения"
+    t.string "unit", null: false, comment: "ед. измерения"
     t.integer "priority", default: 0, null: false, comment: "порядок в списке"
     t.boolean "used", default: true, null: false, comment: "признак использования"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["priority"], name: "index_isecurity_tools_on_priority"
   end
 
   create_table "namings", force: :cascade do |t|
@@ -200,6 +201,14 @@ ActiveRecord::Schema.define(version: 2023_02_22_092603) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["surname", "name", "patrname"], name: "index_namings_on_surname_and_name_and_patrname", unique: true
+  end
+
+  create_table "order_statuses", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "order"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -332,8 +341,8 @@ ActiveRecord::Schema.define(version: 2023_02_22_092603) do
   create_table "stage_orders", force: :cascade do |t|
     t.bigint "stage_id", null: false, comment: "этап"
     t.bigint "isecurity_tool_id", null: false, comment: "СЗИ, товар"
-    t.bigint "status_id", null: false, comment: "статус поставки"
-    t.bigint "contragent_id", null: false, comment: "поставщик"
+    t.bigint "order_status_id", null: false, comment: "статус поставки"
+    t.bigint "organization_id", null: false, comment: "поставщик"
     t.float "amount", comment: "колличество"
     t.date "requested_at", comment: "дата запроса счета"
     t.string "order_number", comment: "счет на поставку"
@@ -341,13 +350,16 @@ ActiveRecord::Schema.define(version: 2023_02_22_092603) do
     t.date "payment_at", comment: "дата оплаты счета"
     t.date "received_at", comment: "дата прихода"
     t.string "description", comment: "примечание"
+    t.integer "priority", default: 0, null: false, comment: "порядок в списке"
+    t.boolean "used", default: true, null: false, comment: "признак использования"
     t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["contragent_id"], name: "index_stage_orders_on_contragent_id"
     t.index ["isecurity_tool_id"], name: "index_stage_orders_on_isecurity_tool_id"
+    t.index ["order_status_id"], name: "index_stage_orders_on_order_status_id"
+    t.index ["organization_id"], name: "index_stage_orders_on_organization_id"
+    t.index ["priority"], name: "index_stage_orders_on_priority"
     t.index ["stage_id"], name: "index_stage_orders_on_stage_id"
-    t.index ["status_id"], name: "index_stage_orders_on_status_id"
   end
 
   create_table "stage_performers", force: :cascade do |t|
@@ -376,6 +388,7 @@ ActiveRecord::Schema.define(version: 2023_02_22_092603) do
     t.boolean "is_sended", comment: "документы высланы"
     t.date "ride_out_at", comment: "дата выезда"
     t.boolean "is_ride_out", comment: "признак выезда к контрагенту"
+    t.boolean "used", default: true, null: false
     t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -457,10 +470,9 @@ ActiveRecord::Schema.define(version: 2023_02_22_092603) do
   add_foreign_key "profiles", "departments"
   add_foreign_key "profiles", "positions"
   add_foreign_key "profiles", "users"
-  add_foreign_key "stage_orders", "contragents"
   add_foreign_key "stage_orders", "isecurity_tools"
+  add_foreign_key "stage_orders", "organizations"
   add_foreign_key "stage_orders", "stages"
-  add_foreign_key "stage_orders", "statuses"
   add_foreign_key "stage_performers", "performers"
   add_foreign_key "stage_performers", "stages"
   add_foreign_key "stages", "contracts"

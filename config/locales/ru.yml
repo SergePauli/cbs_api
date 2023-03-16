@@ -47,6 +47,7 @@ ru:
   task: "задача"
   Task_kind: "Вид задачи"
   task_kind: "Вид задачи"
+  list_key: "ключ списка"
   activerecord:
     errors:
       models:
@@ -66,13 +67,88 @@ ru:
               required: "Не присвоен КОНТРАГЕНТ"                
               invalid: "Неверное значение ID КОНТРАГЕНТА"
             address:
-              required: "Не присвоен АДРЕС"  
+              required: "Не присвоен АДРЕС" 
+              invalid: "Адрес указан неверно" 
             list_key: 
               blank: "Не присвоен уникальный ключ списка"  
             kind:  
-              taken: "Данный ТИП адреса уже присутствует у КОНТРАГЕНТА"     
+              taken: "Данный ТИП адреса уже присутствует у КОНТРАГЕНТА" 
+              
+        contragent_contact:
+          attributes:
+            contact:
+              invalid: "Контакт контрагента указан неверно"    
+            contragent:
+              invalid: "Контрагент невалиден"        
         comment:
           attributes:
             commentable:
               required: "Не указан комментируемый объект"
-             
+        stage_order: 
+          attributes:     
+            list_key: 
+              blank: "Не присвоен уникальный ключ списка" 
+            order_status:
+              required: "(order_status is required) Cтатус заказа не указан"
+            stage:
+              required: "(stage is required) Контракт(этап) не указан"
+              invalid: "(stage is invalid) Контракт(этап) указан неверно"  
+              taken: "(already taken) Указанные Поставщик и СЗИ уже использовались для данного Контракта(этапа)"
+            organization:
+              required: "(organization is required) Поставщик не указан"    
+              invalid: "(organization is invalid) Поставщик указан неверно"  
+            isecurity_tool:
+              required: "(isecurity_tool is required) СЗИ не указано"
+        organization:
+          attributes:
+            ownership:
+              required: "(ownership is required) Форма собственности не указана" 
+            inn:
+              blank: "(inn is blank) ИНН не указан"  
+            name: 
+              taken: "(name already taken) Название организации уже использовалось"     
+        order_status:
+          attributes:
+            name:
+              taken: "(name already taken) Название статуса уже использовалось"      
+        isecurity_tool: 
+          attributes:
+            name:
+              taken: "(name already taken) Название СЗИ уже использовалось"     
+        contact:
+          attributes:
+            value: 
+              taken: "(value already taken) Данный контакт уже был внесен в систему ранее"     
+        person_contact:
+          attributes:
+            contact:
+              invalid: "(person_contact is invalid) Контакт указан неверно"   
+            person:
+              invalid: "Ошибка в персональных данных"    
+        address:
+          attributes:
+            value:
+              taken: "(value already taken) Данный адрес уже был внесен в систему ранее" 
+              blank: "(value is blank) Попытка добавить пустой адрес в систему"
+            area: 
+              required: "(area required) Не указан регион адреса"   
+        naming: 
+          attributes:
+            surname:
+              taken:  "Данное ФИО уже было внесено в систему ранее" 
+        person_address:
+          attributes:
+            address: 
+              invalid: "Ошибка в адресе" 
+            person:
+              invalid: "Ошибка в персональных данных"  
+        contragent_organization:
+          attributes:
+            organization:
+              invalid:  "Ошибка в организации"    
+        person_name:
+          attributes:
+            naming:
+              invalid: "Ошибка в ФИО"
+            person:
+              invalid: "Ошибка в персональных данных"                   

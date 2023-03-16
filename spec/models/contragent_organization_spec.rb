@@ -49,8 +49,7 @@ RSpec.describe ContragentOrganization, type: :model do
     @contragent_organization.organization.name = organizations(:kraskom).name
 
     @contragent_organization.used = false
-    expect(@contragent_organization).to be_valid
-    expect(@contragent_organization.organization.id).to eq organizations(:kraskom).id
+    expect(@contragent_organization).not_to be_valid
   end
 
   it "должна создаваться запись c nested attributes" do

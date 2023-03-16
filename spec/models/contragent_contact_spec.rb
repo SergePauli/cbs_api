@@ -47,7 +47,7 @@ RSpec.describe ContragentContact, type: :model do
     @contragent_contact.contact = Contact.new
     @contragent_contact.contact.value = contacts(:client_mail).value
     @contragent_contact.contact.type = contacts(:client_mail).type
-    expect(@contragent_contact).to be_valid
-    expect(@contragent_contact.contact.id).to eq contacts(:client_mail).id
+    expect(@contragent_contact).not_to be_valid
+    expect(@contragent_contact.errors[:contact]).not_to be_nil # "has already been taken"
   end
 end
