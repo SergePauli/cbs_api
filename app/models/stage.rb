@@ -14,6 +14,10 @@ class Stage < MutableData
   has_many :performers, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
   accepts_nested_attributes_for :performers, allow_destroy: true
 
+  # заказы
+  has_many :stage_orders, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
+  accepts_nested_attributes_for :stage_orders, allow_destroy: true
+
   belongs_to :contract
   belongs_to :task_kind
   belongs_to :status
@@ -29,6 +33,6 @@ class Stage < MutableData
   end
 
   def card
-    super.merge({ contract: contract.item, task_kind: task_kind.item, status: status.item, cost: "%.2f" % cost, deadline: deadline || contract.deadline, duration: duration, sended_at: sended_at, is_sended: is_sended, ride_out_at: ride_out_at, is_ride_out: is_ride_out, tasks: used_items(tasks), performers: used_items(performers) })
+    super.merge({ contract: contract.item, task_kind: task_kind.item, status: status.item, cost: "%.2f" % cost, deadline: deadline || contract.deadline, duration: duration, sended_at: sended_at, is_sended: is_sended, ride_out_at: ride_out_at, is_ride_out: is_ride_out, tasks: used_items(tasks), stage_orders: used_items(stage_orders), performers: used_items(performers) })
   end
 end

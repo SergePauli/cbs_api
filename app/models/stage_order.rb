@@ -17,13 +17,7 @@ class StageOrder < MutableData
   accepts_nested_attributes_for :organization
   accepts_nested_attributes_for :order_status
 
-  # для поддержки MutableData
-  def state
-    result = {}
-    result.merge({ isecurity_tool: isecurity_tool }) if isecurity_tool && isecurity_tool.id === nil
-    result.merge({ organization: organization }) if organization && organization.id === nil
-    result.merge({ order_status: order_status }) if order_status && order_status.id === nil
-  end
+  alias_attribute :state, :isecurity_tool # для поддержки MutableData
 
   def name
     isecurity_tool.name

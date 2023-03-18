@@ -65,4 +65,31 @@ RSpec.describe StageOrder, type: :model do
     expect(new_stage_order.errors[:isecurity_tool]).not_to be_nil
     expect(new_stage_order.errors[:organization]).not_to be_nil
   end
+
+  it "должна возвращать коректный набор данных :card" do
+    data = stage_orders(:test_one).card
+    #puts data.to_json
+    expect(data[:id]).to eq 1
+    expect(data[:head]).to include("Secret Net")
+    expect(data[:stage][:id]).to eq 1
+    expect(data[:stage][:name]).to eq "Оценка эффективности"
+    expect(data[:stage][:priority]).to eq 0
+    expect(data[:isecurity_tool][:id]).to eq 3
+    expect(data[:isecurity_tool][:name]).to eq "Secret Net"
+    expect(data[:isecurity_tool][:unit]).to eq "шт."
+    expect(data[:organization][:id]).to eq 3
+    expect(data[:organization][:name]).to eq "ООО \"Крабком-2\""
+    expect(data[:order_status][:id]).to eq 1
+    expect(data[:order_status][:name]).to eq "Запрошен счет"
+    expect(data[:order_status][:description]).to be_nil
+    expect(data[:amount]).to eq 2.0
+    expect(data[:requested_at]).to eq Date.parse("2023-01-21")
+    expect(data[:ordered_at]).to eq Date.parse("2023-01-21")
+    expect(data[:order_number]).to eq "20230121_0001"
+    expect(data[:payment_at]).to eq Date.parse("2023-02-01")
+    expect(data[:received_at]).to eq Date.parse("2023-03-02")
+    expect(data[:description]).to match "тестовый заказ СЗИ"
+
+    expect(data[:summary]).not_to be_nil
+  end
 end

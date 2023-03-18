@@ -2,7 +2,13 @@ test_one:
   id: 1
   stage_id: 1
   organization_id: 3
-  order_status: 1
+  order_status_id: 1
   isecurity_tool_id: 3
   amount: 2
   list_key: "7c69f63a-87f6-431d-9c5a-12df1004a449"
+  order_number: "20230121_0001"
+  requested_at: "2023-01-21"
+  ordered_at: "2023-01-21"
+  payment_at: "2023-02-01"
+  received_at: "2023-03-02"
+  description: "тестовый заказ СЗИ"
