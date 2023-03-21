@@ -48,6 +48,13 @@ ru:
   Task_kind: "Вид задачи"
   task_kind: "Вид задачи"
   list_key: "ключ списка"
+  payment: "платеж"
+  payments: "платежи"
+  payment_kind: "вид платежа"
+  prepayment: "предоплата"
+  last_payment: "оплата"
+  payment_at: "дата платежа"
+  invoice_at: "дата счета"
   activerecord:
     errors:
       models:
@@ -151,4 +158,12 @@ ru:
             naming:
               invalid: "Ошибка в ФИО"
             person:
-              invalid: "Ошибка в персональных данных"                   
+              invalid: "Ошибка в персональных данных" 
+        payment:
+          attributes:
+            stage:
+              required: "(stage is required) Контракт(этап) не указан" 
+              invalid: "(stage is invalid) Контракт(этап) указан неверно"
+            payment_kind:
+              blank: "(payment_kind is blank) не задан тип платежа" 
+              inclusion: "(payment_kind inclusion) указан неверный тип платежа"                        

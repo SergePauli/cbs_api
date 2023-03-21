@@ -9,6 +9,7 @@ class CreateStages < ActiveRecord::Migration[6.1]
       t.float :cost, comment: "сумма этапа"
       t.date :deadline, comment: "срок выполнения"
       t.date :funded_at, comment: "дата бухгалтерского закрытия"
+      t.date :invoice_at, comment: "дата выставления счета на оплату"
       t.date :completed_at, comment: "дата закрытия"
       t.integer :deadline_kind, comment: "вид срока"
       t.integer :duration, comment: "время выполнения в днях"

@@ -241,8 +241,8 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
 
   create_table "payments", force: :cascade do |t|
     t.bigint "stage_id", null: false, comment: "этап"
+    t.integer "payment_kind", null: false, comment: "вид платежа"
     t.date "payment_at", comment: "дата платежа"
-    t.float "amount", comment: "сумма"
     t.string "description", comment: "примечание"
     t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
     t.datetime "created_at", precision: 6, null: false
@@ -381,6 +381,7 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.float "cost", comment: "сумма этапа"
     t.date "deadline", comment: "срок выполнения"
     t.date "funded_at", comment: "дата бухгалтерского закрытия"
+    t.date "invoice_at", comment: "дата выставления счета на оплату"
     t.date "completed_at", comment: "дата закрытия"
     t.integer "deadline_kind", comment: "вид срока"
     t.integer "duration", comment: "время выполнения в днях"

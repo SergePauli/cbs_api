@@ -18,6 +18,10 @@ class Stage < MutableData
   has_many :stage_orders, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
   accepts_nested_attributes_for :stage_orders, allow_destroy: true
 
+  # платежи
+  has_many :payments, -> { order("payment_at ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
+  accepts_nested_attributes_for :payments, allow_destroy: true
+
   belongs_to :contract
   belongs_to :task_kind
   belongs_to :status

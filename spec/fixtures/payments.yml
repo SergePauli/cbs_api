@@ -1,0 +1,14 @@
+prepayment:
+  id: 1
+  stage_id: 1
+  payment_at: "2023-02-30"
+  payment_kind: 0
+  description: "предоплата"
+  list_key: "7c69f63a-87f6-431d-9c5a-12df1004a449"
+last_payment:
+  id: 2
+  stage_id: 1
+  payment_at: "2023-03-03"
+  payment_kind: 1
+  description: "оплата"
+  list_key: "7c69f63a-87f6-431d-9c5a-12df1004a450"  
