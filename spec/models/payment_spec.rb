@@ -30,8 +30,8 @@ RSpec.describe Payment, type: :model do
   end
 
   it "должна штатно создаваться и обновляться (c запоминанием :stage_id, :payment_kind, :description, :payment_at), удаляться" do
-    expect(new_payment.save).to eq false
-    puts new_payment.errors.to_json
+    expect(new_payment.save).to eq true
+    #puts new_payment.errors.to_json
     expect(new_payment.id).not_to be_nil
     expect(new_payment.head).to eq "13.03.2023-предоплата"
     new_payment.description = "новый тестовый платеж"
