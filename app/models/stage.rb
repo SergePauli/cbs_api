@@ -11,8 +11,8 @@ class Stage < MutableData
   accepts_nested_attributes_for :tasks, allow_destroy: true
 
   # исполнители
-  has_many :performers, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
-  accepts_nested_attributes_for :performers, allow_destroy: true
+  has_many :stage_performers, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
+  accepts_nested_attributes_for :stage_performers, allow_destroy: true
 
   # заказы
   has_many :stage_orders, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
@@ -37,6 +37,6 @@ class Stage < MutableData
   end
 
   def card
-    super.merge({ contract: contract.item, task_kind: task_kind.item, status: status.item, cost: "%.2f" % cost, deadline: deadline || contract.deadline, duration: duration, sended_at: sended_at, is_sended: is_sended, ride_out_at: ride_out_at, is_ride_out: is_ride_out, tasks: used_items(tasks), stage_orders: used_items(stage_orders), performers: used_items(performers) })
+    super.merge({ contract: contract.item, task_kind: task_kind.item, status: status.item, cost: "%.2f" % cost, deadline: deadline || contract.deadline, duration: duration, sended_at: sended_at, is_sended: is_sended, ride_out_at: ride_out_at, is_ride_out: is_ride_out, tasks: used_items(tasks), stage_orders: used_items(stage_orders), performers: used_items(stage_performers), payments: payments.map { |item| item.item } })
   end
 end

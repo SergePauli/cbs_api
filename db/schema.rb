@@ -365,11 +365,14 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
   create_table "stage_performers", force: :cascade do |t|
     t.bigint "stage_id", null: false, comment: "этап"
     t.bigint "performer_id", null: false, comment: "исполнитель"
+    t.integer "priority", default: 0, null: false, comment: "порядок в списке"
+    t.boolean "used", default: true, null: false, comment: "признак использования"
     t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["performer_id", "stage_id"], name: "index_stage_performers_on_performer_id_and_stage_id", unique: true
     t.index ["performer_id"], name: "index_stage_performers_on_performer_id"
+    t.index ["priority"], name: "index_stage_performers_on_priority"
     t.index ["stage_id"], name: "index_stage_performers_on_stage_id"
   end
 

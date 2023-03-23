@@ -68,6 +68,8 @@ ru:
           attributes: 
             contragent:
               required: "Не присвоен КОНТРАГЕНТ"
+            list_key: 
+              blank: "Не присвоен уникальный ключ списка"
         contragent_address: 
           attributes:
             contragent:
@@ -86,7 +88,9 @@ ru:
             contact:
               invalid: "Контакт контрагента указан неверно"    
             contragent:
-              invalid: "Контрагент невалиден"        
+              invalid: "Контрагент невалиден"
+            list_key: 
+              blank: "Не присвоен уникальный ключ списка"        
         comment:
           attributes:
             commentable:
@@ -131,7 +135,9 @@ ru:
             contact:
               invalid: "(person_contact is invalid) Контакт указан неверно"   
             person:
-              invalid: "Ошибка в персональных данных"    
+              invalid: "Ошибка в персональных данных"
+            list_key: 
+              blank: "Не присвоен уникальный ключ списка"    
         address:
           attributes:
             value:
@@ -152,7 +158,9 @@ ru:
         contragent_organization:
           attributes:
             organization:
-              invalid:  "Ошибка в организации"    
+              invalid:  "Ошибка в организации" 
+            list_key: 
+              blank: "Не присвоен уникальный ключ списка"    
         person_name:
           attributes:
             naming:
@@ -166,4 +174,15 @@ ru:
               invalid: "(stage is invalid) Контракт(этап) указан неверно"
             payment_kind:
               blank: "(payment_kind is blank) не задан тип платежа" 
-              inclusion: "(payment_kind inclusion) указан неверный тип платежа"                        
+              inclusion: "(payment_kind inclusion) указан неверный тип платежа"      
+        stage_performer:
+          attributes:
+            stage:
+              required: "(stage is required) Контракт(этап) не указан" 
+              invalid: "(stage is invalid) Контракт(этап) указан неверно"
+              taken: "Указан исполнитель уже назначеный для заданного контракта(этапа)"
+            performer:
+              required: "(performer is required) исполнитель не указан" 
+              invalid: "(performer is invalid) исполнитель указан неверно"  
+            list_key: 
+              blank: "Не присвоен уникальный ключ списка"
