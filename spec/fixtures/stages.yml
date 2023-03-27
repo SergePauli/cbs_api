@@ -3,4 +3,11 @@ krabcom_01_23_01:
   contract_id: 1
   task_kind_id: 2
   list_key: "7c69f63a-87f6-431d-9c5a-12df1004a499"
-  status_id: 1
+  status_id: 4
+  cost: 70800.0369
+  invoice_at: "2023-01-27"
+  ride_out_at: "2023-03-01"
+  is_ride_out: true
+  
+
+
