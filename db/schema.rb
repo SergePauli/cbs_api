@@ -382,7 +382,7 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.bigint "status_id", comment: "статус"
     t.integer "priority", default: 0, null: false, comment: "очередность этапа, если 0,то договор - обычный"
     t.float "cost", comment: "сумма этапа"
-    t.date "deadline", comment: "срок выполнения"
+    t.date "deadline_at", comment: "срок выполнения"
     t.date "funded_at", comment: "дата бухгалтерского закрытия"
     t.date "invoice_at", comment: "дата выставления счета на оплату"
     t.date "completed_at", comment: "дата закрытия"

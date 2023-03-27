@@ -72,7 +72,7 @@ RSpec.describe StageOrder, type: :model do
     expect(data[:id]).to eq 1
     expect(data[:head]).to include("Secret Net")
     expect(data[:stage][:id]).to eq 1
-    expect(data[:stage][:name]).to eq "Оценка эффективности"
+    expect(data[:stage][:name]).to eq "01-23-10 Оценка эффективности"
     expect(data[:stage][:priority]).to eq 0
     expect(data[:isecurity_tool][:id]).to eq 3
     expect(data[:isecurity_tool][:name]).to eq "Secret Net"

@@ -57,7 +57,7 @@ RSpec.describe Payment, type: :model do
     expect(data[:id]).to eq 2
     expect(data[:head]).to include("03.03.2023-оплата")
     expect(data[:stage][:id]).to eq 1
-    expect(data[:stage][:name]).to eq "Оценка эффективности"
+    expect(data[:stage][:name]).to eq "01-23-10 Оценка эффективности"
     expect(data[:stage][:priority]).to eq 0
     expect(data[:payment_kind]).to eq "last_payment"
     expect(data[:payment_at]).to eq Date.parse("2023-03-03")
