@@ -186,3 +186,12 @@ ru:
               invalid: "(performer is invalid) исполнитель указан неверно"  
             list_key: 
               blank: "Не присвоен уникальный ключ списка"
+        stage:
+          attributes: 
+            contract:
+              taken: "Этап с указаной очередностью уже имеется для данного контракта"
+              invalid: "(contract is invalid) Контракт указан неверно"
+              required: "(contract required) Не указан контракт"
+            task_kind:
+              required: "(task_kind required) Не указана задача"
+              invalid: "(task_kind is invalid) Задача указана неверно"      

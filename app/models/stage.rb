@@ -1,5 +1,6 @@
 # Этап контракта
 class Stage < MutableData
+
   # аудит изменений
   include Auditable
 
@@ -24,7 +25,7 @@ class Stage < MutableData
 
   belongs_to :contract
   belongs_to :task_kind
-  belongs_to :status
+  belongs_to :status, optional: true
   validates_associated :contract
   validates_associated :task_kind
   validates_associated :status
@@ -32,11 +33,23 @@ class Stage < MutableData
   alias_attribute :state, :task_kind # для поддержки MutableData
   accepts_nested_attributes_for :task_kind
 
+  # наименование этапа заменяется наименованием контракта в одно-этапных договорах
+  # в много-этапных выводим номер контракта, номер этапа и задачу
   def name
-    priority === 0 ? "#{contract.name}" : "#{contract.name}-#{priority}-#{task_kind.name}"
+    priority === 0 ? "#{contract.name} #{task_kind.name}" : "#{contract.name}_Э#{priority} #{task_kind.name}"
   end
 
+  def head
+    used ? name : "*" + name
+  end
+
+  # реализация для набора данных card
   def card
-    super.merge({ contract: contract.item, task_kind: task_kind.item, status: status.item, cost: "%.2f" % cost, deadline: deadline || contract.deadline, duration: duration, sended_at: sended_at, is_sended: is_sended, ride_out_at: ride_out_at, is_ride_out: is_ride_out, tasks: used_items(tasks), stage_orders: used_items(stage_orders), performers: used_items(stage_performers), payments: payments.map { |item| item.item } })
+    super.merge({ contract: contract.item, task_kind: task_kind.item, status: status ? status.item : nil, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind || contract.deadline_kind, duration: duration, invoice_at: invoice_at, sended_at: sended_at, is_sended: is_sended, ride_out_at: ride_out_at, is_ride_out: is_ride_out, tasks: used_items(tasks) || nil, stage_orders: used_items(stage_orders) || nil, performers: used_items(stage_performers) || nil, payments: payments.map { |item| item.item } || nil })
+  end
+
+  # получаем массив разрешенных параметров запросов на добавление и изменение
+  def self.permitted_params
+    super | [:contract_id, :task_kind_id, :status_id, :cost, :deadline, :duration, :invoice_at, :sended_at, :ride_out_at] | [tasks_attributes: Task.permitted_params] | [stage_orders_attributes: StageOrders.permitted_params] | [payments_attributes: Payment.permitted_params]
   end
 end
