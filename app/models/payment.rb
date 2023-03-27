@@ -9,9 +9,16 @@ class Payment < ApplicationRecord
   belongs_to :stage
   validates_associated :stage
 
+  # дата платежа обязательна
+  validates :payment_at, presence: true
+
   # Формируем имя записи: дата + вид платежа (пример: "10.10.2023 - предоплата")
   def name
-    "#{payment_at.strftime("%d.%m.%Y")}-#{I18n.t payment_kind}"
+    if payment_at === nil
+      "#{I18n.t payment_kind}"
+    else
+      "#{payment_at.strftime("%d.%m.%Y")}-#{I18n.t payment_kind}"
+    end
   end
 
   # Набор данных card
