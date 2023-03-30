@@ -7,7 +7,8 @@ krabcom_01_23_01:
   cost: 70800.0369
   invoice_at: "2023-01-27"
   ride_out_at: "2023-03-01"
+  deadline_at: "2023-03-01"
   is_ride_out: true
-  
+  duration: 30
 
 

@@ -1,8 +1,11 @@
 require "rails_helper"
+require "models/concerns/deadlineable_spec"
+require "models/concerns/auditable_spec"
 
 RSpec.describe Stage, type: :model do
   # поддерживает аудит изменений
   it_behaves_like "auditable"
+  it_behaves_like "deadlineable"
 
   # унаследовано от ApplicationRecord
   it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
@@ -21,7 +24,6 @@ RSpec.describe Stage, type: :model do
   # столбцы для отображения данных модели
   it { is_expected.to have_db_column(:cost).of_type(:float) }
   it { is_expected.to have_db_column(:completed_at).of_type(:date) }
-  it { is_expected.to have_db_column(:deadline_kind).of_type(:integer) }
   it { is_expected.to have_db_column(:deadline_at).of_type(:date) }
   it { is_expected.to have_db_column(:duration).of_type(:integer) }
   it { is_expected.to have_db_column(:sended_at).of_type(:date) }
@@ -79,7 +81,7 @@ RSpec.describe Stage, type: :model do
     stages(:krabcom_01_23_01)
   }
 
-  it "должна возвращать коректный набор данных :item" do
+  it "должна возвращать корректный набор данных :item" do
     data = test_one.item
     expect(data[:id]).to eq 1
     expect(data[:name]).to eq "01-23-10 Оценка эффективности"
@@ -91,7 +93,7 @@ RSpec.describe Stage, type: :model do
 
   it "должна возвращать корректный набор данных :card" do
     data = test_one.card
-    puts data.to_json
+    #puts data.to_json
     expect(data[:id]).to eq 1
     expect(data[:head]).to eq "01-23-10 Оценка эффективности"
     expect(data[:status][:id]).to eq 4
@@ -104,12 +106,22 @@ RSpec.describe Stage, type: :model do
     expect(data[:stage_orders].size).to eq 1
     expect(data[:performers].size).to eq 2
     expect(data[:payments].size).to eq 2
-    # expect(data[:ordered_at]).to eq Date.parse("2023-01-21")
-    # expect(data[:order_number]).to eq "20230121_0001"
-    # expect(data[:payment_at]).to eq Date.parse("2023-02-01")
-    # expect(data[:received_at]).to eq Date.parse("2023-03-02")
-    # expect(data[:description]).to match "тестовый заказ СЗИ"
-
+    expect(data[:duration]).to eq "30РДней"
+    expect(data[:deadline_kind]).to eq "working_days"
+    expect(data[:funded_at]).to be_nil
+    expect(data[:deadline_at]).to eq Date.parse("2023-03-01")
+    expect(data[:invoice_at]).to eq Date.parse("2023-01-27")
+    expect(data[:ride_out_at]).to eq Date.parse("2023-03-01")
+    expect(data[:is_ride_out]).to eq true
+    expect(data[:completed_at]).to be_nil
+    expect(data[:sended_at]).to be_nil
+    expect(data[:is_sended_at]).to be_nil
+    expect(data[:list_key]).to eq "7c69f63a-87f6-431d-9c5a-12df1004a499"
     expect(data[:summary]).not_to be_nil
+  end
+
+  it "должна возвращать корректный набор разрешенных параметров" do
+    #puts Stage.permitted_params
+    expect(Stage.permitted_params.size).to eq 22
   end
 end
