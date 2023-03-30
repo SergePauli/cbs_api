@@ -1,4 +1,5 @@
 require "rails_helper"
+require "models/concerns/auditable_spec"
 
 RSpec.describe Performer, type: :model do
   # поддерживает аудит изменений

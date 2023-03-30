@@ -16,6 +16,6 @@ class Task < MutableData
   end
 
   def self.permitted_params
-    super | [:stage_id, :task_kind_id] | [task_kind_attributes: Task_kind.permitted_params]
+    super | [:stage_id, :task_kind_id] | [task_kind_attributes: TaskKind.permitted_params]
   end
 end

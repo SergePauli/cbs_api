@@ -1,0 +1,72 @@
+{
+  "head": "01-23-10 Оценка эффективности",
+  "id": 1,
+  "summary": {
+    "created": "2023-03-27T10:10:00.709Z",
+    "updated": "2023-03-27T10:10:00.709Z"
+  },
+  "priority": 0,
+  "used": true,
+  "list_key": "7c69f63a-87f6-431d-9c5a-12df1004a499",
+  "contract": {
+    "id": 1,
+    "name": "01-23-10"
+  },
+  "task_kind": {
+    "id": 2,
+    "name": "Оценка эффективности",
+    "code": "01"
+  },
+  "status": {
+    "id": 4,
+    "name": "Выполнен",
+    "description": "Выполнены работы исполнителя"
+  },
+  "cost": "70800.04",
+  "deadline_kind": "working_days",
+  "duration": "30РДней",
+  "deadline_at": "2023-03-01",
+  "completed_at": null,
+  "funded_at": null,
+  "invoice_at": "2023-01-27",
+  "sended_at": null,
+  "is_sended": null,
+  "ride_out_at": "2023-03-01",
+  "is_ride_out": true,
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Оценка эффективности",
+      "priority": 1
+    }
+  ],
+  "stage_orders": [
+    {
+      "id": 1,
+      "name": "Secret Net",
+      "priority": 0
+    }
+  ],
+  "performers": [
+    {
+      "id": 1,
+      "name": "*Тестов Тест Тестович, инженер-программист",
+      "priority": 0
+    },
+    {
+      "id": 2,
+      "name": "Тестова Юза Юзеровна, экономист",
+      "priority": 0
+    }
+  ],
+  "payments": [
+    {
+      "id": 1,
+      "name": "01.02.2023-предоплата"
+    },
+    {
+      "id": 2,
+      "name": "03.03.2023-оплата"
+    }
+  ]
+}

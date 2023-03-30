@@ -55,6 +55,12 @@ ru:
   last_payment: "оплата"
   payment_at: "дата платежа"
   invoice_at: "дата счета"
+  deadline_kind: "режим сроков"
+  calendar_plan: "КПлан"
+  calendar_days: "КДней"
+  calendar_prepayment: "КДнПр"
+  working_days: "РДней"
+  working_prepayment: "РДнПр"
   activerecord:
     errors:
       models:
