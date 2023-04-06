@@ -10,10 +10,6 @@ class ContragentAddress < MutableData
   enum kind: [:real, :registred]
   validates :kind, presence: true
 
-  # def used?
-  #   used
-  # end
-
   def head
     super + " (" + (I18n.t kind) + ")"
   end

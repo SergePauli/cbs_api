@@ -1,0 +1,12 @@
+c_01_23_01:
+  id: 1
+  contract_id: 1
+  number: "01_23_01"
+  used: true
+  priority: 0
+  list_key: "7c69f63a-87f6-431d-9c5a-12df1004a449"
+  is_present: false
+  protocol_link: "ссылка_на_протокол" 
+  scan_link: "ссылка на скан"
+  doc_link: "ссылка на документ"
+  zip_link: "ссылка на архив"

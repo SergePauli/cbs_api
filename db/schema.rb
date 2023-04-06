@@ -73,12 +73,12 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
   create_table "contract_numbers", force: :cascade do |t|
     t.bigint "contract_id", null: false, comment: "контракт"
     t.string "number", null: false, comment: "полный номер контракта"
-    t.string "LinkFileProtocol", comment: "ссылка на скан"
-    t.string "LinkFileScan", comment: "ссылка на скан"
-    t.string "LinkFileDoc", comment: "ссылка на текст"
-    t.string "LinkFileZip", comment: "ссылка на архив"
+    t.string "protocol_link", comment: "ссылка на протокол"
+    t.string "scan_link", comment: "ссылка на скан"
+    t.string "doc_link", comment: "ссылка на текст"
+    t.string "zip_link", comment: "ссылка на архив"
     t.boolean "used", default: true, null: false, comment: "признак отображения как номера контракта"
-    t.integer "additional_number", comment: "номер доп.соглашения"
+    t.integer "priority", comment: "номер доп.соглашения"
     t.boolean "is_present", comment: "признак наличия подписаного оригинала контракта"
     t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
     t.datetime "created_at", precision: 6, null: false
@@ -392,7 +392,7 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.boolean "is_sended", comment: "документы высланы"
     t.date "ride_out_at", comment: "дата выезда"
     t.boolean "is_ride_out", comment: "признак выезда к контрагенту"
-    t.boolean "used", default: true, null: false
+    t.boolean "used", default: true, null: false, comment: "признак актуальности информации"
     t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

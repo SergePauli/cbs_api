@@ -55,12 +55,27 @@ ru:
   last_payment: "оплата"
   payment_at: "дата платежа"
   invoice_at: "дата счета"
+  sended_at: "отправлено"
+  is_sended: "отправка"
+  ride_out_at: "выехали"
+  is_ride_out: "выезд"
+  funded_at: "финзакрыто"
+  completed_at: "завершено"
+  duration: "длительность"
+  deadline_at: "срок"  
   deadline_kind: "режим сроков"
   calendar_plan: "КПлан"
   calendar_days: "КДней"
   calendar_prepayment: "КДнПр"
   working_days: "РДней"
   working_prepayment: "РДнПр"
+  number: "номер контракта"
+  LinkFileProtocol: "ссылка на протокол"
+  LinkFileScan: "ссылка на скан"
+  LinkFileDoc: "ссылка на текст"
+  LinkFileZip: "ссылка на архив"      
+  additional_number: "д.соглашение"
+  is_present: "в наличии"
   activerecord:
     errors:
       models:
@@ -106,10 +121,10 @@ ru:
             list_key: 
               blank: "Не присвоен уникальный ключ списка" 
             order_status:
-              required: "(order_status is required) Cтатус заказа не указан"
+              required: "(order_status_id is required) Cтатус заказа не указан"
             stage:
-              required: "(stage is required) Контракт(этап) не указан"
-              invalid: "(stage is invalid) Контракт(этап) указан неверно"  
+              required: "(stage_id is required) Контракт(этап) не указан"
+              invalid: "(stage_id is invalid) Контракт(этап) указан неверно"  
               taken: "(already taken) Указанные Поставщик и СЗИ уже использовались для данного Контракта(этапа)"
             organization:
               required: "(organization is required) Поставщик не указан"    
@@ -176,28 +191,34 @@ ru:
         payment:
           attributes:
             stage:
-              required: "(stage is required) Контракт(этап) не указан" 
-              invalid: "(stage is invalid) Контракт(этап) указан неверно"
+              required: "(stage_id is required) Контракт(этап) не указан" 
+              invalid: "(stage_id is invalid) Контракт(этап) указан неверно"
             payment_kind:
               blank: "(payment_kind is blank) не задан тип платежа" 
               inclusion: "(payment_kind inclusion) указан неверный тип платежа"      
         stage_performer:
           attributes:
             stage:
-              required: "(stage is required) Контракт(этап) не указан" 
-              invalid: "(stage is invalid) Контракт(этап) указан неверно"
+              required: "(stage_id is required) Контракт(этап) не указан" 
+              invalid: "(stage_id is invalid) Контракт(этап) указан неверно"
               taken: "Указан исполнитель уже назначеный для заданного контракта(этапа)"
             performer:
-              required: "(performer is required) исполнитель не указан" 
-              invalid: "(performer is invalid) исполнитель указан неверно"  
+              required: "(performer_id is required) исполнитель не указан" 
+              invalid: "(performer_id is invalid) исполнитель указан неверно"  
             list_key: 
               blank: "Не присвоен уникальный ключ списка"
         stage:
           attributes: 
             contract:
               taken: "Этап с указаной очередностью уже имеется для данного контракта"
-              invalid: "(contract is invalid) Контракт указан неверно"
-              required: "(contract required) Не указан контракт"
+              invalid: "(contract_id is invalid) Контракт указан неверно"
+              required: "(contract_id required) Не указан контракт"
             task_kind:
               required: "(task_kind required) Не указана задача"
               invalid: "(task_kind is invalid) Задача указана неверно"      
+        contract_number:
+          attributes:
+            contract:
+              required:  "(contract_id required) Не указан контракт" 
+              invalid: "(contract_id is invalid) Контракт указан неверно"
+              taken: "Указана не уникальная комбинация контракта и очередности"
