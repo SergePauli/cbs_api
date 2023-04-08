@@ -66,7 +66,7 @@ RSpec.describe Stage, type: :model do
   it "должна штатно создаваться и обновляться, удаляться" do
     expect(stage_new.save).to eq true
     expect(stage_new.id).not_to be_nil
-    expect(stage_new.head).to eq "01-23-10_Э1 Аттестация"
+    expect(stage_new.head).to eq "01-23-01_Э1 Аттестация"
     stage_new.used = false
     stage_new.priority = 5
     expect(stage_new.save).to eq true
@@ -84,18 +84,18 @@ RSpec.describe Stage, type: :model do
   it "должна возвращать корректный набор данных :item" do
     data = test_one.item
     expect(data[:id]).to eq 1
-    expect(data[:name]).to eq "01-23-10 Оценка эффективности"
+    expect(data[:name]).to eq "01-23-01 Оценка эффективности"
     expect(data[:priority]).to eq 0
     test_one.priority = 1
     data = test_one.item
-    expect(data[:name]).to eq "01-23-10_Э1 Оценка эффективности"
+    expect(data[:name]).to eq "01-23-01_Э1 Оценка эффективности"
   end
 
   it "должна возвращать корректный набор данных :card" do
     data = test_one.card
     #puts data.to_json
     expect(data[:id]).to eq 1
-    expect(data[:head]).to eq "01-23-10 Оценка эффективности"
+    expect(data[:head]).to eq "01-23-01 Оценка эффективности"
     expect(data[:status][:id]).to eq 4
     expect(data[:status][:name]).to eq "Выполнен"
     expect(data[:status][:description]).to eq "Выполнены работы исполнителя"

@@ -70,23 +70,6 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.index ["value", "type"], name: "index_contacts_on_value_and_type", unique: true
   end
 
-  create_table "contract_numbers", force: :cascade do |t|
-    t.bigint "contract_id", null: false, comment: "контракт"
-    t.string "number", null: false, comment: "полный номер контракта"
-    t.string "protocol_link", comment: "ссылка на протокол"
-    t.string "scan_link", comment: "ссылка на скан"
-    t.string "doc_link", comment: "ссылка на текст"
-    t.string "zip_link", comment: "ссылка на архив"
-    t.boolean "used", default: true, null: false, comment: "признак отображения как номера контракта"
-    t.integer "priority", comment: "номер доп.соглашения"
-    t.boolean "is_present", comment: "признак наличия подписаного оригинала контракта"
-    t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["contract_id"], name: "index_contract_numbers_on_contract_id"
-    t.index ["number"], name: "index_contract_numbers_on_number"
-  end
-
   create_table "contracts", force: :cascade do |t|
     t.bigint "contragent_id", null: false, comment: "контрагент"
     t.bigint "task_kind_id", null: false, comment: "тип контракта"
@@ -338,6 +321,23 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
+  create_table "revisions", force: :cascade do |t|
+    t.bigint "contract_id", null: false, comment: "ссылка на контракт"
+    t.string "protocol_link", comment: "ссылка на протокол"
+    t.string "scan_link", comment: "ссылка на скан"
+    t.string "doc_link", comment: "ссылка на текст"
+    t.string "zip_link", comment: "ссылка на архив"
+    t.boolean "used", default: true, null: false, comment: "признак использования"
+    t.integer "priority", comment: "номер ревизии или доп.соглашения"
+    t.boolean "is_present", comment: "признак наличия подписаного оригинала"
+    t.string "description", comment: "Описание ревизии или Доп-а"
+    t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contract_id", "priority"], name: "index_revisions_on_contract_id_and_priority", unique: true
+    t.index ["contract_id"], name: "index_revisions_on_contract_id"
+  end
+
   create_table "stage_orders", force: :cascade do |t|
     t.bigint "stage_id", null: false, comment: "этап"
     t.bigint "isecurity_tool_id", null: false, comment: "СЗИ, товар"
@@ -447,7 +447,6 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
   end
 
   add_foreign_key "addresses", "areas"
-  add_foreign_key "contract_numbers", "contracts"
   add_foreign_key "contracts", "contragents"
   add_foreign_key "contracts", "statuses"
   add_foreign_key "contracts", "task_kinds"
@@ -474,6 +473,7 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
   add_foreign_key "profiles", "departments"
   add_foreign_key "profiles", "positions"
   add_foreign_key "profiles", "users"
+  add_foreign_key "revisions", "contracts"
   add_foreign_key "stage_orders", "isecurity_tools"
   add_foreign_key "stage_orders", "organizations"
   add_foreign_key "stage_orders", "stages"

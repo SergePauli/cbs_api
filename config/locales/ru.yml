@@ -74,7 +74,8 @@ ru:
   LinkFileScan: "ссылка на скан"
   LinkFileDoc: "ссылка на текст"
   LinkFileZip: "ссылка на архив"      
-  additional_number: "д.соглашение"
+  revisions: "ревизии или доп.соглашения"
+  Revision: "ревизия или доп.соглашение"
   is_present: "в наличии"
   activerecord:
     errors:
@@ -216,7 +217,7 @@ ru:
             task_kind:
               required: "(task_kind required) Не указана задача"
               invalid: "(task_kind is invalid) Задача указана неверно"      
-        contract_number:
+        revision:
           attributes:
             contract:
               required:  "(contract_id required) Не указан контракт" 
