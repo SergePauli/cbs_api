@@ -1,11 +1,15 @@
 require "rails_helper"
-require "models/concerns/deadlineable_spec"
+require "models/concerns/executable_spec"
 require "models/concerns/auditable_spec"
+require "models/concerns/commentable_spec"
 
 RSpec.describe Stage, type: :model do
   # поддерживает аудит изменений
   it_behaves_like "auditable"
-  it_behaves_like "deadlineable"
+  # комменты
+  it_behaves_like "commentable"
+  # статусы, сроки, задачи
+  it_behaves_like "executable"
 
   # унаследовано от ApplicationRecord
   it { is_expected.to respond_to(:head, :card, :item, :custom_data, :data_sets) }
@@ -19,7 +23,6 @@ RSpec.describe Stage, type: :model do
   # ссылки на модель-владельца
   it { is_expected.to have_db_column(:contract_id).of_type(:integer) }
   it { is_expected.to have_db_column(:task_kind_id).of_type(:integer) }
-  it { is_expected.to have_db_column(:status_id).of_type(:integer) }
 
   # столбцы для отображения данных модели
   it { is_expected.to have_db_column(:cost).of_type(:float) }
@@ -122,6 +125,6 @@ RSpec.describe Stage, type: :model do
 
   it "должна возвращать корректный набор разрешенных параметров" do
     #puts Stage.permitted_params
-    expect(Stage.permitted_params.size).to eq 22
+    expect(Stage.permitted_params.size).to eq 23
   end
 end

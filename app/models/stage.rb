@@ -7,8 +7,11 @@ class Stage < MutableData
   # фильтр на используемые
   include Usable
 
-  # используется режим сроков
-  include Deadlineable
+  # используются режим сроков, статусы, основная задача
+  include Executable
+
+  # Комментирование
+  include Commentable
 
   # задачи
   has_many :tasks, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
@@ -27,11 +30,10 @@ class Stage < MutableData
   accepts_nested_attributes_for :payments, allow_destroy: true
 
   belongs_to :contract
-  belongs_to :task_kind
-  belongs_to :status, optional: true
+
   validates_associated :contract
   validates_associated :task_kind
-  validates_associated :status
+
   validates :contract, uniqueness: { scope: [:contract, :priority] }
   alias_attribute :state, :task_kind # для поддержки MutableData
   accepts_nested_attributes_for :task_kind
@@ -53,6 +55,6 @@ class Stage < MutableData
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
   def self.permitted_params
-    super | [:contract_id, :task_kind_id, :status_id, :cost, :completed_at, :deadline_at, :duration, :deadline_kind, :invoice_at, :sended_at, :ride_out_at, :is_sended, :is_ride_out, :funded_at] | [tasks_attributes: Task.permitted_params] | [stage_orders_attributes: StageOrder.permitted_params] | [payments_attributes: Payment.permitted_params]
+    super | [:contract_id, :task_kind_id, :status_id, :cost, :completed_at, :deadline_at, :duration, :deadline_kind, :invoice_at, :sended_at, :ride_out_at, :is_sended, :is_ride_out, :funded_at] | [tasks_attributes: Task.permitted_params] | [stage_orders_attributes: StageOrder.permitted_params] | [payments_attributes: Payment.permitted_params] | [comments_attributes: Comment.permitted_params]
   end
 end

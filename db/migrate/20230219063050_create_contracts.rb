@@ -1,3 +1,4 @@
+# Основная таблица (контракты)
 class CreateContracts < ActiveRecord::Migration[6.1]
   def up
     create_table :contracts do |t|
@@ -14,6 +15,7 @@ class CreateContracts < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+    add_index :contracts, [:year, :code, :order], unique: true
   end
 
   def down

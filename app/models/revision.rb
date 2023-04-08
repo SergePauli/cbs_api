@@ -4,7 +4,7 @@ class Revision < MutableData
   # аудит изменений
   include Auditable
 
-  belongs_to :contract, inverse_of: :revisions
+  belongs_to :contract
   validates_associated :contract
 
   validates :contract, uniqueness: { scope: :priority }
