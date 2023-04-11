@@ -1,5 +1,6 @@
 #главный класс приложения
 class Contract < ApplicationRecord
+  before_validation :generate_order, if: -> { order.blank? }
 
   # аудит изменений
   include Auditable
@@ -11,11 +12,13 @@ class Contract < ApplicationRecord
   include Executable
 
   # Весь документо-оборот по контракту
-  has_many :revisions, -> { order("priority ASC") }, inverse_of: :revision, autosave: true, dependent: :destroy
+  has_many :revisions, -> { order("priority ASC") }, autosave: true, dependent: :destroy
   accepts_nested_attributes_for :revisions, allow_destroy: true
 
+  has_one :revision, -> { where(used: true, priority: 0) }
+
   # Этапы (как минимум один)
-  has_many :stages, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
+  has_many :stages, -> { order("priority ASC") }, autosave: true, dependent: :destroy
   accepts_nested_attributes_for :stages, allow_destroy: true
 
   # Контрагент
@@ -29,8 +32,24 @@ class Contract < ApplicationRecord
     "#{code}-#{year}-#{order.to_s.rjust(2, "0")}"
   end
 
+  # реализация для набора данных basement
+  def basement
+    { id: id, contragent: contragent.item, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind, governmental: governmental, signed_at: signed_at, revision: revision.basement, status: status.item }
+  end
+
+  # реализация для набора данных card
+  def card
+    super.merge(basement).merge({ task_kind: task_kind.item, stages: stages.map { |el| el.basement }, comments: comments.map { |el| el.item } || [], audits: audits.map { |el| el.item } || [], revisions: revisions.map { |el| el.item } })
+  end
+
   # получаем массив разрешенных параметров запросов на добавление и изменение
   def self.permitted_params
-    super | [:contragent_id, :task_kind_id, :status_id, :cost, :deadline_kind] | [stages_attributes: Stage.permitted_params] | [comments_attributes: Comment.permitted_params]
+    super | [:contragent_id, :task_kind_id, :status_id, :cost, :governmental, :deadline_kind, :signed_at] | [stages_attributes: Stage.permitted_params] | [comments_attributes: Comment.permitted_params] | [revisions_attributes: Revision.permitted_params]
+  end
+
+  # назначаем сквозной номер контракту
+  def generate_order
+    last_one = Contract.where(year: year, code: code).last
+    self.order = last_one.order + 1
   end
 end

@@ -16,16 +16,24 @@ class Revision < MutableData
     priority === 0 ? contract.name : "#{contract.name}/#{priority}"
   end
 
+  # шапка
   def head
     used ? name : "*" + name
   end
 
+  # набор для списков
   def item
     super.merge({ description: description })
   end
 
+  # заготовка (минимальный набор)
+  def basement
+    { id: id, description: description, protocol_link: protocol_link, scan_link: scan_link, zip_link: zip_link, doc_link: doc_link, is_present: is_present }
+  end
+
+  # карточка (полный набор)
   def card
-    super.merge({ contract: contract.item, description: description, protocol_link: protocol_link, scan_link: scan_link, zip_link: zip_link, doc_link: doc_link, is_present: is_present, audits: audits })
+    super.merge({ contract: contract.item, audits: audits }).merge(basement)
   end
 
   def self.permitted_params

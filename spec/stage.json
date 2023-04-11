@@ -1,16 +1,37 @@
 {
-  "head": "01-23-10 Оценка эффективности",
+  "head": "01-23-01 Оценка эффективности",
   "id": 1,
   "summary": {
-    "created": "2023-03-27T10:10:00.709Z",
-    "updated": "2023-03-27T10:10:00.709Z"
+    "created": "2023-04-11T08:10:02.923Z",
+    "updated": "2023-04-11T08:10:02.923Z"
   },
   "priority": 0,
   "used": true,
   "list_key": "7c69f63a-87f6-431d-9c5a-12df1004a499",
   "contract": {
     "id": 1,
-    "name": "01-23-10"
+    "contragent": {
+      "id": 1,
+      "name": "ООО \"Крабком\""
+    },
+    "cost": "70800.04",
+    "deadline_kind": "working_days",
+    "governmental": false,
+    "signed_at": null,
+    "revision": {
+      "id": 1,
+      "description": "первоначальная",
+      "protocol_link": "ссылка_на_протокол",
+      "scan_link": "ссылка на скан",
+      "zip_link": "ссылка на архив",
+      "doc_link": "ссылка на документ",
+      "is_present": false
+    },
+    "status": {
+      "id": 1,
+      "name": "Согласование",
+      "description": null
+    }
   },
   "task_kind": {
     "id": 2,
@@ -68,5 +89,7 @@
       "id": 2,
       "name": "03.03.2023-оплата"
     }
-  ]
+  ],
+  "comments": [],
+  "audits": []
 }

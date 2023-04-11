@@ -48,9 +48,14 @@ class Stage < MutableData
     used ? name : "*" + name
   end
 
+  # реализация для набора данных basement
+  def basement
+    { id: id, task_kind: task_kind.item, status: status ? status.item : nil, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind || contract.deadline_kind, duration: "#{duration}#{I18n.t(deadline_kind || contract.deadline_kind)}", deadline_at: deadline_at, completed_at: completed_at, funded_at: funded_at, invoice_at: invoice_at, sended_at: sended_at, is_sended: is_sended, ride_out_at: ride_out_at, is_ride_out: is_ride_out, tasks: used_items(tasks) || nil, stage_orders: used_items(stage_orders) || nil, performers: used_items(stage_performers) || nil, payments: payments.map { |item| item.item } || nil }
+  end
+
   # реализация для набора данных card
   def card
-    super.merge({ contract: contract.item, task_kind: task_kind.item, status: status ? status.item : nil, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind || contract.deadline_kind, duration: "#{duration}#{I18n.t(deadline_kind || contract.deadline_kind)}", deadline_at: deadline_at, completed_at: completed_at, funded_at: funded_at, invoice_at: invoice_at, sended_at: sended_at, is_sended: is_sended, ride_out_at: ride_out_at, is_ride_out: is_ride_out, tasks: used_items(tasks) || nil, stage_orders: used_items(stage_orders) || nil, performers: used_items(stage_performers) || nil, payments: payments.map { |item| item.item } || nil })
+    super.merge({ contract: contract.basement, comments: comments.map { |el| el.item } || [], audits: audits.map { |el| el.item } || [] }).merge(basement)
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
