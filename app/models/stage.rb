@@ -31,8 +31,11 @@ class Stage < MutableData
 
   belongs_to :contract
 
+  belongs_to :status, optional: true
+
   validates_associated :contract
   validates_associated :task_kind
+  validate :validate_status
 
   validates :contract, uniqueness: { scope: [:contract, :priority] }
   alias_attribute :state, :task_kind # для поддержки MutableData
@@ -48,6 +51,16 @@ class Stage < MutableData
     used ? name : "*" + name
   end
 
+  # кастомное присвоение статуса, с учетом несуществующего ID
+  def status_id=(val)
+    begin
+      Status.find(val) unless val.nil?
+    rescue
+      nil
+    end
+    super
+  end
+
   # реализация для набора данных basement
   def basement
     { id: id, task_kind: task_kind.item, status: status ? status.item : nil, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind || contract.deadline_kind, duration: "#{duration}#{I18n.t(deadline_kind || contract.deadline_kind)}", deadline_at: deadline_at, completed_at: completed_at, funded_at: funded_at, invoice_at: invoice_at, sended_at: sended_at, is_sended: is_sended, ride_out_at: ride_out_at, is_ride_out: is_ride_out, tasks: used_items(tasks) || nil, stage_orders: used_items(stage_orders) || nil, performers: used_items(stage_performers) || nil, payments: payments.map { |item| item.item } || nil }
@@ -61,5 +74,12 @@ class Stage < MutableData
   # получаем массив разрешенных параметров запросов на добавление и изменение
   def self.permitted_params
     super | [:contract_id, :task_kind_id, :status_id, :cost, :completed_at, :deadline_at, :duration, :deadline_kind, :invoice_at, :sended_at, :ride_out_at, :is_sended, :is_ride_out, :funded_at] | [tasks_attributes: Task.permitted_params] | [stage_orders_attributes: StageOrder.permitted_params] | [payments_attributes: Payment.permitted_params] | [comments_attributes: Comment.permitted_params]
+  end
+
+  private
+
+  # кастомная валидация  статуса (в случае если статус указан, но неверно, мы узнаем об этом)
+  def validate_status
+    errors.add(:status, ["(status invalid) Указано невалидное значение id статуса"]) if status_id != nil && status.nil?
   end
 end

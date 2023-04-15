@@ -25,6 +25,10 @@ class Contract < ApplicationRecord
   belongs_to :contragent
   validates_associated :contragent
 
+  # Статус
+  belongs_to :status
+  validates_associated :status
+
   validates :order, uniqueness: { scope: [:year, :code, :order] }
 
   # номер контракта

@@ -22,10 +22,8 @@ RSpec.describe Stage, type: :model do
 
   # ссылки на модель-владельца
   it { is_expected.to have_db_column(:contract_id).of_type(:integer) }
-  it { is_expected.to have_db_column(:task_kind_id).of_type(:integer) }
 
   # столбцы для отображения данных модели
-  it { is_expected.to have_db_column(:cost).of_type(:float) }
   it { is_expected.to have_db_column(:completed_at).of_type(:date) }
   it { is_expected.to have_db_column(:deadline_at).of_type(:date) }
   it { is_expected.to have_db_column(:duration).of_type(:integer) }
@@ -57,6 +55,14 @@ RSpec.describe Stage, type: :model do
     stage_new.task_kind_id = 899 # несуществующий ID задачи
     expect(stage_new).not_to be_valid
     expect(stage_new.errors[:task_kind]).not_to be_nil
+  end
+
+  it "Должна быть невалидной c невалидным id статуса" do
+    stage_new.status_id = nil
+    expect(stage_new).to be_valid
+    stage_new.status_id = 899 # несуществующий ID статуса
+    expect(stage_new).not_to be_valid
+    expect(stage_new.errors[:status]).not_to be_nil
   end
 
   it "должна быть уникальной комбинация id контракта и номера этапа" do
@@ -94,6 +100,28 @@ RSpec.describe Stage, type: :model do
     expect(data[:name]).to eq "01-23-01_Э1 Оценка эффективности"
   end
 
+  it "должна возвращать корректный набор данных :basement" do
+    data = test_one.basement
+    #puts data.to_json
+    expect(data[:id]).to eq 1
+    expect(data[:status][:id]).to eq 4
+    expect(data[:status][:name]).to eq "Выполнен"
+    expect(data[:status][:description]).to eq "Выполнены работы исполнителя"
+    expect(data[:cost]).to eq "70800.04"
+    expect(data[:stage_orders].size).to eq 1
+    expect(data[:performers].size).to eq 2
+    expect(data[:payments].size).to eq 2
+    expect(data[:duration]).to eq "30РДней"
+    expect(data[:deadline_kind]).to eq "working_days"
+    expect(data[:funded_at]).to be_nil
+    expect(data[:deadline_at]).to eq Date.parse("2023-03-01")
+    expect(data[:invoice_at]).to eq Date.parse("2023-01-27")
+    expect(data[:ride_out_at]).to eq Date.parse("2023-03-01")
+    expect(data[:is_ride_out]).to eq true
+    expect(data[:completed_at]).to be_nil
+    expect(data[:sended_at]).to be_nil
+    expect(data[:is_sended_at]).to be_nil
+  end
   it "должна возвращать корректный набор данных :card" do
     data = test_one.card
     #puts data.to_json

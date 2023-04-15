@@ -215,11 +215,20 @@ ru:
               invalid: "(contract_id is invalid) Контракт указан неверно"
               required: "(contract_id required) Не указан контракт"
             task_kind:
-              required: "(task_kind required) Не указана задача"
-              invalid: "(task_kind is invalid) Задача указана неверно"      
+              required: "(task_kind required) Не указан или неверный id типа задачи"  
+            status:
+              required: "(status required) Не указан или неверный id статуса"                  
         revision:
           attributes:
             contract:
               required:  "(contract_id required) Не указан контракт" 
               invalid: "(contract_id is invalid) Контракт указан неверно"
               taken: "Указана не уникальная комбинация контракта и очередности"
+        contract:
+          attributes:
+            contragent:
+              required:  "(contragent_id required) Не указан контрагент"  
+            task_kind:
+              required: "(task_kind required) Не указан или неверный id типа задачи"
+            status:
+              required: "(status required) Не указан или неверный id статуса"                      
