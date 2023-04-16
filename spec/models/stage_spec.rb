@@ -102,7 +102,6 @@ RSpec.describe Stage, type: :model do
 
   it "должна возвращать корректный набор данных :basement" do
     data = test_one.basement
-    #puts data.to_json
     expect(data[:id]).to eq 1
     expect(data[:status][:id]).to eq 4
     expect(data[:status][:name]).to eq "Выполнен"
@@ -124,7 +123,6 @@ RSpec.describe Stage, type: :model do
   end
   it "должна возвращать корректный набор данных :card" do
     data = test_one.card
-    #puts data.to_json
     expect(data[:id]).to eq 1
     expect(data[:head]).to eq "01-23-01 Оценка эффективности"
     expect(data[:status][:id]).to eq 4
