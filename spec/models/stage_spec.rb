@@ -35,7 +35,7 @@ RSpec.describe Stage, type: :model do
   fixtures :stages, :contracts
 
   let (:stage_new) {
-    Stage.new({ contract_id: contracts(:krabcom_01_23_01).id, priority: 1, task_kind_id: 4, list_key: "38fdfe7e-6eec-4ec4-bbf0-aa1b8500f3f5" })
+    Stage.new({ contract_id: contracts(:krabcom_01_23_01).id, priority: 1, list_key: "38fdfe7e-6eec-4ec4-bbf0-aa1b8500f3f5" })
   }
 
   it "Должна быть невалидной c невалидным id контракта" do
@@ -75,7 +75,7 @@ RSpec.describe Stage, type: :model do
   it "должна штатно создаваться и обновляться, удаляться" do
     expect(stage_new.save).to eq true
     expect(stage_new.id).not_to be_nil
-    expect(stage_new.head).to eq "01-23-01_Э1 Аттестация"
+    expect(stage_new.head).to eq "01-23-01_Э1 Оценка эффективности"
     stage_new.used = false
     stage_new.priority = 5
     expect(stage_new.save).to eq true
