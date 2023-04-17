@@ -60,9 +60,10 @@ RSpec.describe Contract, type: :model do
     data = test_one.basement
     expect(data[:id]).to eq 1
     expect(data[:contragent]).to eq test_one.contragent.item
-    expect(data[:cost]).to eq "70800.04"
+    expect(data[:task_kind]).to eq test_one.task_kind.item
     expect(data[:status]).to eq test_one.status.item
     expect(data[:revision]).to eq test_one.revision.basement
+    expect(data[:cost]).to eq "70800.04"
     expect(data[:deadline_kind]).to eq "working_days"
     expect(data[:governmental]).to eq false
     expect(data[:signed_at]).to be_nil

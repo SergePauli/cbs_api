@@ -53,12 +53,12 @@ class Contract < ApplicationRecord
 
   # реализация для набора данных basement
   def basement
-    { id: id, contragent: contragent.item, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind, governmental: governmental, signed_at: signed_at, revision: revision.basement, status: status.item }
+    { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind, governmental: governmental, signed_at: signed_at, revision: revision.basement, status: status.item }
   end
 
   # реализация для набора данных card
   def card
-    super.merge(basement).merge({ task_kind: task_kind.item, code: code, order: order, year: year, stages: stages.map { |el| el.basement }, comments: comments.map { |el| el.item } || [], audits: audits.map { |el| el.item } || [], revisions: revisions.map { |el| el.item } })
+    super.merge(basement).merge({ code: code, order: order, year: year, stages: stages.map { |el| el.basement }, comments: comments.map { |el| el.item } || [], audits: audits.map { |el| el.item } || [], revisions: revisions.map { |el| el.item } })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
