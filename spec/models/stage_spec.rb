@@ -103,9 +103,8 @@ RSpec.describe Stage, type: :model do
   it "должна возвращать корректный набор данных :basement" do
     data = test_one.basement
     expect(data[:id]).to eq 1
-    expect(data[:status][:id]).to eq 4
-    expect(data[:status][:name]).to eq "Выполнен"
-    expect(data[:status][:description]).to eq "Выполнены работы исполнителя"
+    expect(data[:status]).to eq test_one.status.item
+    expect(data[:task_kind]).to eq test_one.task_kind.item
     expect(data[:cost]).to eq "70800.04"
     expect(data[:stage_orders].size).to eq 1
     expect(data[:performers].size).to eq 2
@@ -125,12 +124,8 @@ RSpec.describe Stage, type: :model do
     data = test_one.card
     expect(data[:id]).to eq 1
     expect(data[:head]).to eq "01-23-01 Оценка эффективности"
-    expect(data[:status][:id]).to eq 4
-    expect(data[:status][:name]).to eq "Выполнен"
-    expect(data[:status][:description]).to eq "Выполнены работы исполнителя"
-    expect(data[:task_kind][:id]).to eq 2
-    expect(data[:task_kind][:name]).to eq "Оценка эффективности"
-    expect(data[:task_kind][:code]).to eq "01"
+    expect(data[:status]).to eq test_one.status.item
+    expect(data[:task_kind]).to eq test_one.task_kind.item
     expect(data[:cost]).to eq "70800.04"
     expect(data[:stage_orders].size).to eq 1
     expect(data[:performers].size).to eq 2
