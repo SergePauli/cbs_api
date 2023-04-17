@@ -1,5 +1,6 @@
 # Этап контракта
 class Stage < MutableData
+  before_validation :set_task_kind, if: -> { task_kind_id.nil? }
 
   # аудит изменений
   include Auditable
@@ -34,7 +35,7 @@ class Stage < MutableData
   belongs_to :status, optional: true
 
   validates_associated :contract
-  validates_associated :task_kind
+
   validate :validate_status
 
   validates :contract, uniqueness: { scope: [:contract, :priority] }
@@ -81,5 +82,10 @@ class Stage < MutableData
   # кастомная валидация  статуса (в случае если статус указан, но неверно, мы узнаем об этом)
   def validate_status
     errors.add(:status, ["(status invalid) Указано невалидное значение id статуса"]) if status_id != nil && status.nil?
+  end
+
+  # присвоение задачи контракта, если не задана специфическая
+  def set_task_kind
+    self.task_kind_id = contract.task_kind_id
   end
 end
