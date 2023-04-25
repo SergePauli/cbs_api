@@ -54,6 +54,15 @@ class Auth::RegistrationController < ApplicationController
     end
   end
 
+  # GET auth/departments
+  # отдает список отделов (для регистрации профиля пользователя)
+  def departments
+    @departments = Department.all
+    result = []
+    @departments.each { |department| result.push(department.item) }
+    render json: result, status: :ok
+  end
+
   private
 
   def profile_params

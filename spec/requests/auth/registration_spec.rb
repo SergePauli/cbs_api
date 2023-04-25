@@ -63,4 +63,10 @@ RSpec.describe "Auth::Registrations", type: :request do
     post "/auth/pwd_renew", params: { user: { activation_link: "invalid_code", password: "new_pwd", password_confirmation: "new_pwd" } }, headers: headers
     expect(response).to have_http_status(:not_acceptable)
   end
+
+  it "Экшин /auth/departments должен вернуть список отделов и статус OK" do
+    get "/auth/departments"
+    #puts response.body
+    expect(response).to have_http_status(:ok)
+  end
 end

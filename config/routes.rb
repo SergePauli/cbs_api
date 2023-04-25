@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     get "/activation/:link", action: "activation"
     get "/renew_link/:name", action: "renew_link"
     post "/pwd_renew", action: "pwd_renew"
+    get "/departments", action: "departments"
   end
   # Авторизация
   scope "auth", controller: "auth/authentication" do
