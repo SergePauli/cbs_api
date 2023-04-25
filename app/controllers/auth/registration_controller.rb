@@ -63,6 +63,21 @@ class Auth::RegistrationController < ApplicationController
     render json: result, status: :ok
   end
 
+  # POST auth/positions
+  # q -  фильтр по совпадению (по умолчанию без фильтра)
+  # offset - смещение в списке (0 по умолчанию)
+  # limit - размер выборки (25 по умолчанию)
+  # отдает список должностей (для регистрации профиля пользователя)
+  def positions
+    limit = params[:limit].blank? ? 25 : params[:limit].to_i
+    @res = Position.limit(limit)
+    @res = @res.offset(params[:offset].to_i) if params[:offset]
+    @res = @res.ransack!(params[:q]).result unless params[:q].blank?
+    result = []
+    @res.each { |position| result.push(position.item) }
+    render json: result, status: :ok
+  end
+
   private
 
   def profile_params
