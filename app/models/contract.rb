@@ -36,21 +36,6 @@ class Contract < ApplicationRecord
     "#{code}-#{year}-#{order.to_s.rjust(2, "0")}"
   end
 
-  # кастомное присвоение задачи, с учетом несуществующего ID
-  def task_kind_id=(val)
-    begin
-      tk = TaskKind.find(val) unless val.nil?
-      if tk
-        self.code = tk.code
-        tk
-      end
-    rescue
-      self.code = nil
-      nil
-    end
-    super
-  end
-
   # реализация для набора данных basement
   def basement
     { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind, governmental: governmental, signed_at: signed_at, revision: revision.basement, status: status.item }

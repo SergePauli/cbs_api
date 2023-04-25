@@ -89,4 +89,7 @@ RSpec.describe Contract, type: :model do
     expect(data[:signed_at]).to be_nil
     expect(data[:summary]).not_to be_nil
   end
+  let (:contract_new) {
+    Contract.new({ contragent_id: contragents(:kraskom).id, task_kind_id: task_kinds(:exam).id, cost: 30178 })
+  }
 end
