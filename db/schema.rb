@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.index ["contragent_id"], name: "index_contracts_on_contragent_id"
     t.index ["status_id"], name: "index_contracts_on_status_id"
     t.index ["task_kind_id"], name: "index_contracts_on_task_kind_id"
+    t.index ["year", "code", "order"], name: "index_contracts_on_year_and_code_and_order", unique: true
   end
 
   create_table "contragent_addresses", force: :cascade do |t|
