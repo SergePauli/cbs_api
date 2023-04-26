@@ -38,6 +38,14 @@ class User < NamedRecord
   belongs_to :person
   validates_associated :person
 
+  # профили
+  has_many :profiles, -> { order("priority DESC") }
+  # по умолчанию
+  has_one :profile, -> { where(used: true).order("priority DESC") }
+
+  has_one :department, through: :profile
+  has_one :position, through: :profile
+
   # валидация ролей пользователя
   validates :name, format: { with: /\A[a-z0-9_-]{3,16}\z/, message: "недопустимое имя пользователя" }
   validates :role, format: { with: /\A\w(,\w)*/, message: "неверный массив ролей пользователя" }, allow_nil: true
@@ -50,7 +58,12 @@ class User < NamedRecord
 
   # реализация для набора данных card
   def card
-    super.merge({ role: role, person: person.card, last_login: last_login })
+    super.merge({ role: role, person: person.card, last_login: last_login, profiles: profiles.map { |profile| profile.item } })
+  end
+
+  # реализация для набора данных login_info
+  def login_info
+    { id: id, name: name, person: person.item, email: email, role: role, last_login: last_login, profiles: profiles.map { |profile| profile.item }, department: department.nil? ? nil : department.item, position: position.nil? ? nil : position.item }
   end
 
   # получение email

@@ -22,7 +22,7 @@ class Profile < MutableData
 
   # реализация для набора данных card
   def card
-    super.merge({ user: user.card, position: position.item,
+    super.merge({ user: user.item, position: position.item,
                   department: department ? department.item : nil,
                   statuses: statuses || position.def_statuses || (department ? department.def_statuses : nil),
                   contracts_types: contracts_types || position.def_contracts_types || (department ? department.def_contracts_types : nil) })

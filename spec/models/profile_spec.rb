@@ -49,7 +49,7 @@ RSpec.describe Profile, type: :model do
     expect(@profile.card[:department]).to eq @profile.department.item
   end
 
-  it "метод Card должен возвращать card пользователя" do
-    expect(@profile.card[:user]).to eq @profile.user.card
+  it "метод Card должен возвращать item пользователя" do
+    expect(@profile.card[:user]).to eq @profile.user.item
   end
 end

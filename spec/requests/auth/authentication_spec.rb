@@ -27,8 +27,14 @@ RSpec.describe "Auth::Authentications", type: :request do
       headers = { "ACCEPT" => "application/json" }
       post "/auth/login", params: { name: test_user.name, password: "42password" }, headers: headers
       expect(response.content_type).to eq("application/json; charset=utf-8")
+      #puts response.body
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include test_user.head
+      expect(response.body).to include test_user.role
+      expect(response.body).to include test_user.position.name
+      expect(response.body).to include "last_login"
+      expect(response.body).to include test_user.name
+      expect(response.body).to include test_user.email
+      expect(response.body).to include test_user.person.head
       expect(response.body).to include cookies[:refresh_token]
     end
   end

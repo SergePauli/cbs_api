@@ -14,7 +14,7 @@ class Auth::AuthenticationController < PrivateController
       @user.last_login = DateTime.now
       raise ApiError.new("Ошибка регистрации входа", :internal_server_error) unless @user.save
       set_tokens
-      render json: { user: @user.card, tokens: @tokens }, status: :ok
+      render json: { user: @user.login_info, tokens: @tokens }, status: :ok
     else
       raise ApiError.new("Неверный пароль или имя пользователя", :unauthorized)
     end
