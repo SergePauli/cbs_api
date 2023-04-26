@@ -63,7 +63,7 @@ class User < NamedRecord
 
   # реализация для набора данных login_info
   def login_info
-    { id: id, name: name, person: person.item, email: email, role: role, last_login: last_login, profiles: profiles.map { |profile| profile.item }, department: department.nil? ? nil : department.item, position: position.nil? ? nil : position.item }
+    { id: id, name: name, person: { id: person_id, name: person.name }, email: email, role: role, last_login: last_login, profiles: profiles.map { |profile| profile.item }, department: department.nil? ? nil : department.item, position: position.nil? ? nil : position.item }
   end
 
   # получение email

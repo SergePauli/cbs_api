@@ -34,7 +34,7 @@ RSpec.describe "Auth::Authentications", type: :request do
       expect(response.body).to include "last_login"
       expect(response.body).to include test_user.name
       expect(response.body).to include test_user.email
-      expect(response.body).to include test_user.person.head
+      expect(response.body).to include test_user.person.name
       expect(response.body).to include cookies[:refresh_token]
     end
   end
