@@ -9,7 +9,7 @@ class ApplicationMailer < ActionMailer::Base
       @name = @user.head
       @email = @user.email
       @app_name = Rails.configuration.app_name
-      @url = "http://#{Rails.configuration.base_url}/auth/activate/#{@user.activation_link}"
+      @url = "#{Rails.configuration.base_url}/auth/activation/#{@user.activation_link}"
       mail(to: Rails.configuration.admin_mail, subject: "Запрос на активацию аккаунта")
     else
       raise "Exception in ApplicationMailer.confirmation_mail: invalid user_id '#{params[:user_id]}'"
