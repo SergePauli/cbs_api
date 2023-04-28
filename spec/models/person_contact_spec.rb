@@ -46,6 +46,6 @@ RSpec.describe PersonContact, type: :model do
     @person_contact.contact = Contact.new
     @person_contact.contact.value = contacts(:client_mail).value
     @person_contact.contact.type = contacts(:client_mail).type
-    expect(@person_contact).not_to be_valid
+    expect(@person_contact).to be_valid
   end
 end

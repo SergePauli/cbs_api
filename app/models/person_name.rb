@@ -6,6 +6,9 @@ class PersonName < MutableData
   # только одна запись может быть используемой (актуальной)
   include Singleable
 
+  # Не создаем дублей ФИО
+  include Stateable
+
   belongs_to :person, inverse_of: :person_names
   belongs_to :naming
   validates_associated :person

@@ -1,6 +1,9 @@
 # хранение контактов человека
 # контакты могут меняться со временем - потому используем MutableData
 class PersonContact < MutableData
+  # Не создаем дублей контактов
+  include Stateable
+
   belongs_to :person, inverse_of: :person_contacts
   belongs_to :contact
   validates_associated :person

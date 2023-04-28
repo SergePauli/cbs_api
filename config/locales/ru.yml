@@ -80,12 +80,17 @@ ru:
   activerecord:
     errors:
       models:
+        user:
+          attributes:
+            person:
+              invalid: "ошибка в ПЕРСОНАЛЬНЫХ ДАННЫХ"
         profile:
           attributes:
             position:
               required: "Не присвоена ДОЛЖНОСТЬ"
             user:  
               required: "Не присвоен ПОЛЬЗОВАТЕЛЬ"
+              invalid: "ошибка в данных ПОЛЬЗОВАТЕЛЯ"
         employee:
           attributes: 
             contragent:
@@ -188,7 +193,9 @@ ru:
             naming:
               invalid: "Ошибка в ФИО"
             person:
-              invalid: "Ошибка в персональных данных" 
+              invalid: "Ошибка в персональных данных"
+            list_key: 
+              blank: "Не присвоен уникальный ключ списка"   
         payment:
           attributes:
             stage:
