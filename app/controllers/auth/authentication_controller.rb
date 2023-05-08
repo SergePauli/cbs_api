@@ -1,7 +1,7 @@
 class Auth::AuthenticationController < PrivateController
   include ActionController::Cookies
 
-  skip_before_action :authenticate_request, except: :logout
+  skip_before_action :authenticate_request, except: [:logout, :login_info]
 
   # POST "auth/login"
   # авторизует пользователя :name проверяя пароль в  :password
@@ -32,6 +32,7 @@ class Auth::AuthenticationController < PrivateController
 
   # GET "auth/refresh" обновляем токен доступа
   # если токен обновлений в порядке - генерируется новый набор токенов
+  # если указан параметр :with_user_info, то к информации добавляем инфу о пользователе
   def refresh
     token = cookies[:refresh_token]
     raise ApiError.new("Отсутствует токен обновлений", :unauthorized) if token.blank?
@@ -44,7 +45,12 @@ class Auth::AuthenticationController < PrivateController
       REDIS.hdel("tokens", token)
       @dto = user_data["data"]
       set_tokens
-      render json: { tokens: @tokens }, status: :ok
+      unless params["with_user_info"].blank?
+        @user = User.find(user_data["data"]["id"])
+        render json: { user: @user.login_info, tokens: @tokens }, status: :ok
+      else
+        render json: { tokens: @tokens }, status: :ok
+      end
     else
       raise ApiError.new("Токен обновлений не действителен", :unauthorized)
     end
