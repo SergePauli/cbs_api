@@ -24,4 +24,9 @@ Rails.application.routes.draw do
     put "/:model_name/:id", action: "update"
     delete "/:model_name/:id", action: "destroy"
   end
+
+  # Профиль контроллер
+  scope "profile", controller: "profile" do
+    get "/activity/:profile_id", action: "activity"
+  end
 end
