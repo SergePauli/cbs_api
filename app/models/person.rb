@@ -59,7 +59,7 @@ class Person < ApplicationRecord
 
   def head
     result = initials
-    contact = email.value || phone.value
+    contact = email.nil? ? (phone.nil? ? "" : phone.value) : email.value
     result += " " + contact if contact != nil
   end
 
