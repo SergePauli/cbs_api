@@ -20,6 +20,10 @@ class PersonContact < MutableData
     super.merge(type: type)
   end
 
+  def edit
+    super.merge({ person_id: person_id, contact_attributes: contact.edit })
+  end
+
   def self.permitted_params
     super | [:person_id, :contact_id] | [contact_attributes: Contact.permitted_params]
   end

@@ -14,6 +14,10 @@ class Contact < ApplicationRecord
     super.merge({ type: type, audits: audits })
   end
 
+  def edit
+    super.merge({ type: type, value: value })
+  end
+
   def item
     super.merge({ type: type })
   end

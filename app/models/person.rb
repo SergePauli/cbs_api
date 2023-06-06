@@ -40,7 +40,7 @@ class Person < ApplicationRecord
   # end
 
   def data_sets
-    super.push(:full).push(:financial)
+    super.push(:financial)
   end
 
   def email
@@ -67,12 +67,16 @@ class Person < ApplicationRecord
     person_name.head
   end
 
-  def card
-    super.merge({ email: (email ? email.item : nil), phone: (phone ? phone.item : nil), name: name, address: (address ? address.item : nil), contacts: person_contacts.filter { |el| el.used }.map { |el| el.custom_data(:item) } || [] })
+  def basement
+    { email: (email ? email.item : nil), phone: (phone ? phone.item : nil), name: name }
   end
 
-  def full
-    card.merge({ namings: person_names.map { |el| el.custom_data(:item) } || [], addresses: person_addresses.map { |el| el.custom_data(:item) } || [] })
+  def edit
+    super.merge(basement).merge({ person_names_attributes: person_names.map { |el| el.custom_data(:edit) } || [], person_addresses_attributes: person_addresses.map { |el| el.custom_data(:card) } || [], person_contacts_attributes: person_contacts.filter { |el| el.used }.map { |el| el.custom_data(:edit) } || [] })
+  end
+
+  def card
+    super.merge(basement).merge({ name: name, address: (address ? address.item : nil), contacts: person_contacts.filter { |el| el.used }.map { |el| el.custom_data(:item) } || [] })
   end
 
   def financial

@@ -8,7 +8,8 @@ class ApplicationRecord < ActiveRecord::Base
     [:head, # только наименование
      :item, # элемент меню
      :card, # карточка
-     :summary # аудит изменений
+     :summary, # аудит изменений
+     :edit # запись для редактирования
 ]
   end
 
@@ -39,6 +40,10 @@ class ApplicationRecord < ActiveRecord::Base
 
   def card
     { head: head, id: id, summary: summary }
+  end
+
+  def edit
+    { id: id }
   end
 
   #end Дефолтная реализация методов для кастомного рендеринга

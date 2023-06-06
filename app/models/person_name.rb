@@ -23,6 +23,10 @@ class PersonName < MutableData
     { id: id, name: naming.head }
   end
 
+  def edit
+    { id: id, used: used, person_id: person_id, naming_attributes: naming.edit }
+  end
+
   def self.permitted_params
     super | [:person_id, :naming_id] | [naming_attributes: Naming.permitted_params]
   end
