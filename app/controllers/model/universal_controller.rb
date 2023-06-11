@@ -87,7 +87,7 @@ class Model::UniversalController < PrivateController
     end
   end
 
-  # DELETE /model/:mode || []l_name/:id
+  # DELETE /model/:model_name/:id
   # принимает параметры:
   # :id
   # возвращает экземпляр модели <model_name> удаленный по его ID или ошибку
