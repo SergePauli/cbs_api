@@ -24,7 +24,7 @@ class Employee < MutableData
   end
 
   def item
-    { id: id, priority: priority, name: name, position: position.name, contacts: person.person_contacts.filter { |el| el.used }.map { |el| el.custom_data(:item) } || [] }
+    { id: id, priority: priority, name: name, position: position.name, contacts: person.person_contacts.filter { |el| el.used }.map { |el| el.custom_data(:item) } || [], description: description }
   end
 
   def card

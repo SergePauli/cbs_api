@@ -87,7 +87,7 @@ class Model::UniversalController < PrivateController
     end
   end
 
-  # DELETE /model/:model_name/:id
+  # DELETE /model/:mode || []l_name/:id
   # принимает параметры:
   # :id
   # возвращает экземпляр модели <model_name> удаленный по его ID или ошибку
@@ -144,6 +144,16 @@ class Model::UniversalController < PrivateController
   def check_audit_creation(obj)
     if (obj.respond_to? :audits) && obj.audits.empty?
       audit = Audit.new({ action: :added, auditable: obj, user_id: @current_user[:data][:id] })
+      audit.save
+      obj.audits.push(audit)
+    end
+  end
+
+  # проверка на аудит удаления
+  # регистрируем удаление объектов, требующих аудит
+  def audit_removed(obj)
+    if (obj.respond_to? :audits)
+      audit = Audit.new({ action: :removed, auditable: obj, user_id: @current_user[:data][:id] })
       audit.save
       obj.audits.push(audit)
     end
@@ -207,7 +217,7 @@ class Model::UniversalController < PrivateController
           check_attributes(child, v)
         elsif v.class.name === "Array"
           v.each do |el|
-            element = child.filter { |objct| objct.list_key === el[:list_key] }
+            element = child.select { |objct| objct.list_key === el[:list_key] }
             check_audit_creation(element[0])
             check_attributes(element[0], el)
           end
