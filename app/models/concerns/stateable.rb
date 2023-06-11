@@ -2,7 +2,7 @@ module Stateable
   extend ActiveSupport::Concern
 
   included do
-    before_validation :check_if_exist, if: -> { !!state && !state.id }
+    before_validation :check_if_exist, on: :create
 
     def check_if_exist
       # получаем чистые атрибуты стэйта
