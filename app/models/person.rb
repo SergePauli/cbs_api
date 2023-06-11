@@ -1,13 +1,13 @@
-# Валидатор наборов ФИО
-class NameValidator < ActiveModel::Validator
-  def validate(record)
-    used_count = 0
-    record.person_names.each { |person_name| used_count += 1 if person_name.used }
-    if used_count != 1
-      record.errors.add :person_names, "Персональные данные содержат более одного действующего набора ФИО"
-    end
-  end
-end
+# # Валидатор наборов ФИО
+# class NameValidator < ActiveModel::Validator
+#   def validate(record)
+#     used_count = 0
+#     record.person_names.each { |person_name| used_count += 1 if person_name.used }
+#     if used_count != 1
+#       record.errors.add :person_names, "Персональные данные содержат более одного действующего набора ФИО"
+#     end
+#   end
+# end
 
 # Персональные данные участников (фио, адрес, контакты)
 class Person < ApplicationRecord
@@ -21,7 +21,7 @@ class Person < ApplicationRecord
   has_one :person_address, -> { where(used: true).order("priority DESC") }
   has_one :address, through: :person_address
 
-  validates_with NameValidator
+  #validates_with NameValidator
 
   validates :person_contacts, presence: true
   validates :inn, format: { with: /[0-9]{12}/, message: "Неверный код ИНН" }, allow_nil: true
