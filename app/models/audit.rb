@@ -26,12 +26,13 @@ class Audit < ApplicationRecord
 
   # реализация для набора данных head
   def head
-    "#{created_at.strftime("%d.%m.%Y %H:%M")} #{action_name_local}: #{auditable_field.blank? ? auditable_type_local : auditable_field_local + " в " + auditable_type_local} #{auditable.head}"
+    "#{created_at.strftime("%d.%m.%Y %H:%M")} #{action_name_local}: #{auditable_field.blank? ? auditable_type_local : auditable_field_local + " в " + auditable_type_local} #{auditable.nil? ? "" : auditable.head}"
   end
 
   # реализация для набора данных card
   def card
-    super.merge({ action: action, auditable: auditable.item, auditable_type: auditable_type, auditable_field: auditable_field, detail: detail, before: before, after: after, user: user.item })
+    super.merge({ action: action, when: "#{created_at.strftime("%d.%m.%Y %H:%M")}", where: "#{auditable_type_local}", what: "#{auditable.nil? ? "" : auditable.head}", field: "#{auditable_field.blank? ? nil : auditable_field_local}",
+                  after: after, before: before, user: user.item })
   end
 
   # атрибуты для добавления
