@@ -90,13 +90,13 @@ class Model::UniversalController < PrivateController
   # DELETE /model/:model_name/:id
   # принимает параметры:
   # :id
-  # возвращает экземпляр модели <model_name> удаленный по его ID или ошибку
+  # возвращает код 200 или ошибку
   def destroy
-    # @audit = Audit.new(guid: @res.guid, action: :removed, table: params[:model_name], severity: :success, detail: @res.to_s, user_id: @current_user[:data][:id]) if @model_class.trackable?
+    audit = @res.head if @res.respond_to? :audits
     begin
       if @res && @res.destroy
-        #@audit.save if @audit
-        render json: @res
+        audit_removed(@res) if audit
+        render status: :ok
       else
         render json: { errors: @res.errors.full_messages }, status: :unprocessable_entity
       end
@@ -143,17 +143,17 @@ class Model::UniversalController < PrivateController
   # регистрируем вновь созданные записи, требующие аудит
   def check_audit_creation(obj)
     if (obj.respond_to? :audits) && obj.audits.empty?
-      audit = Audit.new({ action: :added, auditable: obj, user_id: @current_user[:data][:id] })
+      audit = Audit.new({ action: :added, auditable: obj, user_id: @current_user[:data][:id], detail: obj.head })
       audit.save
       obj.audits.push(audit)
     end
   end
 
-  # проверка на аудит удаления
+  # аудит удаления
   # регистрируем удаление объектов, требующих аудит
   def audit_removed(obj)
     if (obj.respond_to? :audits)
-      audit = Audit.new({ action: :removed, auditable: obj, user_id: @current_user[:data][:id] })
+      audit = Audit.new({ action: :removed, auditable: obj, user_id: @current_user[:data][:id], detail: obj.head })
       audit.save
       obj.audits.push(audit)
     end
@@ -165,7 +165,7 @@ class Model::UniversalController < PrivateController
     new_map.each do |k, v|
       before = old_map[k]
       if v != before
-        audit = Audit.new({ action: :updated, auditable_field: k, before: before, after: v, auditable: @res, user_id: @current_user[:data][:id] })
+        audit = Audit.new({ action: :updated, auditable_field: k, before: before, after: v, auditable: @res, detail: @res.head, user_id: @current_user[:data][:id] })
         audit.save
         @res.audits.push(audit)
       end
@@ -222,6 +222,8 @@ class Model::UniversalController < PrivateController
             check_attributes(element[0], el)
           end
         end
+      elsif k === "_destroy" && !Auditable::no_audit_for.include?(k)
+        audit_removed(obj)
       end
     end
   end

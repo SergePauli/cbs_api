@@ -32,7 +32,7 @@ class Audit < ApplicationRecord
   # реализация для набора данных card
   def card
     super.merge({ action: action, when: "#{created_at.strftime("%d.%m.%Y %H:%M")}", where: "#{auditable_type_local}", what: "#{auditable.nil? ? "" : auditable.head}", field: "#{auditable_field.blank? ? nil : auditable_field_local}",
-                  after: after, before: before, user: user.item })
+                  detail: detail, after: after, before: before, user: user.item })
   end
 
   # атрибуты для добавления
