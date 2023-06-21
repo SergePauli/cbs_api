@@ -156,6 +156,9 @@ class Model::UniversalController < PrivateController
       audit = Audit.new({ action: :removed, auditable: obj, user_id: @current_user[:data][:id], detail: obj.head })
       audit.save
       obj.audits.push(audit)
+      obj.class.reflect_on_all_associations.all? do |assoc|
+        audit_removed(obj.send(assoc.name)) if ((assoc.options[:dependent] == :destroy) && (obj.send(assoc.name).respond_to? :audits))
+      end
     end
   end
 
