@@ -11,11 +11,11 @@ class ContragentAddress < MutableData
   validates :kind, presence: true
 
   def head
-    super + " (" + (I18n.t kind) + ")"
+    (I18n.t kind) + ": " + super
   end
 
-  def item
-    super.merge({ kind: kind })
+  def edit
+    super.merge({ kind: kind, address_attributes: address.edit })
   end
 
   def self.permitted_params

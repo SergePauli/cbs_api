@@ -17,6 +17,10 @@ class ContragentContact < MutableData
     super.merge({ description: description })
   end
 
+  def edit
+    super.merge({ contragent_id: contragent_id, contact_attributes: contact.edit })
+  end
+
   def self.permitted_params
     super | [:contragent_id, :contact_id, :description] | [contact_attributes: Contact.permitted_params]
   end

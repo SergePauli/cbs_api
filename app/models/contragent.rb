@@ -20,6 +20,8 @@ class Contragent < ApplicationRecord
 
   # адреса
   has_many :contragent_addresses, dependent: :destroy, inverse_of: :contragent
+  has_one :real_addr, -> { where(used: true).where(kind: :real).order("id DESC") }, class_name: "ContragentAddress"
+  has_one :registred_addr, -> { where(used: true).where(kind: :registred).order("id DESC") }, class_name: "ContragentAddress"
   accepts_nested_attributes_for :contragent_addresses, allow_destroy: true
 
   # Определяем наименование контрагента
@@ -38,7 +40,7 @@ class Contragent < ApplicationRecord
 
   # карточка контрагента
   def card
-    super.merge({ requisites: contragent_organization.card, description: description, obj_uuid: obj_uuid, audits: audits.map { |el| el.item } || [], comments: comments.map { |el| el.item } || [], contacts: contragent_contacts.filter { |el| el.used }.map { |el| el.item } || [], addresses: contragent_addresses.filter { |el| el.used }.map { |el| el.item } || [], employees: employees.filter { |el| el.used }.map { |el| el.item } || [] })
+    super.merge({ requisites: contragent_organization.card, description: description, obj_uuid: obj_uuid, audits: audits.map { |el| el.card } || [], comments: comments.map { |el| el.item } || [], contacts: contragent_contacts.filter { |el| el.used }.map { |el| el.edit } || [], real_addr: real_addr.nil? ? nil : real_addr.item, registred_addr: registred_addr.nil? ? nil : registred_addr.item, region: real_addr.nil? ? nil : real_addr.address.area.item, employees: employees.filter { |el| el.used }.map { |el| el.item } || [] })
   end
 
   # налоговые и банковские реквизиты контрагента

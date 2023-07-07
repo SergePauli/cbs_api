@@ -45,7 +45,7 @@ class Model::UniversalController < PrivateController
 
   # POST /model/add/:model_name
   # принимает параметры:
-  # :<model_name> аттрибуты экзэмпляра модели для добаваления
+  # :<model_name> аттрибуты экземпляра модели для добаваления
   # :data_set задает типовой набор данных на выходе (:item, :card и т.д.)
   def create
     @res = @model_class.new permitted_params
@@ -58,6 +58,7 @@ class Model::UniversalController < PrivateController
         render json: @res.custom_data(params[:data_set].to_sym), status: :ok
       end
     else
+      puts @res.contragent_organizations[0].organization.to_json
       render json: { errors: @res.errors.full_messages }, status: :unprocessable_entity
     end
   end
