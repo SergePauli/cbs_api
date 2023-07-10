@@ -58,7 +58,7 @@ class Model::UniversalController < PrivateController
         render json: @res.custom_data(params[:data_set].to_sym), status: :ok
       end
     else
-      puts @res.contragent_organizations[0].organization.to_json
+      # puts @res.contragent_organizations[0].organization.to_json
       render json: { errors: @res.errors.full_messages }, status: :unprocessable_entity
     end
   end
@@ -94,10 +94,11 @@ class Model::UniversalController < PrivateController
   # возвращает код 200 или ошибку
   def destroy
     audit = @res.head if @res.respond_to? :audits
+    result = @res.item
     begin
       if @res && @res.destroy
         audit_removed(@res) if audit
-        render status: :ok
+        render json: result, status: :ok
       else
         render json: { errors: @res.errors.full_messages }, status: :unprocessable_entity
       end
