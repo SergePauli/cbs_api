@@ -10,6 +10,7 @@ class Employee < MutableData
   validates_associated :position
   validates :contragent, uniqueness: { scope: [:person, :position] }
   alias_attribute :state, :position # для поддержки MutableData
+  alias_attribute :main_model, :contragent # для поддержки обновления кэша модели-владельца
   accepts_nested_attributes_for :person
   accepts_nested_attributes_for :position
 

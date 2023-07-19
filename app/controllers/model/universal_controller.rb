@@ -21,7 +21,7 @@ class Model::UniversalController < PrivateController
       if params[:data_set].blank?
         render json: @res.all
       else
-        render json: @res.all.map { |el| el.custom_data(params[:data_set].to_sym) }
+        render json: @res.all.map { |el| get_data_set(el) }
       end
     else
       render json: @res.count
@@ -39,7 +39,7 @@ class Model::UniversalController < PrivateController
     if params[:data_set].blank?
       render json: @res
     else
-      render json: @res.custom_data(params[:data_set].to_sym), status: :ok
+      render json: get_data_set(@res), status: :ok
     end
   end
 
@@ -55,10 +55,9 @@ class Model::UniversalController < PrivateController
       if params[:data_set].blank?
         render json: @res
       else
-        render json: @res.custom_data(params[:data_set].to_sym), status: :ok
+        render json: get_data_set(@res, true), status: :ok
       end
     else
-      # puts @res.contragent_organizations[0].organization.to_json
       render json: { errors: @res.errors.full_messages }, status: :unprocessable_entity
     end
   end
@@ -81,7 +80,7 @@ class Model::UniversalController < PrivateController
       if params[:data_set].blank?
         render json: @res
       else
-        render json: @res.custom_data(params[:data_set].to_sym), status: :ok
+        render json: get_data_set(@res, true), status: :ok
       end
     else
       render json: { errors: @res.errors.full_messages }, status: :unprocessable_entity
@@ -91,10 +90,12 @@ class Model::UniversalController < PrivateController
   # DELETE /model/:model_name/:id
   # принимает параметры:
   # :id
-  # возвращает код 200 или ошибку
+  # возвращает Item-набор удаленного объекта или ошибку
   def destroy
     audit = @res.head if @res.respond_to? :audits
     result = @res.item
+    # удаляем все ключи объекта в кэше Redis
+    clean_keys(@res)
     begin
       if @res && @res.destroy
         audit_removed(@res) if audit
@@ -139,6 +140,45 @@ class Model::UniversalController < PrivateController
     rescue ActiveRecord::RecordNotFound
       raise ApiError.new("Запись не найдена для ID=#{params[:id]}", :not_found)
     end
+  end
+
+  # Очистка неактуальных ключей в кэше
+  def clean_keys(obj)
+    # получаем маску для всех ключей модели, в случае режима обновлений
+    mask = "#{obj.class.name}_#{obj.id}*"
+    puts "mask", mask
+    # удаляем все устаревшие ключи, в случае обновления объекта в базе
+    keys = REDIS.keys mask
+    REDIS.del keys if keys
+    # удаляем ключи и для объекта-владельца, если такой есть
+    clean_keys(obj.main_model) if obj.respond_to? :main_model
+  end
+
+  # получаем набор данных для объекта
+  # obj - экзэмпляр класса модели
+  # на выходе hashmap его представления для :data_set
+  def get_data_set(obj, update_mode = false)
+    # получаем нужный ключ из Класса модели, ID записи и названия набора
+    key = "#{params[:model_name]}_#{obj.id}_#{params[:data_set]}"
+    # обновляем время последнего обращения к кэшу
+    REDIS.hset key, "time", DateTime.now.to_s
+    if update_mode
+      # удаляем все устаревшие ключи, в случае обновления объекта в базе
+      clean_keys(obj)
+    else
+      # проверяем если готовое значение в REDIS
+      json_str = REDIS.hget key, "value"
+    end
+    if !json_str || json_str.blank?
+      # если нет - получаем из СУБД данные и генерим карту объекта
+      result = obj.custom_data(params[:data_set].to_sym)
+      # и кэшируем в REDIS как JSON
+      REDIS.hset key, "value", result.to_json
+    else
+      # если да - Парсим JSON и получаем нужную карту объекта
+      result = JSON.parse(json_str)
+    end
+    result
   end
 
   # проверка на аудит добавления
