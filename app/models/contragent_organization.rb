@@ -6,7 +6,7 @@ class ContragentOrganization < MutableData
 
   belongs_to :contragent, inverse_of: :contragent_organization
 
-  belongs_to :organization
+  belongs_to :organization, dependent: :destroy, autosave: true
   accepts_nested_attributes_for :organization
 
   validates_associated :contragent
