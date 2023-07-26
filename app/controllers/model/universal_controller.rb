@@ -69,6 +69,7 @@ class Model::UniversalController < PrivateController
   # :data_set задает типовой набор данных на выходе (:item, :card и т.д.)
   # возвращает экземпляр модели <model_name> или ошибку
   def update
+    clean_keys(@res)
     old_map = create_string_values_map if (@res.respond_to? :audits)
     if @res.update(permitted_params)
       if (@res.respond_to? :audits)
@@ -146,7 +147,6 @@ class Model::UniversalController < PrivateController
   def clean_keys(obj)
     # получаем маску для всех ключей модели, в случае режима обновлений
     mask = "#{obj.class.name}_#{obj.id}*"
-    puts "mask", mask
     # удаляем все устаревшие ключи, в случае обновления объекта в базе
     keys = REDIS.keys mask
     REDIS.del keys if keys
@@ -226,7 +226,7 @@ class Model::UniversalController < PrivateController
         field = k.gsub("_id", "")
         child = @res.method(field).call
         result[field] = child.blank? ? "" : child.head
-      elsif (k.include?("_attributes") && (v.class.name === "Array"))
+      elsif (k.include?("s_attributes"))
         field = k.gsub("_attributes", "")
         child = @res.method(field).call
         all_string = child.reduce("") { |all_string, el| all_string + "{" + el.head + "} " }
@@ -256,7 +256,11 @@ class Model::UniversalController < PrivateController
   def check_attributes(obj, params)
     params.each do |k, v|
       if k.include?("_attributes") && !Auditable::no_audit_for.include?(k)
-        child = obj.method(k.gsub("_attributes", "")).call
+        begin
+          child = obj.method(k.gsub("_attributes", "")).call
+        rescue
+          puts k, obj.to_json
+        end
         if v.class.name === "ActionController::Parameters"
           check_audit_creation(child)
           check_attributes(child, v)
