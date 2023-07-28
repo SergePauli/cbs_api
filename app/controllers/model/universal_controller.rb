@@ -159,25 +159,25 @@ class Model::UniversalController < PrivateController
   # на выходе hashmap его представления для :data_set
   def get_data_set(obj, update_mode = false)
     # получаем нужный ключ из Класса модели, ID записи и названия набора
-    key = "#{params[:model_name]}_#{obj.id}_#{params[:data_set]}"
-    # обновляем время последнего обращения к кэшу
-    REDIS.hset key, "time", DateTime.now.to_s
+    redis_key = "#{params[:model_name]}_#{obj.id}_#{params[:data_set]}"
     if update_mode
       # удаляем все устаревшие ключи, в случае обновления объекта в базе
       clean_keys(obj)
     else
       # проверяем если готовое значение в REDIS
-      json_str = REDIS.hget key, "value"
+      json_str = REDIS.hget redis_key, "value"
     end
     if !json_str || json_str.blank?
       # если нет - получаем из СУБД данные и генерим карту объекта
       result = obj.custom_data(params[:data_set].to_sym)
       # и кэшируем в REDIS как JSON
-      REDIS.hset key, "value", result.to_json
+      REDIS.hset redis_key, "value", result.to_json
     else
       # если да - Парсим JSON и получаем нужную карту объекта
       result = JSON.parse(json_str)
     end
+    # обновляем время жизни данных в кэше без использования
+    REDIS.expire(redis_key, Rails.configuration.redis_key_expire.to_i)
     result
   end
 

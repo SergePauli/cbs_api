@@ -81,5 +81,8 @@ module CbsApi
 
     # локаль
     config.i18n.default_locale = :ru
+
+    # время жизни неиспользуемых наборов данных в кэше REDIS, сек
+    config.redis_key_expire = ENV["DATA_EXPIRE"]
   end
 end

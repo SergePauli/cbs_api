@@ -11,7 +11,7 @@ class Address < NamedRecord
   end
 
   def edit
-    super.merge({ area_id: area_id })
+    { id: id, area_id: area_id, value: value }
   end
 
   def self.permitted_params
