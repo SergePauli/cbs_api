@@ -39,4 +39,6 @@ class Employee < MutableData
   def self.permitted_params
     super | [:contragent_id, :person_id, :position_id, :description] | [person_attributes: Person.permitted_params] | [position_attributes: Position.permitted_params]
   end
+
+  ransack_alias :person_name, :person_person_name_naming_name_or_person_person_name_naming_surname_or_person_person_name_naming_patrname
 end
