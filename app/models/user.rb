@@ -56,6 +56,11 @@ class User < NamedRecord
     "#{name} #{person.head}"
   end
 
+  # реализация для набора данных редактирования
+  def edit
+    super.merge({ name: name, person: person.head, role: role, last_login: last_login })
+  end
+
   # реализация для набора данных card
   def card
     super.merge({ role: role, person: person.card, last_login: last_login, profiles: profiles.map { |profile| profile.item } })

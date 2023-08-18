@@ -4,7 +4,7 @@ class Ownership < NamedRecord
   end
 
   def card
-    super.merge({ full_name: full_name })
+    super.merge({ full_name: full_name, okopf: okopf })
   end
 
   def self.permitted_params

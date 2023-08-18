@@ -49,16 +49,20 @@ class Model::UniversalController < PrivateController
   # :data_set задает типовой набор данных на выходе (:item, :card и т.д.)
   def create
     @res = @model_class.new permitted_params
-    if @res.save
-      check_audit_creation(@res)
-      check_attributes(@res, params[params[:model_name]])
-      if params[:data_set].blank?
-        render json: @res
+    begin
+      if @res.save
+        check_audit_creation(@res)
+        check_attributes(@res, params[params[:model_name]])
+        if params[:data_set].blank?
+          render json: @res
+        else
+          render json: get_data_set(@res, true), status: :ok
+        end
       else
-        render json: get_data_set(@res, true), status: :ok
+        render json: { errors: @res.errors.full_messages }, status: :unprocessable_entity
       end
-    else
-      render json: { errors: @res.errors.full_messages }, status: :unprocessable_entity
+    rescue ActiveRecord::RecordNotUnique
+      render json: { errors: ["Новая запись нарушает требования уникальности"] }, status: :unprocessable_entity
     end
   end
 

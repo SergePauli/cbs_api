@@ -13,6 +13,11 @@ class StatusRecord < NamedRecord
     super.merge({ description: description, order: order })
   end
 
+  # реализация для набора данных edit
+  def edit
+    super.merge({ name: name, description: description, order: order })
+  end
+
   def self.permitted_params
     super | [:description, :order]
   end

@@ -12,6 +12,11 @@ class IsecurityTool < NamedRecord
     super.merge({ unit: unit, priority: priority, used: used })
   end
 
+  # реализация для набора данных edit
+  def edit
+    super.merge({ name: name, unit: unit, priority: priority, used: used })
+  end
+
   def self.permitted_params
     super | [:unit, :priority, :used]
   end

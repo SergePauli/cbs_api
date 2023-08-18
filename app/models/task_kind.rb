@@ -14,6 +14,6 @@ class TaskKind < NamedRecord
   end
 
   def self.permitted_params
-    super | [:description, :cost, :duration]
+    super | [:description, :cost, :duration, :code]
   end
 end
