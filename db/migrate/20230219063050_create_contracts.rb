@@ -10,8 +10,7 @@ class CreateContracts < ActiveRecord::Migration[6.1]
       t.string :code, null: false, limit: 2, comment: "код типа контракта"
       t.boolean :governmental, null: false, default: false, comment: "госконтракт?"
       t.date :signed_at, comment: "дата контракта (подписания)"
-      t.integer :deadline_kind, comment: "вид срока"
-      t.float :cost, comment: "сумма контракта"
+      t.string :external_number, comment: "внешний номер"
 
       t.timestamps
     end

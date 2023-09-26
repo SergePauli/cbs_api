@@ -4,7 +4,7 @@ class Revision < MutableData
   # аудит изменений
   include Auditable
 
-  belongs_to :contract
+  belongs_to :contract, inverse_of: :revisions
   validates_associated :contract
 
   validates :contract, uniqueness: { scope: :priority }
@@ -37,6 +37,6 @@ class Revision < MutableData
   end
 
   def self.permitted_params
-    super | [:contract_id, :protocol_link, :scan_link, :zip_link, :doc_link, :is_present]
+    super | [:contract_id, :protocol_link, :scan_link, :zip_link, :doc_link, :is_present, :description]
   end
 end

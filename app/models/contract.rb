@@ -12,13 +12,13 @@ class Contract < ApplicationRecord
   include Executable
 
   # Весь документо-оборот по контракту
-  has_many :revisions, -> { order("priority ASC") }, autosave: true, dependent: :destroy
+  has_many :revisions, -> { order("priority ASC") }, autosave: true, dependent: :destroy, inverse_of: :contract
   accepts_nested_attributes_for :revisions, allow_destroy: true
 
   has_one :revision, -> { where(used: true, priority: 0) }
 
   # Этапы (как минимум один)
-  has_many :stages, -> { order("priority ASC") }, autosave: true, dependent: :destroy
+  has_many :stages, -> { order("priority ASC") }, autosave: true, dependent: :destroy, inverse_of: :contract
   accepts_nested_attributes_for :stages, allow_destroy: true
 
   # Контрагент
@@ -31,14 +31,19 @@ class Contract < ApplicationRecord
 
   validates :order, uniqueness: { scope: [:year, :code, :order] }
 
-  # номер контракта
+  # номер
   def name
     "#{code}-#{year}-#{order.to_s.rjust(2, "0")}"
   end
 
+  # стоимость
+  def cost
+    stages.reduce(0) { |cost, stage| cost + stage.cost }
+  end
+
   # реализация для набора данных basement
   def basement
-    { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind, governmental: governmental, signed_at: signed_at, revision: revision.basement, status: status.item }
+    { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, signed_at: signed_at, external_number: external_number, revision: revision.basement, status: status.item }
   end
 
   # реализация для набора данных card
@@ -48,7 +53,7 @@ class Contract < ApplicationRecord
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
   def self.permitted_params
-    super | [:contragent_id, :task_kind_id, :status_id, :cost, :governmental, :deadline_kind, :signed_at] | [stages_attributes: Stage.permitted_params] | [comments_attributes: Comment.permitted_params] | [revisions_attributes: Revision.permitted_params]
+    super | [:year, :code, :contragent_id, :task_kind_id, :status_id, :governmental, :external_number, :signed_at] | [stages_attributes: Stage.permitted_params] | [comments_attributes: Comment.permitted_params] | [revisions_attributes: Revision.permitted_params]
   end
 
   # назначаем сквозной номер контракту

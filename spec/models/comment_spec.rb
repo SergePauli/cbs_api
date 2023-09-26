@@ -14,7 +14,7 @@ RSpec.describe Comment, type: :model do
     Comment.new
   }
 
-  it "должна быть невалидной при отсутствии :action в списке ошибок должно быть сообщение" do
+  it "должна быть невалидной при отсутствии :content в списке ошибок должно быть сообщение" do
     expect(new_comment).not_to be_valid
     expect(new_comment.errors[:content]).not_to be_nil
   end

@@ -38,6 +38,10 @@ class Contragent < ApplicationRecord
     "#{name}"
   end
 
+  def item
+    super.merge({ description: description })
+  end
+
   # карточка контрагента
   def card
     super.merge({ requisites: contragent_organization.card, description: description, obj_uuid: obj_uuid, audits: audits.map { |el| el.card } || [], comments: comments.map { |el| el.item } || [], contacts: contragent_contacts.filter { |el| el.used }.map { |el| el.edit } || [], real_addr: real_addr.nil? ? nil : real_addr.edit, registred_addr: registred_addr.nil? ? nil : registred_addr.edit, region: real_addr.nil? ? nil : real_addr.address.area.item, employees: employees.filter { |el| el.used }.map { |el| el.item } || [] })

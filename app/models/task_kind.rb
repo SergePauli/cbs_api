@@ -6,7 +6,7 @@ class TaskKind < NamedRecord
                              message: "Указан неверный код типа контракта" }, allow_nil: true
 
   def item
-    code.blank? ? super : super.merge({ code: code })
+    code.blank? ? super.merge({ description: description }) : super.merge({ code: code, description: description })
   end
 
   def card

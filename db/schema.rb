@@ -79,8 +79,7 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.string "code", limit: 2, null: false, comment: "код типа контракта"
     t.boolean "governmental", default: false, null: false, comment: "госконтракт?"
     t.date "signed_at", comment: "дата контракта (подписания)"
-    t.integer "deadline_kind", comment: "вид срока"
-    t.float "cost", comment: "сумма контракта"
+    t.string "external_number", comment: "внешний номер"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["contragent_id"], name: "index_contracts_on_contragent_id"
@@ -220,6 +219,7 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.string "full_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "okopf", comment: "ОКОПФ"
     t.index ["name"], name: "index_ownerships_on_name", unique: true
   end
 
@@ -388,6 +388,9 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.date "invoice_at", comment: "дата выставления счета на оплату"
     t.date "completed_at", comment: "дата закрытия"
     t.integer "deadline_kind", comment: "вид срока"
+    t.integer "payment_deadline_kind", comment: "вид срока оплаты"
+    t.integer "payment_duration", comment: "дней на оплату"
+    t.date "payment_deadline_at", comment: "срок оплаты"
     t.integer "duration", comment: "время выполнения в днях"
     t.date "sended_at", comment: "дата отправки документации"
     t.boolean "is_sended", comment: "документы высланы"

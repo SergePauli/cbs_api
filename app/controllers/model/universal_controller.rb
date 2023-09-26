@@ -118,8 +118,8 @@ class Model::UniversalController < PrivateController
   def permitted_params
     begin
       params.require(params[:model_name].to_sym).permit(@model_class.permitted_params)
-    rescue
-      raise ApiError.new("Данные модели #{params[:model_name]} не верно указаны в запросе", :bad_request)
+    rescue Exception => e
+      raise ApiError.new("Данные модели #{params[:model_name]} не верно указаны в запросе #{e.to_json}", :bad_request)
     end
   end
 

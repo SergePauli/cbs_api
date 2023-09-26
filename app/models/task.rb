@@ -11,6 +11,10 @@ class Task < MutableData
     task_kind.name
   end
 
+  def edit
+    super.merge({ priority: priority, list_key: list_key, name: name, task_kind_id: task_kind_id })
+  end
+
   def card
     super.merge({ stage: stage.item, task_kind: task_kind.item })
   end

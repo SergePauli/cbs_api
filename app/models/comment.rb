@@ -21,12 +21,12 @@ class Comment < ApplicationRecord
 
   # реализация для набора данных :item
   def item
-    super.merge({ commentable: commentable.item, department: department.item, content: content })
+    super.merge({ commentable: commentable.item, department: department.item, content: content, when: created_at.strftime("%d.%m.%Y %H:%M") })
   end
 
   # реализация для набора данных card
   def card
-    super.merge({ content: content, commentable: commentable.item, commentable_type: commentable_type, profile: profile.item, user: user.item, person: person.item, department: department.item })
+    super.merge({ content: content, commentable: commentable.item, commentable_type: commentable_type, profile: profile.item, user: user.item, person: person.item, department: department.item, when: created_at.strftime("%d.%m.%Y %H:%M") })
   end
 
   # атрибуты для добавления

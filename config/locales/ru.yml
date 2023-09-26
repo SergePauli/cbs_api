@@ -67,6 +67,7 @@ ru:
   duration: "длительность"
   deadline_at: "срок"  
   deadline_kind: "режим сроков"
+  payment_deadline_kind: "режим оплаты (РО)"
   calendar_plan: "КПлан"
   calendar_days: "КДней"
   calendar_prepayment: "КДнПр"
