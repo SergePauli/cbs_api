@@ -5,7 +5,7 @@ class CreateContracts < ActiveRecord::Migration[6.1]
       t.references :contragent, null: false, foreign_key: true, comment: "контрагент"
       t.references :task_kind, null: false, foreign_key: true, comment: "тип контракта"
       t.references :status, null: false, foreign_key: true, comment: "статус"
-      t.integer :order, null: false, default: 1, comment: "сквозной номер, относительно года и типа"
+      t.integer :order, null: false, comment: "сквозной номер, относительно года и типа"
       t.integer :year, null: false, comment: "год контракта"
       t.string :code, null: false, limit: 2, comment: "код типа контракта"
       t.boolean :governmental, null: false, default: false, comment: "госконтракт?"

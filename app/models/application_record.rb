@@ -34,6 +34,10 @@ class ApplicationRecord < ActiveRecord::Base
     { id: id, name: head }
   end
 
+  def to_date_str(date)
+    date.blank? ? nil : date.strftime("%a %b %d %Y")
+  end
+
   def summary
     { created: created_at, updated: updated_at }
   end
