@@ -48,7 +48,7 @@ class Contract < ApplicationRecord
 
   # реализация для набора данных card
   def card
-    super.merge(basement).merge({ code: code, order: order, year: year, stages: stages.map { |el| el.card }, comments: comments.map { |el| el.item } || [], audits: audits.map { |el| el.item } || [], revisions: revisions.map { |el| el.basement } })
+    super.merge(basement).merge({ code: code, order: order, year: year, stages: stages.map { |el| el.edit }, comments: stages.reduce([]) { |comments, el| comments + el.comments ? el.comments.map { |com| com.card } : [] } || [], audits: audits.map { |el| el.item } || [], revisions: revisions.map { |el| el.basement } })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение

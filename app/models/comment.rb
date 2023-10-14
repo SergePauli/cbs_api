@@ -16,7 +16,7 @@ class Comment < ApplicationRecord
 
   # реализация для набора данных head
   def head
-    "#{created_at.strftime("%d.%m.%Y %H:%M")} #{person.initials}"
+    "#{profile.position.name} #{person.initials}"
   end
 
   # реализация для набора данных :item

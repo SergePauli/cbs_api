@@ -81,7 +81,7 @@ class Stage < MutableData
   end
 
   def edit
-    basement
+    basement.merge({ comments: comments.map { |el| el.item } || [], used: used })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
