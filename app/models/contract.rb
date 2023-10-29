@@ -43,7 +43,7 @@ class Contract < ApplicationRecord
 
   # реализация для набора данных basement
   def basement
-    { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, signed_at: to_date_str(signed_at), external_number: external_number, revision: revision.basement, status: status.item }
+    { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, deadline_at: to_date_str(deadline_at), signed_at: to_date_str(signed_at), external_number: external_number, revision: revision.basement, status: status.item }
   end
 
   # реализация для набора данных card

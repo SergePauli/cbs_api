@@ -7,6 +7,7 @@ class CreateStages < ActiveRecord::Migration[6.1]
       t.references :status, foreign_key: true, comment: "статус"
       t.integer :priority, null: false, default: 0, comment: "очередность этапа, если 0,то договор - обычный"
       t.float :cost, comment: "сумма этапа"
+      t.date :start_at, comment: "начало этапа"
       t.date :deadline_at, comment: "срок выполнения"
       t.date :funded_at, comment: "дата бухгалтерского закрытия"
       t.date :invoice_at, comment: "дата выставления счета на оплату"

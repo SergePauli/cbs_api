@@ -71,7 +71,7 @@ class Stage < MutableData
 
   # реализация для набора данных basement
   def basement
-    { id: id, priority: priority, task_kind: task_kind.item, status: status ? status.item : nil, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind, duration: duration, deadline_at: to_date_str(deadline_at),
+    { id: id, priority: priority, task_kind: task_kind.item, status: status ? status.item : nil, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind, duration: duration, start_at: to_date_str(start_at), deadline_at: to_date_str(deadline_at),
       payment_deadline_kind: payment_deadline_kind, payment_duration: payment_duration, payment_deadline_at: to_date_str(payment_deadline_at), completed_at: to_date_str(completed_at), funded_at: to_date_str(funded_at), invoice_at: to_date_str(invoice_at), sended_at: to_date_str(sended_at), is_sended: is_sended, ride_out_at: to_date_str(ride_out_at), is_ride_out: is_ride_out, tasks: tasks.map { |el| el.edit } || nil, stage_orders: used_items(stage_orders) || nil, performers: used_items(stage_performers) || nil, payments: payments.map { |item| item.item } || nil }
   end
 
@@ -81,12 +81,12 @@ class Stage < MutableData
   end
 
   def edit
-    basement.merge({ comments: comments.map { |el| el.item } || [], used: used })
+    basement.merge({ comments: comments.map { |el| el.item } || [], used: used, list_key: list_key })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
   def self.permitted_params
-    super | [:contract_id, :task_kind_id, :status_id, :cost, :completed_at, :deadline_at, :duration, :deadline_kind, :payment_deadline_kind, :payment_duration, :payment_deadline_at, :invoice_at, :sended_at, :ride_out_at, :is_sended, :is_ride_out, :funded_at] | [tasks_attributes: Task.permitted_params] | [stage_orders_attributes: StageOrder.permitted_params] | [payments_attributes: Payment.permitted_params] | [comments_attributes: Comment.permitted_params]
+    super | [:contract_id, :task_kind_id, :status_id, :cost, :start_at, :completed_at, :deadline_at, :duration, :deadline_kind, :payment_deadline_kind, :payment_duration, :payment_deadline_at, :invoice_at, :sended_at, :ride_out_at, :is_sended, :is_ride_out, :funded_at] | [tasks_attributes: Task.permitted_params] | [stage_orders_attributes: StageOrder.permitted_params] | [payments_attributes: Payment.permitted_params] | [comments_attributes: Comment.permitted_params]
   end
 
   private

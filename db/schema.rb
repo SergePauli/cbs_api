@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_10_034553) do
+ActiveRecord::Schema.define(version: 2023_10_18_094544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.bigint "contragent_id", null: false, comment: "контрагент"
     t.bigint "task_kind_id", null: false, comment: "тип контракта"
     t.bigint "status_id", null: false, comment: "статус"
-    t.integer "order", default: 1, null: false, comment: "сквозной номер, относительно года и типа"
+    t.integer "order", null: false, comment: "сквозной номер, относительно года и типа"
     t.integer "year", null: false, comment: "год контракта"
     t.string "code", limit: 2, null: false, comment: "код типа контракта"
     t.boolean "governmental", default: false, null: false, comment: "госконтракт?"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.string "external_number", comment: "внешний номер"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.date "deadline_at"
     t.index ["contragent_id"], name: "index_contracts_on_contragent_id"
     t.index ["status_id"], name: "index_contracts_on_status_id"
     t.index ["task_kind_id"], name: "index_contracts_on_task_kind_id"
@@ -165,6 +166,16 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.index ["contragent_id"], name: "index_employees_on_contragent_id"
     t.index ["person_id"], name: "index_employees_on_person_id"
     t.index ["position_id"], name: "index_employees_on_position_id"
+  end
+
+  create_table "holidays", force: :cascade do |t|
+    t.date "begin_at"
+    t.date "end_at"
+    t.string "name"
+    t.boolean "work"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["begin_at"], name: "index_holidays_on_begin_at"
   end
 
   create_table "isecurity_tools", force: :cascade do |t|
@@ -400,6 +411,7 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.date "start_at"
     t.index ["contract_id"], name: "index_stages_on_contract_id"
     t.index ["status_id"], name: "index_stages_on_status_id"
     t.index ["task_kind_id"], name: "index_stages_on_task_kind_id"
@@ -421,7 +433,6 @@ ActiveRecord::Schema.define(version: 2023_03_10_034553) do
     t.integer "duration"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["code"], name: "index_task_kinds_on_code"
   end
 
   create_table "tasks", force: :cascade do |t|
