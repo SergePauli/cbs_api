@@ -20,6 +20,7 @@ class Contract < ApplicationRecord
   # Этапы (как минимум один)
   has_many :stages, -> { order("priority ASC") }, autosave: true, dependent: :destroy, inverse_of: :contract
   accepts_nested_attributes_for :stages, allow_destroy: true
+  has_one :stage, -> { where(used: true, priority: 0) }
 
   # Контрагент
   belongs_to :contragent
@@ -48,12 +49,17 @@ class Contract < ApplicationRecord
 
   # реализация для набора данных card
   def card
-    super.merge(basement).merge({ code: code, order: order, year: year, stages: stages.map { |el| el.edit }, comments: stages.reduce([]) { |comments, el| comments + el.comments ? el.comments.map { |com| com.card } : [] } || [], audits: audits.map { |el| el.item } || [], revisions: revisions.map { |el| el.basement } })
+    super.merge(basement).merge({ code: code, order: order, year: year, stages: stages.map { |el| el.edit }, comments: stages.reduce([]) { |comments, el| comments + el.comments ? el.comments.map { |com| com.card } : [] } || [], audits: audits.map { |el| el.item } || [], revisions: revisions.map { |el| el.basement }, expire_at: stages[0].priority > 0 ? to_date_str(deadline_at) : to_date_str(stages[0].deadline_at), region: contragent.real_addr.nil? ? nil : contragent.real_addr.address.area.item })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
   def self.permitted_params
     super | [:year, :code, :order, :contragent_id, :task_kind_id, :status_id, :governmental, :external_number, :signed_at] | [stages_attributes: Stage.permitted_params] | [comments_attributes: Comment.permitted_params] | [revisions_attributes: Revision.permitted_params]
+  end
+
+  ransacker :total_costs do
+    query = "(SELECT SUM(cost) FROM stages WHERE stages.contract_id = contracts.id and stages.priority > 0 GROUP BY stages.contract_id)"
+    Arel.sql(query)
   end
 
   private
