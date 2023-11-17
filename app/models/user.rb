@@ -66,9 +66,14 @@ class User < NamedRecord
     super.merge({ role: role, person: person.card, last_login: last_login, profiles: profiles.map { |profile| profile.item } })
   end
 
+  # определяем дополнительный набор данных :login_info
+  def data_sets
+    super.push(:login_info)
+  end
+
   # реализация для набора данных login_info
   def login_info
-    { id: id, profile_id: profile.id, name: name, person: { id: person_id, name: person.name }, email: email, role: role, last_login: last_login, profiles: profiles.map { |profile| profile.item }, department: department.nil? ? nil : department.item, position: position.nil? ? nil : position.item }
+    { id: id, profile_id: profile.id, name: name, person: { id: person_id, name: person.name }, email: email, role: role, last_login: last_login, profiles: profiles.map { |profile| profile.item }, department: department.nil? ? nil : department.item, position: position.nil? ? nil : position.item, activated: activated }
   end
 
   # получение email
