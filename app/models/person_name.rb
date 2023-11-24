@@ -24,7 +24,7 @@ class PersonName < MutableData
   end
 
   def edit
-    { id: id, used: used, person_id: person_id, naming_attributes: naming.edit }
+    { id: id, used: used, person_id: person_id, naming: naming.edit }
   end
 
   def self.permitted_params

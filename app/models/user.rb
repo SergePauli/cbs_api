@@ -58,7 +58,7 @@ class User < NamedRecord
 
   # реализация для набора данных редактирования
   def edit
-    super.merge({ name: name, person: person.head, role: role, last_login: last_login })
+    super.merge({ name: name, person: person.edit, last_login: last_login, role: role, email: email, activated: activated })
   end
 
   # реализация для набора данных card
@@ -96,7 +96,7 @@ class User < NamedRecord
 
   # получаем массив разрешенных параметров запросов на обновление
   def self.permitted_params
-    super | [:role, :password, :password_confirmation, person_attributes: Person.permitted_params]
+    super | [:role, :activated, :password, :password_confirmation, person_attributes: Person.permitted_params]
   end
 
   # end

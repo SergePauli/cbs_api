@@ -28,6 +28,12 @@ class Profile < MutableData
                   contracts_types: contracts_types || position.def_contracts_types || (department ? department.def_contracts_types : nil) })
   end
 
+  # реализация для набора данных edit
+  def edit
+    super.merge({ name: head, user: user.edit, position: position.item,
+                  department: department ? department.item : nil })
+  end
+
   # begin Принимаем атрибуты для связанных моделей
   accepts_nested_attributes_for :user
   accepts_nested_attributes_for :position

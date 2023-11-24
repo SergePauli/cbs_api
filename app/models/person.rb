@@ -72,7 +72,7 @@ class Person < ApplicationRecord
   end
 
   def edit
-    super.merge(basement).merge({ person_names_attributes: person_names.map { |el| el.custom_data(:edit) } || [], person_addresses_attributes: person_addresses.map { |el| el.custom_data(:card) } || [], person_contacts_attributes: person_contacts.filter { |el| el.used }.map { |el| el.custom_data(:edit) } || [] })
+    super.merge(basement).merge({ person_name: person_name.edit, person_names_attributes: person_names.map { |el| el.custom_data(:edit) } || [], person_addresses_attributes: person_addresses.map { |el| el.custom_data(:card) } || [], contacts: person_contacts.filter { |el| el.used }.map { |el| el.edit } || [] })
   end
 
   def card

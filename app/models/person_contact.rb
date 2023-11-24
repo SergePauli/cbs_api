@@ -21,7 +21,7 @@ class PersonContact < MutableData
   end
 
   def edit
-    super.merge({ person_id: person_id, contact_attributes: contact.edit })
+    super.merge({ person_id: person_id, contact: contact.edit })
   end
 
   def self.permitted_params
