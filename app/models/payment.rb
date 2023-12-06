@@ -21,6 +21,10 @@ class Payment < ApplicationRecord
     end
   end
 
+  def edit
+    { id: id, name: name, payment_kind: payment_kind, payment_at: payment_at.nil? ? nil : to_date_str(payment_at), description: description, list_key: list_key }
+  end
+
   # Набор данных card
   def card
     super.merge({ stage: stage.item, payment_kind: payment_kind, payment_at: payment_at, description: description, list_key: list_key })
