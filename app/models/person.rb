@@ -63,8 +63,12 @@ class Person < ApplicationRecord
     result += " " + contact if contact != nil
   end
 
+  def item
+    { id: id, head: head, name: name }
+  end
+
   def name
-    person_name.head
+    initials
   end
 
   def basement
