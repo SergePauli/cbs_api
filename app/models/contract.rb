@@ -20,7 +20,7 @@ class Contract < ApplicationRecord
   # Этапы (как минимум один)
   has_many :stages, -> { order("priority ASC") }, autosave: true, dependent: :destroy, inverse_of: :contract
   accepts_nested_attributes_for :stages, allow_destroy: true
-  has_one :stage, -> { where(used: true, priority: 0) }
+  has_one :stage, -> { where(used: true) }
 
   # Контрагент
   belongs_to :contragent
@@ -44,12 +44,12 @@ class Contract < ApplicationRecord
 
   # реализация для набора данных basement
   def basement
-    { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, deadline_at: to_date_str(deadline_at), signed_at: to_date_str(signed_at), external_number: external_number, revision: revision.basement, status: status.item }
+    { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, deadline_at: to_date_str(deadline_at), signed_at: to_date_str(signed_at), external_number: external_number, revision: revision.basement, status: status.item, region: contragent.real_addr.nil? ? nil : contragent.real_addr.address.area.item }
   end
 
   # реализация для набора данных card
   def card
-    super.merge(basement).merge({ code: code, order: order, year: year, stages: stages.map { |el| el.edit }, comments: stages.reduce([]) { |comments, el| comments + el.comments ? el.comments.map { |com| com.card } : [] } || [], audits: audits.map { |el| el.item } || [], revisions: revisions.map { |el| el.basement }, expire_at: stages[0].priority > 0 ? to_date_str(deadline_at) : to_date_str(stages[0].deadline_at), region: contragent.real_addr.nil? ? nil : contragent.real_addr.address.area.item })
+    super.merge(basement).merge({ code: code, order: order, year: year, use_stage: stage.id, stages: stages.map { |el| el.edit }, comments: stages.reduce([]) { |comments, el| comments + el.comments ? el.comments.map { |com| com.card } : [] } || [], revisions: revisions.map { |el| el.basement }, expire_at: stages[0].priority > 0 ? to_date_str(deadline_at) : to_date_str(stages[0].deadline_at) })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение

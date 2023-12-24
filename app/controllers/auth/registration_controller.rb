@@ -8,7 +8,7 @@ class Auth::RegistrationController < ApplicationController
     @profile = Profile.new(profile_params)
     if @profile.save
       ApplicationMailer.with(user_id: @profile.user_id).confirmation_mail.deliver_later
-      render status: :ok
+      render json: { errors: "нет ошибок" }, status: :ok
     else
       render json: { errors: @profile.errors.full_messages }, status: :unprocessable_entity
     end

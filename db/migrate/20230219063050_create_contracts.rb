@@ -11,6 +11,7 @@ class CreateContracts < ActiveRecord::Migration[6.1]
       t.boolean :governmental, null: false, default: false, comment: "госконтракт?"
       t.date :signed_at, comment: "дата контракта (подписания)"
       t.date :deadline_at, comment: "срок завершения контракта"
+      t.date :closed_at, comment: "дата закрытия контракта"
       t.string :external_number, comment: "внешний номер"
 
       t.timestamps

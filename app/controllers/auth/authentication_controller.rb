@@ -27,7 +27,7 @@ class Auth::AuthenticationController < PrivateController
     raise ApiError.new("Отсутствует токен обновлений", :unauthorized) if token.blank?
     REDIS.hdel "tokens", token
     cookies.delete :refresh_token
-    render status: :ok
+    render json: { errors: "нет ошибок" }, status: :ok
   end
 
   # GET "auth/refresh" обновляем токен доступа

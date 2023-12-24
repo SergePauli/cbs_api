@@ -33,10 +33,6 @@ class Stage < MutableData
   has_many :stage_orders, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
   accepts_nested_attributes_for :stage_orders, allow_destroy: true
 
-  # платежи
-  has_many :payments, -> { order("payment_at ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
-  accepts_nested_attributes_for :payments, allow_destroy: true
-
   belongs_to :contract, inverse_of: :stages
 
   belongs_to :status, optional: true
@@ -47,16 +43,17 @@ class Stage < MutableData
 
   validates :contract, uniqueness: { scope: [:contract, :priority] }
   alias_attribute :state, :task_kind # для поддержки MutableData
+  alias_attribute :main_model, :contract # для поддержки обновления модели-владельца в Redis
   accepts_nested_attributes_for :task_kind
 
   # наименование этапа заменяется наименованием контракта в одно-этапных договорах
   # в много-этапных выводим номер контракта, номер этапа и задачу
   def name
-    priority === 0 ? "#{contract.name} #{task_kind.name}" : "#{contract.name}_Э#{priority} #{task_kind.name}"
+    priority === 0 ? "#{contract.name}" : "#{contract.name}_Э#{priority}"
   end
 
   def head
-    used ? name : "*" + name
+    used ? "#{name} #{task_kind.name}" : "* #{name} #{task_kind.name}"
   end
 
   # кастомное присвоение статуса, с учетом несуществующего ID
@@ -71,22 +68,22 @@ class Stage < MutableData
 
   # реализация для набора данных basement
   def basement
-    { id: id, name: name, priority: priority, task_kind: task_kind.item, status: status ? status.item : nil, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind, duration: duration, start_at: to_date_str(start_at), deadline_at: to_date_str(deadline_at),
-      payment_deadline_kind: payment_deadline_kind, payment_duration: payment_duration, payment_deadline_at: to_date_str(payment_deadline_at), completed_at: to_date_str(completed_at), funded_at: to_date_str(funded_at), invoice_at: to_date_str(invoice_at), sended_at: to_date_str(sended_at), is_sended: is_sended, ride_out_at: to_date_str(ride_out_at), is_ride_out: is_ride_out, tasks: tasks.map { |el| el.edit } || nil, stage_orders: used_items(stage_orders) || nil, performers: used_items(stage_performers) || nil, payments: payments.map { |item| item.edit } || nil }
+    { id: id, name: name, priority: priority, task_kind: task_kind.item, status: status ? status.item : nil, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind, duration: duration, start_at: to_date_str(start_at), deadline_at: to_date_str(deadline_at), payment_at: to_date_str(payment_at),
+      payment_deadline_kind: payment_deadline_kind, payment_duration: payment_duration, payment_deadline_at: to_date_str(payment_deadline_at), completed_at: to_date_str(completed_at), funded_at: to_date_str(funded_at), invoice_at: to_date_str(invoice_at), sended_at: to_date_str(sended_at), is_sended: is_sended, ride_out_at: to_date_str(ride_out_at), is_ride_out: is_ride_out, tasks: tasks.map { |el| el.edit } || nil, stage_orders: used_items(stage_orders) || nil, performers: used_items(stage_performers) || nil }
   end
 
   # реализация для набора данных card
   def card
-    super.merge({ contract: contract.basement, comments: comments.map { |el| el.item } || [], audits: audits.map { |el| el.item } || [] }).merge(basement)
+    super.merge(basement).merge({ comments: comments.map { |el| el.card } || [], contract: contract.basement, used: used, list_key: list_key })
   end
 
   def edit
-    basement.merge({ comments: comments.map { |el| el.item } || [], used: used, list_key: list_key })
+    basement.merge({ comments: comments.map { |el| el.card } || [], used: used, list_key: list_key })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
   def self.permitted_params
-    super | [:contract_id, :task_kind_id, :status_id, :cost, :start_at, :completed_at, :deadline_at, :duration, :deadline_kind, :payment_deadline_kind, :payment_duration, :payment_deadline_at, :invoice_at, :sended_at, :ride_out_at, :is_sended, :is_ride_out, :funded_at] | [tasks_attributes: Task.permitted_params] | [stage_orders_attributes: StageOrder.permitted_params] | [payments_attributes: Payment.permitted_params] | [comments_attributes: Comment.permitted_params]
+    super | [:contract_id, :task_kind_id, :status_id, :cost, :start_at, :completed_at, :deadline_at, :duration, :deadline_kind, :payment_deadline_kind, :payment_duration, :payment_deadline_at, :payment_at, :invoice_at, :sended_at, :ride_out_at, :registry_quarter, :registry_year, :is_sended, :is_ride_out, :funded_at] | [tasks_attributes: Task.permitted_params] | [stage_orders_attributes: StageOrder.permitted_params] | [comments_attributes: Comment.permitted_params]
   end
 
   private
