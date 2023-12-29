@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.date "deadline_at"
+    t.date "closed_at"
     t.index ["contragent_id"], name: "index_contracts_on_contragent_id"
     t.index ["status_id"], name: "index_contracts_on_status_id"
     t.index ["task_kind_id"], name: "index_contracts_on_task_kind_id"
@@ -252,19 +253,17 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
   end
 
   create_table "performers", force: :cascade do |t|
-    t.bigint "person_id", null: false
-    t.bigint "department_id", null: false
-    t.bigint "position_id"
-    t.integer "priority", default: 1, null: false
-    t.boolean "used", default: true, null: false
-    t.string "description"
-    t.uuid "list_key", null: false
+    t.bigint "stage_id", null: false, comment: "этап"
+    t.bigint "employee_id", null: false, comment: "исполнитель"
+    t.integer "priority", default: 0, null: false, comment: "порядок в списке"
+    t.boolean "used", default: true, null: false, comment: "признак использования"
+    t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["department_id", "person_id", "position_id"], name: "index_performers_on_department_id_and_person_id_and_position_id", unique: true
-    t.index ["department_id"], name: "index_performers_on_department_id"
-    t.index ["person_id"], name: "index_performers_on_person_id"
-    t.index ["position_id"], name: "index_performers_on_position_id"
+    t.index ["employee_id", "stage_id"], name: "index_performers_on_employee_id_and_stage_id", unique: true
+    t.index ["employee_id"], name: "index_performers_on_employee_id"
+    t.index ["priority"], name: "index_performers_on_priority"
+    t.index ["stage_id"], name: "index_performers_on_stage_id"
   end
 
   create_table "person_addresses", force: :cascade do |t|
@@ -374,20 +373,6 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
     t.index ["stage_id"], name: "index_stage_orders_on_stage_id"
   end
 
-  create_table "stage_performers", force: :cascade do |t|
-    t.bigint "stage_id", null: false, comment: "этап"
-    t.bigint "performer_id", null: false, comment: "исполнитель"
-    t.integer "priority", default: 0, null: false, comment: "порядок в списке"
-    t.boolean "used", default: true, null: false, comment: "признак использования"
-    t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["performer_id", "stage_id"], name: "index_stage_performers_on_performer_id_and_stage_id", unique: true
-    t.index ["performer_id"], name: "index_stage_performers_on_performer_id"
-    t.index ["priority"], name: "index_stage_performers_on_priority"
-    t.index ["stage_id"], name: "index_stage_performers_on_stage_id"
-  end
-
   create_table "stages", force: :cascade do |t|
     t.bigint "contract_id", null: false, comment: "контракт"
     t.bigint "task_kind_id", null: false, comment: "тип работы"
@@ -412,6 +397,9 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.date "start_at"
+    t.date "payment_at"
+    t.integer "registry_quarter"
+    t.integer "registry_year"
     t.index ["contract_id"], name: "index_stages_on_contract_id"
     t.index ["status_id"], name: "index_stages_on_status_id"
     t.index ["task_kind_id"], name: "index_stages_on_task_kind_id"
@@ -476,9 +464,8 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
   add_foreign_key "employees", "positions"
   add_foreign_key "organizations", "ownerships"
   add_foreign_key "payments", "stages"
-  add_foreign_key "performers", "departments"
-  add_foreign_key "performers", "people"
-  add_foreign_key "performers", "positions"
+  add_foreign_key "performers", "employees"
+  add_foreign_key "performers", "stages"
   add_foreign_key "person_addresses", "addresses"
   add_foreign_key "person_addresses", "people"
   add_foreign_key "person_contacts", "contacts"
@@ -492,8 +479,6 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
   add_foreign_key "stage_orders", "isecurity_tools"
   add_foreign_key "stage_orders", "organizations"
   add_foreign_key "stage_orders", "stages"
-  add_foreign_key "stage_performers", "performers"
-  add_foreign_key "stage_performers", "stages"
   add_foreign_key "stages", "contracts"
   add_foreign_key "stages", "statuses"
   add_foreign_key "stages", "task_kinds"

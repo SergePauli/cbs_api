@@ -26,8 +26,8 @@ class Stage < MutableData
   accepts_nested_attributes_for :tasks, allow_destroy: true
 
   # исполнители
-  has_many :stage_performers, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
-  accepts_nested_attributes_for :stage_performers, allow_destroy: true
+  has_many :performers, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
+  accepts_nested_attributes_for :performers, allow_destroy: true
 
   # заказы
   has_many :stage_orders, -> { order("priority ASC") }, inverse_of: :stage, autosave: true, dependent: :destroy
@@ -68,8 +68,8 @@ class Stage < MutableData
 
   # реализация для набора данных basement
   def basement
-    { id: id, name: name, priority: priority, task_kind: task_kind.item, status: status ? status.item : nil, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind, duration: duration, start_at: to_date_str(start_at), deadline_at: to_date_str(deadline_at), payment_at: to_date_str(payment_at),
-      payment_deadline_kind: payment_deadline_kind, payment_duration: payment_duration, payment_deadline_at: to_date_str(payment_deadline_at), completed_at: to_date_str(completed_at), funded_at: to_date_str(funded_at), invoice_at: to_date_str(invoice_at), sended_at: to_date_str(sended_at), is_sended: is_sended, ride_out_at: to_date_str(ride_out_at), is_ride_out: is_ride_out, tasks: tasks.map { |el| el.edit } || nil, stage_orders: used_items(stage_orders) || nil, performers: used_items(stage_performers) || nil }
+    { id: id, name: name, priority: priority, task_kind: task_kind.item, status: status ? status.item : nil, cost: cost ? "%.2f" % cost : cost, deadline_kind: deadline_kind, duration: duration, start_at: to_date_str(start_at), deadline_at: to_date_str(deadline_at), payment_at: to_date_str(payment_at), registry_quarter: registry_quarter, registry_year: registry_year,
+      payment_deadline_kind: payment_deadline_kind, payment_duration: payment_duration, payment_deadline_at: to_date_str(payment_deadline_at), completed_at: to_date_str(completed_at), funded_at: to_date_str(funded_at), invoice_at: to_date_str(invoice_at), sended_at: to_date_str(sended_at), is_sended: is_sended, ride_out_at: to_date_str(ride_out_at), is_ride_out: is_ride_out, tasks: tasks.map { |el| el.edit } || nil, stage_orders: used_items(stage_orders) || nil, performers: performers.map { |el| el.edit } || nil }
   end
 
   # реализация для набора данных card
@@ -83,7 +83,7 @@ class Stage < MutableData
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
   def self.permitted_params
-    super | [:contract_id, :task_kind_id, :status_id, :cost, :start_at, :completed_at, :deadline_at, :duration, :deadline_kind, :payment_deadline_kind, :payment_duration, :payment_deadline_at, :payment_at, :invoice_at, :sended_at, :ride_out_at, :registry_quarter, :registry_year, :is_sended, :is_ride_out, :funded_at] | [tasks_attributes: Task.permitted_params] | [stage_orders_attributes: StageOrder.permitted_params] | [comments_attributes: Comment.permitted_params]
+    super | [:contract_id, :task_kind_id, :status_id, :cost, :start_at, :completed_at, :deadline_at, :duration, :deadline_kind, :payment_deadline_kind, :payment_duration, :payment_deadline_at, :payment_at, :invoice_at, :sended_at, :ride_out_at, :registry_quarter, :registry_year, :is_sended, :is_ride_out, :funded_at] | [tasks_attributes: Task.permitted_params] | [performers_attributes: Performer.permitted_params] | [stage_orders_attributes: StageOrder.permitted_params] | [comments_attributes: Comment.permitted_params]
   end
 
   private
