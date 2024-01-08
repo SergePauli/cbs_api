@@ -62,6 +62,11 @@ class Contract < ApplicationRecord
     Arel.sql(query)
   end
 
+  ransacker :contract_number do
+    query = "(SELECT contracts.code || '/'  || RIGHT(cast(contracts.year as varchar(4)),2) || '/' || RIGHT('000' || cast(contracts.order as varchar(3)),3))"
+    Arel.sql(query)
+  end
+
   private
 
   # назначаем сквозной номер контракту
