@@ -8,7 +8,11 @@ class Auth::AuthenticationController < PrivateController
   # генерирует токены обновлений и доступа
   # возвращает информацию о пользователе и токены
   def login
-    @user = User.find_by(name: params[:name])
+    begin
+      @user = User.find_by!(name: params[:name])
+    rescue ActiveRecord::RecordNotFound
+      raise ApiError.new("Неверный пароль или имя пользователя", :unauthorized)
+    end
     if @user&.authenticate(params[:password]) && @user.activated
       @dto = { id: @user.id, email: @user.email, role: @user.role, logged: @user.last_login }
       @user.last_login = DateTime.now
