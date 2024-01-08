@@ -85,6 +85,10 @@ class Stage < MutableData
   def self.permitted_params
     super | [:contract_id, :task_kind_id, :status_id, :cost, :start_at, :completed_at, :deadline_at, :duration, :deadline_kind, :payment_deadline_kind, :payment_duration, :payment_deadline_at, :payment_at, :invoice_at, :sended_at, :ride_out_at, :registry_quarter, :registry_year, :is_sended, :is_ride_out, :funded_at] | [tasks_attributes: Task.permitted_params] | [performers_attributes: Performer.permitted_params] | [stage_orders_attributes: StageOrder.permitted_params] | [comments_attributes: Comment.permitted_params]
   end
+  ransacker :register do
+    query = "(SELECT cast(stages.registry_quarter as varchar(2)) || '.'  || cast(stages.registry_year as varchar(4)))"
+    Arel.sql(query)
+  end
 
   private
 
