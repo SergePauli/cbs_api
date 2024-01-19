@@ -12,7 +12,7 @@ class CreateStages < ActiveRecord::Migration[6.1]
       t.date :funded_at, comment: "дата бухгалтерского закрытия"
       t.date :payment_at, comment: "дата предоплаты"
       t.date :invoice_at, comment: "дата выставления счета на оплату"
-      t.date :completed_at, comment: "дата выполнения"
+      t.date :closed_at, comment: "дата закрытия"
       t.integer :deadline_kind, comment: "вид срока"
       t.integer :payment_deadline_kind, comment: "вид срока оплаты"
       t.integer :payment_duration, comment: "дней на оплату"
@@ -21,10 +21,11 @@ class CreateStages < ActiveRecord::Migration[6.1]
       t.date :sended_at, comment: "дата отправки документации"
       t.boolean :is_sended, comment: "документы высланы"
       t.date :ride_out_at, comment: "дата выезда"
+      t.date :completed_at, comment: "дата выполнения работ"
       t.integer :registry_quarter, comment: "квартал реестра"
       t.integer :registry_year, comment: "год реестра"
       t.boolean :is_ride_out, comment: "признак выезда к контрагенту"
-      t.boolean :used, null: false, default: true, comment: "признак актуальности информации"
+      t.boolean :used, null: false, default: true, comment: "признак активности этапа"
 
       t.uuid :list_key, null: false, comment: "служебный ключ списка, для логгирования"
       t.timestamps
