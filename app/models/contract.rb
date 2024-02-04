@@ -54,7 +54,7 @@ class Contract < ApplicationRecord
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
   def self.permitted_params
-    super | [:year, :code, :order, :contragent_id, :task_kind_id, :status_id, :governmental, :external_number, :signed_at, :deadline_at] | [stages_attributes: Stage.permitted_params] | [comments_attributes: Comment.permitted_params] | [revisions_attributes: Revision.permitted_params]
+    super | [:year, :code, :order, :contragent_id, :task_kind_id, :status_id, :governmental, :external_number, :signed_at, :deadline_at, :closed_at] | [stages_attributes: Stage.permitted_params] | [comments_attributes: Comment.permitted_params] | [revisions_attributes: Revision.permitted_params]
   end
 
   ransacker :total_costs do
@@ -73,6 +73,6 @@ class Contract < ApplicationRecord
   def generate_order
     return unless order.blank?
     last_one = Contract.where(year: year, code: code).last
-    self.order = last_one.order + 1
+    self.order = (last_one ? last_one.order : 0) + 1
   end
 end
