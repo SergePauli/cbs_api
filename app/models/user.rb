@@ -29,6 +29,7 @@ class User < NamedRecord
   constants_group :ROLES do
     constant :ADMIN
     constant :USER
+    constant :EXCEL
   end
 
   # хелпер для bcript авторизации

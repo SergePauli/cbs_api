@@ -245,7 +245,7 @@ class Model::UniversalController < PrivateController
           result[k] = child.strftime("%d.%m.%Y")
         elsif (child.class.name === "DateTime")
           result[k] = child.strftime("%d.%m.%Y %H:%M")
-        elsif (child.class.name === "TrueClass" || child.class.name === "FalseClass")
+        elsif (["w_days", "c_days", "calendar_plan", "c_plan", "working_days", "working_prepayment", "calendar_prepayment", "calendar_days"].include?(child) || child.class.name === "TrueClass" || child.class.name === "FalseClass")
           result[k] = I18n.t child.to_s
         else
           result[k] = child.to_s

@@ -63,6 +63,7 @@ ru:
   prepayment: "предоплата"
   last_payment: "оплата"
   payment_at: "дата платежа"
+  prepayment_at: "дата предоплаты"
   signed_at: "дата подписания"
   invoice_at: "дата счета"
   sended_at: "когда отправлено"
@@ -79,7 +80,7 @@ ru:
   calendar_plan: "КПлан"
   c_plan: "КПлан"
   calendar_days: "КДней"
-  c_days: "КДней"
+  c_days: "КДней"  
   payment_duration: "срок на оплату"
   calendar_prepayment: "КДнПр"
   working_days: "РДней"
@@ -88,10 +89,14 @@ ru:
   external_number: "Внешний № контракта"
   governmental: "гос.контракт"
   number: "номер контракта"
+  registry_year: "год реестра"
+  registry_quarter: "квартал реестра"
   protocol_link: "ссылка на протокол"
   scan_link: "ссылка на скан"
   doc_link: "ссылка на текст"
-  LinkFileZip: "ссылка на архив"      
+  LinkFileZip: "ссылка на архив" 
+  start_at: "дата начала"   
+  closed_at: "дата закрытия"  
   revisions: "договор(доп.соглашения)"
   Revision: "договор(доп.соглашение)"
   is_present: "в наличии"
@@ -126,8 +131,7 @@ ru:
             list_key: 
               blank: "Не присвоен уникальный ключ списка"  
             kind:  
-              taken: "Данный ТИП адреса уже присутствует у КОНТРАГЕНТА" 
-              
+              taken: "Данный ТИП адреса уже присутствует у КОНТРАГЕНТА"               
         contragent_contact:
           attributes:
             contact:
@@ -256,4 +260,8 @@ ru:
             task_kind:
               required: "(task_kind required) Не указан или неверный id типа задачи"
             status:
-              required: "(status required) Не указан или неверный id статуса"                      
+              required: "(status required) Не указан или неверный id статуса"
+        performer:
+          attributes:
+            stage:
+              taken: "Исполнитель уже был выбран для этого этапа"                            
