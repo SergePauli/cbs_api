@@ -8,6 +8,6 @@ class Ownership < NamedRecord
   end
 
   def self.permitted_params
-    super | [:full_name]
+    super | [:full_name, :okopf]
   end
 end

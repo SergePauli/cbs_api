@@ -23,7 +23,7 @@ class Organization < NamedRecord
   end
 
   def card
-    super.merge({ name: name, full_name: full_name, inn: inn, kpp: kpp, ownership: ownership.item, audits: audits.map { |el| el.item } || [] })
+    super.merge({ name: name, full_name: full_name, inn: inn, kpp: kpp, okopf: okopf, ogrn: ogrn, okpo: okpo, oktmo: oktmo, okved: okved, okogu: okogu, okfc: okfc, ownership: ownership.item, audits: audits.map { |el| el.item } || [] })
   end
 
   # бухгалтерско-коммерческий набор
