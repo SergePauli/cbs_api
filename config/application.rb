@@ -39,13 +39,10 @@ module CbsApi
     config.api_only = true
 
     #URL фронтэнда приложения, вида <hostname:port>
-    config.client_url = "localhost:3000"
-
-    # Имя / адрес хоста
-    config.host = "localhost:5000"
+    config.client_url = "#{ENV["FRONTEND"]}:3000"
 
     # Endpoint
-    config.base_url = "http://#{config.host}:5000"
+    config.base_url = "http://#{ENV["BACKEND"]}:5000"
 
     # Наименование приложения
     config.app_name = "Контракты и Контрагенты 3.0"
@@ -71,7 +68,7 @@ module CbsApi
       ssl: true,
     }
 
-    config.action_mailer.default_url_options = { host: config.host }
+    config.action_mailer.default_url_options = { host: ENV["HOST"] }
     config.action_mailer.delivery_method = :smtp
     #config.action_mailer.raise_delivery_errors = true
     # Send email in development mode.
