@@ -162,3 +162,9 @@ INSERT INTO public.task_kinds VALUES (22, 'Поставка журналов', '
 INSERT INTO public.task_kinds VALUES (23, 'СОУТ', '70', NULL, NULL, NULL, '2024-03-01 09:59:44.912806', '2024-03-01 09:59:44.912806');
 INSERT INTO public.task_kinds VALUES (24, 'Оценка профрисков', '75', NULL, NULL, NULL, '2024-03-01 10:00:34.455129', '2024-03-01 10:00:34.455129');
 INSERT INTO public.task_kinds VALUES (25, 'ПК', '80', 'Производственный контроль', NULL, NULL, '2024-03-01 10:01:13.126635', '2024-03-01 10:01:13.126635');")
+
+#загружаем статусы заказов СЗИ
+connection.execute("INSERT INTO public.order_statuses VALUES (1, 'Заказано', NULL, 1, '2024-03-01 09:44:36.887354', '2024-03-01 09:44:36.887354');
+INSERT INTO public.order_statuses VALUES (2, 'Пришло частично', NULL, 2, '2024-03-01 09:45:06.042193', '2024-03-01 09:45:06.042193');
+INSERT INTO public.order_statuses VALUES (3, 'Пришло', NULL, 3, '2024-03-01 09:45:25.022755', '2024-03-01 09:45:25.022755');
+INSERT INTO public.order_statuses VALUES (4, 'Отменено', NULL, 4, '2024-03-01 09:45:46.238859', '2024-03-01 09:45:46.238859');")

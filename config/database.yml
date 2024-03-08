@@ -6,6 +6,7 @@ default: &default
   username: crm
   password: Rhyxu1Fu6
   host: localhost
+  port: 5433
 
 development:
   <<: *default
