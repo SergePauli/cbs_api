@@ -18,7 +18,7 @@ class Auth::AuthenticationController < PrivateController
       @user.last_login = DateTime.now
       raise ApiError.new("Ошибка регистрации входа", :internal_server_error) unless @user.save
       set_tokens
-      render json: { user: @user.login_info, tokens: @tokens, secr: JsonWebToken.secr }, status: :ok
+      render json: { user: @user.login_info, tokens: @tokens }, status: :ok
     else
       raise ApiError.new("Неверный пароль или имя пользователя", :unauthorized)
     end
@@ -28,9 +28,10 @@ class Auth::AuthenticationController < PrivateController
   # выполняет деавторизацию пользователя
   def logout
     token = cookies[:refresh_token]
-    raise ApiError.new("Отсутствует токен обновлений", :unauthorized) if token.blank?
-    REDIS.hdel "tokens", token
-    cookies.delete :refresh_token
+    if !token.blank?
+      REDIS.hdel "tokens", token
+      cookies.delete :refresh_token
+    end
     render json: { errors: "нет ошибок" }, status: :ok
   end
 

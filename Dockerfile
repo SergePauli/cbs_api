@@ -19,4 +19,4 @@ WORKDIR $APP_HOME
 EXPOSE 5000
 
 # Запуск по умолчанию сервера в продакшин
-CMD ["rails", "server"]
+CMD ["rails", "server","-e=production"]
