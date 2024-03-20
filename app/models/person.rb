@@ -72,7 +72,7 @@ class Person < ApplicationRecord
   end
 
   def basement
-    { email: (email ? email.item : nil), phone: (phone ? phone.item : nil), name: name }
+    { email: (email ? email.item : nil), phone: (phone ? phone.item : nil), full_name: person_name.naming.head }
   end
 
   def edit
