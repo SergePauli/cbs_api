@@ -1,4 +1,4 @@
-# данные этапа
+# данные этапа скрипт создания таблицы
 class CreateStages < ActiveRecord::Migration[6.1]
   def up
     create_table :stages do |t|

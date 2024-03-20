@@ -5,7 +5,7 @@
 #
 class JsonWebToken
   # уникальное значение для генерации токенов
-  SECRET = Rails.application.secrets.secret_key_base || ENV["SECRET_KEY"]
+  SECRET = Rails.application.secrets.secret_key_base || "529265aed609cd96aa2b91e8136cbf700bd077df"
   # Срок действия токена обновлений в системе в часах
   LIFETIME = 144
   # Срок действия токена доступа в часах

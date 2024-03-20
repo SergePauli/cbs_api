@@ -39,10 +39,10 @@ module CbsApi
     config.api_only = true
 
     #URL фронтэнда приложения, вида <hostname:port>
-    config.client_url = "#{ENV["FRONTEND"]}:3000"
+    config.client_url = "localhost:3000"
 
     # Endpoint
-    config.base_url = "http://#{ENV["BACKEND"]}:5000"
+    config.base_url = "http://localhost:5000"
 
     # Наименование приложения
     config.app_name = "Контракты и Контрагенты 3.0"
