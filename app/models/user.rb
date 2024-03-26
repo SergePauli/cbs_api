@@ -40,7 +40,7 @@ class User < NamedRecord
   validates_associated :person
 
   # профили
-  has_many :profiles, -> { order("priority DESC") }
+  has_many :profiles, -> { order("priority DESC") }, dependent: :destroy
   # по умолчанию
   has_one :profile, -> { where(used: true).order("priority DESC") }
 
