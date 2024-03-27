@@ -38,7 +38,7 @@ class Auth::RegistrationController < ApplicationController
   def renew_link
     get_user
     ApplicationMailer.with(name: @user.name, to: @user.email, link: @user.activation_link).pass_renew_mail.deliver_later
-    render status: :ok
+    render json: { errors: "нет ошибок" }, status: :ok
   end
 
   # POST auth/pwd_renew
@@ -48,7 +48,7 @@ class Auth::RegistrationController < ApplicationController
     @user = User.where(activation_link: params[:user][:activation_link]).first
     raise ApiError.new("Неверный код", :not_acceptable) unless @user
     if @user.update(password: params[:user][:password], password_confirmation: params[:user][:password_confirmation], activation_link: User.new_activation_link)
-      render status: :ok
+      render json: { errors: "нет ошибок" }, status: :ok
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end

@@ -6,8 +6,11 @@ class ApplicationMailer < ActionMailer::Base
   def confirmation_mail
     @user = User.find(params[:user_id])
     if @user
-      @name = @user.head
+      @login = @user.name
+      @name = @user.person.person_name.naming.head
       @email = @user.email
+      @position = @user.position.name
+      @department = @user.department.name
       @app_name = Rails.configuration.app_name
       @url = "#{Rails.configuration.base_url}/auth/activation/#{@user.activation_link}"
       mail(to: Rails.configuration.admin_mail, subject: "Запрос на активацию аккаунта")
