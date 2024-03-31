@@ -1,4 +1,7 @@
 class ContragentAddress < MutableData
+  # Не создаем дублей адресов
+  include Stateable
+
   belongs_to :contragent, inverse_of: :contragent_addresses
   belongs_to :address
   validates_associated :contragent
