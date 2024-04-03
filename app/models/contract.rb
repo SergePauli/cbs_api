@@ -39,7 +39,7 @@ class Contract < ApplicationRecord
 
   # стоимость
   def cost
-    stages.reduce(0) { |cost, stage| cost + stage.cost }
+    stages.reduce(0) { |cost, stage| cost + stage.cost if stage.cost }
   end
 
   # реализация для набора данных basement
