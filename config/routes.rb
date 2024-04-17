@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     post "/login", action: "login"
     get "/logout", action: "logout"
     get "/refresh", action: "refresh"
+    get "/commer", action: "commer"
   end
   # Универсальный контроллер
   scope "model", controller: "model/universal" do
