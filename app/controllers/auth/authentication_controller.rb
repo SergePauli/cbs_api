@@ -61,6 +61,24 @@ class Auth::AuthenticationController < PrivateController
     end
   end
 
+  #get "auth/commer" авторизуем коммер-клиента
+  def commer
+    token = cookies[:refresh_token]
+    begin
+      user_data = JsonWebToken.validate_token token
+    rescue JWT::DecodeError
+      raise ApiError.new("Валидация токена обновлений не успешна", :unauthorized)
+    end
+    if REDIS.hget("tokens", token) == user_data["data"]["id"].to_s
+      @user = User.find(user_data["data"]["id"])
+      commer_token = SecureRandom.uuid
+      REDIS.hset "commers", commer_token, @tokens[:refresh]
+      render json: { user: @user.login_info, token: commer_token }, status: :ok
+    else
+      raise ApiError.new("Токен обновлений не действителен", :unauthorized)
+    end
+  end
+
   private
 
   def set_tokens
