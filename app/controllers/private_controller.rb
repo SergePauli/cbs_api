@@ -1,4 +1,5 @@
 class PrivateController < ApplicationController
+  PrivateController::const_set(:ONE_DAY, 3600 * 12) # 12 hours
   before_action :authenticate_request
 
   attr_reader :current_user

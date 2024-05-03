@@ -29,5 +29,6 @@ Rails.application.routes.draw do
   # Профиль контроллер
   scope "profile", controller: "profile" do
     get "/activity/:profile_id", action: "activity"
+    get "/contract/:contract_id", action: "contract"
   end
 end
