@@ -2,7 +2,8 @@
 class Model::UniversalController < PrivateController
   before_action :prepare_model, only: [:index, :show, :create, :update, :destroy]
   before_action :find_record, only: [:show, :update, :destroy]
-
+  Model::UniversalController::const_set(:SIGNED, 1) #signed status id
+  Model::UniversalController::const_set(:CLOSED, 5) #closed status id
   # POST /model/:model_name
   # доступны параметры:
   #  :select для выбора нужных атрибутов модели,
@@ -53,6 +54,9 @@ class Model::UniversalController < PrivateController
       if @res.save
         check_audit_creation(@res)
         check_attributes(@res, params[params[:model_name]])
+        if (@res.respond_to? :audits)
+          ActionCable.server.broadcast("update", { action: "added", model: (I18n.t params[:model_name]), id: @res.id })
+        end
         if params[:data_set].blank?
           render json: @res
         else
@@ -80,6 +84,9 @@ class Model::UniversalController < PrivateController
         @res.reload
         new_map = create_string_values_map
         check_audit_updating(new_map, old_map)
+        ActionCable.server.broadcast("update", { action: "updated", model: (I18n.t params[:model_name]), id: @res.id })
+        ActionCable.server.broadcast("update", { action: "closed", model: (I18n.t params[:model_name]), id: @res.id }) if params[params[:model_name]][:status_id] == Model::UniversalController::CLOSED
+        ActionCable.server.broadcast("update", { action: "signed", model: (I18n.t params[:model_name]), id: @res.id }) if params[params[:model_name]][:status_id] == Model::UniversalController::SIGNED
         check_attributes(@res, params[params[:model_name]])
       end
       if params[:data_set].blank?

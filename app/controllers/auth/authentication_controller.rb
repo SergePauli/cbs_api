@@ -69,14 +69,17 @@ class Auth::AuthenticationController < PrivateController
     rescue JWT::DecodeError
       raise ApiError.new("Валидация токена обновлений не успешна", :unauthorized)
     end
-    if REDIS.hget("tokens", token) == user_data["data"]["id"].to_s
-      @user = User.find(user_data["data"]["id"])
+    key = "commer_" + user_data["data"]["id"].to_s
+    commer_token = REDIS.hget key, "token"
+    @user = User.find(user_data["data"]["id"])
+    if commer_token == nil
       commer_token = SecureRandom.uuid
-      REDIS.hset "commers", commer_token, @tokens[:refresh]
-      render json: { user: @user.login_info, token: commer_token }, status: :ok
-    else
-      raise ApiError.new("Токен обновлений не действителен", :unauthorized)
+      REDIS.hset key, "token", commer_token
+      # обновляем время жизни данных в кэше без использования
+      REDIS.expire(key, PrivateController: ONE_DAY)
     end
+    cookies[:user_id] = { value: user_data["data"]["id"], expires: 12.hours, httponly: true }
+    render json: { profile: @user.profile.edit, token: commer_token }, status: :ok
   end
 
   private
