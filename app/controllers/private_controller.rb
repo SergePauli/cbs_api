@@ -7,13 +7,21 @@ class PrivateController < ApplicationController
   private
 
   def authenticate_request
-    header = request.headers["Authorization"]
-    raise ApiError.new("Отсутствует токен доступа", :bad_request) unless header
-    header = header.split(" ").last
-    begin
-      @current_user = JsonWebToken.validate_token header
-    rescue JWT::DecodeError
-      raise ApiError.new("Валидация токена доступа не успешна", :unauthorized)
+    if !params[:token].blank?
+      key = "commer_" + params[:user_id].to_s
+      if REDIS.hget(key, "token") != params[:token]
+        raise ApiError.new("Валидация коммер-токена не успешна: #{params[:token]}", :unauthorized)
+      end
+      @current_user = { data: { id: params[:user_id] } }
+    else
+      header = request.headers["Authorization"]
+      raise ApiError.new("Отсутствует токен доступа", :bad_request) unless header
+      header = header.split(" ").last
+      begin
+        @current_user = JsonWebToken.validate_token header
+      rescue JWT::DecodeError
+        raise ApiError.new("Валидация токена доступа не успешна", :unauthorized)
+      end
     end
   end
 end

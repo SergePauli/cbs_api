@@ -13,6 +13,7 @@ class ApplicationController < ActionController::API
   rescue_from ApiError, :with => :api_error
 
   def api_error(exception)
+    puts exception.message
     render json: { errors: [exception.message] }, status: exception.status
   end
 end

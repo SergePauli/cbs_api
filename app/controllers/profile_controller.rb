@@ -1,11 +1,32 @@
 class ProfileController < PrivateController
-
+  skip_before_action :authenticate_request, except: [:activity, :contract]
   # GET profile/activity/:profile_id
   def activity
     if params[:profile_id]
       render json: [{ name: "created", count: 3, ids: [1, 6, 5] }]
     else
       render json: []
+    end
+  end
+
+  # POST profile/contract/
+  # open selected contractract in commer-client
+  def open_contract
+    key = "commer_" + params[:user_id].to_s
+    if REDIS.hget(key, "token") != params[:token]
+      render json: { message: "Валидация токена не успешна" }, status: :unauthorized
+    else
+      begin
+        contract_id = REDIS.hget key, "contract_id"
+        contract = Contract.find(contract_id) if contract_id.present?
+        if contract.present?
+          render json: { id: contract.id, number: contract.name, contragent: contract.contragent.name, revisions: contract.revisions.map { |el| el.basement } }
+        else
+          render json: { message: "Контракт не найден по ID=" + contract_id }, status: 422
+        end
+      rescue e
+        render json: { message: e.message }, status: 422
+      end
     end
   end
 

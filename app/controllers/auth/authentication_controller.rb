@@ -1,7 +1,7 @@
 class Auth::AuthenticationController < PrivateController
   include ActionController::Cookies
 
-  skip_before_action :authenticate_request, except: [:logout, :login_info]
+  skip_before_action :authenticate_request, except: [:logout, :commer_token]
 
   # POST "auth/login"
   # авторизует пользователя :name проверяя пароль в  :password
@@ -61,8 +61,8 @@ class Auth::AuthenticationController < PrivateController
     end
   end
 
-  #get "auth/commer" авторизуем коммер-клиента
-  def commer
+  #get "auth/commer" создаем  токен коммер-клиента
+  def commer_token
     token = cookies[:refresh_token]
     begin
       user_data = JsonWebToken.validate_token token
@@ -75,11 +75,24 @@ class Auth::AuthenticationController < PrivateController
     if commer_token == nil
       commer_token = SecureRandom.uuid
       REDIS.hset key, "token", commer_token
+      REDIS.hset commer_token, "user_id", user_data["data"]["id"].to_s
       # обновляем время жизни данных в кэше без использования
-      REDIS.expire(key, PrivateController: ONE_DAY)
+      REDIS.expire(key, PrivateController::ONE_DAY)
+      REDIS.expire(commer_token, PrivateController::ONE_DAY)
     end
     cookies[:user_id] = { value: user_data["data"]["id"], expires: 12.hours, httponly: true }
     render json: { profile: @user.profile.edit, token: commer_token }, status: :ok
+  end
+
+  #post "auth/commer" авторизуем коммер-клиента по токену
+  def commer_login
+    begin
+      user_id = REDIS.hget(params[:token], "user_id")
+    rescue
+      raise ApiError.new("Неверный токен доступа " + params[:token], :unauthorized)
+    end
+    @user = User.find(user_id.to_i)
+    render json: @user.item, status: :ok
   end
 
   private

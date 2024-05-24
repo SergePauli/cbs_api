@@ -15,7 +15,8 @@ Rails.application.routes.draw do
     post "/login", action: "login"
     get "/logout", action: "logout"
     get "/refresh", action: "refresh"
-    get "/commer", action: "commer"
+    get "/commer", action: "commer_token"
+    post "/commer", action: "commer_login"
   end
   # Универсальный контроллер
   scope "model", controller: "model/universal" do
@@ -30,5 +31,7 @@ Rails.application.routes.draw do
   scope "profile", controller: "profile" do
     get "/activity/:profile_id", action: "activity"
     get "/contract/:contract_id", action: "contract"
+    post "/contract", action: "open_contract"
+    put "/contract/:token", action: "open_contract"
   end
 end
