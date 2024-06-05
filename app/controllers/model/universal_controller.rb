@@ -86,10 +86,11 @@ class Model::UniversalController < PrivateController
         check_audit_updating(new_map, old_map)
         begin
           ActionCable.server.broadcast("update", { action: "updated", model: "(I18n.t params[:model_name])" })
-        rescue
-          raise ApiError.new("Обновление записи в #{params[:model_name]} с id #{params[:id]} сбоит в ActionCable.server.broadcast update", :unprocessable_entity)
+        rescue Exception => e
+          raise ApiError.new("Обновление записи в #{params[:model_name]} с id #{params[:id]} сбоит в ActionCable.server.broadcast update #{e.class.name} : #{e.message}", :unprocessable_entity)
         end
         clean_keys(@res.contract) if params[:model_name] === "Revision"
+
         ActionCable.server.broadcast("update", { action: "closed", model: (I18n.t params[:model_name]), id: @res.id }) if params[params[:model_name]][:status_id] == Model::UniversalController::CLOSED
         ActionCable.server.broadcast("update", { action: "signed", model: (I18n.t params[:model_name]), id: @res.id }) if params[params[:model_name]][:status_id] == Model::UniversalController::SIGNED
         check_attributes(@res, params[params[:model_name]])
