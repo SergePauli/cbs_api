@@ -85,7 +85,7 @@ class Model::UniversalController < PrivateController
         new_map = create_string_values_map
         check_audit_updating(new_map, old_map)
         begin
-          ActionCable.server.broadcast("update", { action: "updated", model: (I18n.t params[:model_name]), id: @res.id })
+          ActionCable.server.broadcast("update", { action: "updated", model: "(I18n.t params[:model_name])" })
         rescue
           raise ApiError.new("Обновление записи в #{params[:model_name]} с id #{params[:id]} сбоит в ActionCable.server.broadcast update", :unprocessable_entity)
         end
