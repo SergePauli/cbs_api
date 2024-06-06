@@ -54,9 +54,6 @@ class Model::UniversalController < PrivateController
       if @res.save
         check_audit_creation(@res)
         check_attributes(@res, params[params[:model_name]])
-        if (@res.respond_to? :audits)
-          ActionCable.server.broadcast("update", { action: "added", model: (I18n.t params[:model_name]), id: @res.id })
-        end
         if params[:data_set].blank?
           render json: @res
         else
@@ -84,15 +81,6 @@ class Model::UniversalController < PrivateController
         @res.reload
         new_map = create_string_values_map
         check_audit_updating(new_map, old_map)
-        begin
-          ActionCable.server.broadcast("update", { action: "updated", model: "(I18n.t params[:model_name])" })
-        rescue Exception => e
-          raise ApiError.new("Обновление записи в #{params[:model_name]} с id #{params[:id]} сбоит в ActionCable.server.broadcast update #{e.class.name} : #{e.message}", :unprocessable_entity)
-        end
-        clean_keys(@res.contract) if params[:model_name] === "Revision"
-
-        ActionCable.server.broadcast("update", { action: "closed", model: (I18n.t params[:model_name]), id: @res.id }) if params[params[:model_name]][:status_id] == Model::UniversalController::CLOSED
-        ActionCable.server.broadcast("update", { action: "signed", model: (I18n.t params[:model_name]), id: @res.id }) if params[params[:model_name]][:status_id] == Model::UniversalController::SIGNED
         check_attributes(@res, params[params[:model_name]])
       end
       if params[:data_set].blank?
