@@ -47,7 +47,6 @@ class Auth::AuthenticationController < PrivateController
       raise ApiError.new("Валидация токена обновлений не успешна", :unauthorized)
     end
     if REDIS.hget("tokens", token) == user_data["data"]["id"].to_s
-      REDIS.hdel("tokens", token)
       @dto = user_data["data"]
       set_tokens
       unless params["with_user_info"].blank?
@@ -59,6 +58,7 @@ class Auth::AuthenticationController < PrivateController
     else
       raise ApiError.new("Токен обновлений не действителен", :unauthorized)
     end
+    REDIS.hdel("tokens", token)
   end
 
   #get "auth/commer" создаем  токен коммер-клиента
@@ -77,8 +77,8 @@ class Auth::AuthenticationController < PrivateController
       REDIS.hset key, "token", commer_token
       REDIS.hset commer_token, "user_id", user_data["data"]["id"].to_s
       # обновляем время жизни данных в кэше без использования
-      REDIS.expire(key, PrivateController::ONE_DAY)
-      REDIS.expire(commer_token, PrivateController::ONE_DAY)
+      REDIS.expire(key, PrivateController::ONE_DAY * 14)
+      REDIS.expire(commer_token, PrivateController::ONE_DAY * 14)
     end
     cookies[:user_id] = { value: user_data["data"]["id"], expires: 12.hours, httponly: true }
     render json: { profile: @user.profile.edit, token: commer_token }, status: :ok

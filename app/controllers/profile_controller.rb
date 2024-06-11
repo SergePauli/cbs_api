@@ -1,12 +1,35 @@
 class ProfileController < PrivateController
+  include ActionController::Cookies
   skip_before_action :authenticate_request, except: [:activity, :contract]
-  # GET profile/activity/:profile_id
+  # GET profile/activity
+  # get updates
   def activity
-    if params[:profile_id]
-      render json: [{ name: "created", count: 3, ids: [1, 6, 5] }]
-    else
-      render json: []
+    result = []
+    user_id = REDIS.hget "tokens", cookies[:refresh_token]
+    updates = REDIS.hkeys "updates"
+    updates = updates.select { |el| el.include? user_id }
+    updates.each do |el|
+      data = {}
+      data_keys = el.split(":")
+      data["action"] = data_keys[1]
+      data["model"] = I18n.t data_keys[2]
+      data["ids"] = JSON.parse(REDIS.hget("updates", el))
+      result.push(data)
+      REDIS.hdel "updates", el
     end
+    render json: result, status: 200
+  end
+
+  # GET profile/activity_clean
+  # clean updates
+  def activity_clean
+    user_id = REDIS.hget "tokens", cookies[:refresh_token]
+    updates = REDIS.hkeys "updates"
+    updates = updates.select { |el| el.include? user_id }
+    updates.each do |el|
+      REDIS.hdel "updates", el
+    end
+    render json: { message: "обновления очищены" }, status: 200
   end
 
   # POST profile/contract/
