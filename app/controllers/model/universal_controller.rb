@@ -54,6 +54,7 @@ class Model::UniversalController < PrivateController
       if @res.save
         check_audit_creation(@res)
         check_attributes(@res, params[params[:model_name]])
+        add_updates("added") if (@res.respond_to? :audits)
         if params[:data_set].blank?
           render json: @res
         else
@@ -80,11 +81,15 @@ class Model::UniversalController < PrivateController
       if (@res.respond_to? :audits)
         @res.reload
         new_map = create_string_values_map
-        check_audit_updating(new_map, old_map)
+        add_updates("updated") if check_audit_updating(new_map, old_map)
+        clean_keys(@res.contract) if params[:model_name] === "Revision"
+        add_updates("commented") unless params[params[:model_name]][:comments_attributes].blank?
+        add_updates("closed") if params[params[:model_name]][:status_id] == Model::UniversalController::CLOSED
+        add_updates("signed") if params[params[:model_name]][:status_id] == Model::UniversalController::SIGNED
         check_attributes(@res, params[params[:model_name]])
       end
       if params[:data_set].blank?
-        render json: @res
+        render json: @res, status: :ok
       else
         render json: get_data_set(@res, true), status: :ok
       end
@@ -212,14 +217,17 @@ class Model::UniversalController < PrivateController
   # проверка на аудит обновления
   # регистрируем изменение записи, с признаком аудита
   def check_audit_updating(new_map, old_map)
+    updated = false
     new_map.each do |k, v|
       before = old_map[k]
       if v != before
         audit = Audit.new({ action: :updated, auditable_field: k, before: before, after: v, auditable: @res, detail: @res.head, user_id: @current_user[:data][:id] })
         audit.save
         @res.audits.push(audit)
+        updated = true
       end
     end
+    return updated
   end
 
   # генерируем строковую карту значений
@@ -278,6 +286,26 @@ class Model::UniversalController < PrivateController
         end
       elsif k === "_destroy" && !Auditable::no_audit_for.include?(k)
         audit_removed(obj)
+      end
+    end
+  end
+
+  # сохраняем в REDIS уведомления о изменениях
+  def add_updates(name)
+    users = REDIS.hvals "tokens"
+    users.each do |user_id|
+      upd_key = user_id + ":#{name}:" + params[:model_name]
+      json_str = REDIS.hget "updates", upd_key
+      if !json_str.blank?
+        # если да - Парсим JSON и добавляем id объекта
+        updated = JSON.parse(json_str)
+        updated.push(@res.id) if !updated.include?(@res.id)
+        # и кэшируем в REDIS как JSON
+        REDIS.hset "updates", upd_key, updated.to_json
+      else
+        # если нет - генерим новую карту обновлений
+        # и кэшируем в REDIS как JSON
+        REDIS.hset "updates", upd_key, [@res.id].to_json
       end
     end
   end
