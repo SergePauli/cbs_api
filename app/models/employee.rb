@@ -19,7 +19,7 @@ class Employee < MutableData
   end
 
   def head
-    tmp = "#{person.name}, #{position.name}"
+    tmp = position.blank? ? person.name : "#{person.name}, #{position.name}"
     tmp = "*" + tmp unless used
     tmp
   end
@@ -29,11 +29,11 @@ class Employee < MutableData
   end
 
   def card
-    super.merge({ description: description, person: person.card, position: position.item, contragent: contragent.item, audits: audits.map { |el| el.item } || [] })
+    super.merge({description: description, person: person.card, position: position.item, contragent: contragent.item, audits: audits.map { |el| el.item } || [] })
   end
 
   def edit
-    super.merge({ description: description, person: person.edit, position: position.item, contragent: contragent.item })
+    super.merge({list_key: list_key, description: description, person: person.edit, position: position.nil? ? nil : position.item, contragent: contragent.nil? ? nil : contragent.item })
   end
 
   def self.permitted_params

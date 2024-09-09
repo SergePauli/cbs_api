@@ -1,6 +1,7 @@
 #главный класс приложения
 class Contract < ApplicationRecord
   before_validation :generate_order, on: [:create, :update]
+  before_validation :fix_task_kind, on: [:create, :update]
 
   # аудит изменений
   include Auditable
@@ -44,12 +45,12 @@ class Contract < ApplicationRecord
 
   # реализация для набора данных basement
   def basement
-    { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, signed_at: to_date_str(signed_at), deadline_at: to_date_str(deadline_at), closed_at: to_date_str(closed_at), external_number: external_number, revision: revision.basement, status: status.item, region: contragent.real_addr.nil? ? nil : contragent.real_addr.address.area.item }
+    { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, signed_at: to_date_str(signed_at), deadline_at: to_date_str(deadline_at), closed_at: to_date_str(closed_at), external_number: external_number, revision: revision.nil? ? revisions[0].basement : revision.basement, status: status.item, region: contragent.real_addr.nil? ? nil : contragent.real_addr.address.area.item }
   end
 
   # реализация для набора данных card
   def card
-    super.merge(basement).merge({ code: code, order: order, year: year, use_stage: stage.id, stages: stages.map { |el| el.edit }, comments: stages.reduce([]) { |comments, el| comments + el.comments ? el.comments.map { |com| com.card } : [] } || [], revisions: revisions.map { |el| el.basement }, expire_at: stages[0].priority > 0 ? to_date_str(deadline_at) : to_date_str(stages[0].deadline_at) })
+    super.merge(basement).merge({ code: code, order: order, year: year, use_stage: stage ? stage.id : stages[0].id, stages: stages.map { |el| el.edit }, comments: stages.reduce([]) { |comments, el| comments + el.comments ? el.comments.map { |com| com.card } : [] } || [], revisions: revisions.map { |el| el.basement }, expire_at: stages[0].priority > 0 ? to_date_str(deadline_at) : to_date_str(stages[0].deadline_at) })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
@@ -75,4 +76,14 @@ class Contract < ApplicationRecord
     last_one = Contract.where(year: year, code: code).last
     self.order = (last_one ? last_one.order : 100) + 1
   end
+
+  def fix_task_kind
+    return if code.nil? && !(task_kind_id.nil? || task_kind.nil?) 
+    self.task_kind = TaskKind.find_by(code: code)
+    if task_kind
+      self.stages[0].task_kind_id = task_kind.id
+    else
+      raise ActiveRecord::RecordNotFound, "Не найден тип задачи #{code}"
+    end    
+  end  
 end

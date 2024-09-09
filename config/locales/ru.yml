@@ -97,6 +97,7 @@ ru:
   LinkFileZip: "ссылка на архив" 
   start_at: "дата начала"   
   closed_at: "дата закрытия"  
+  division: "подразделение"
   revisions: "договор(доп.соглашения)"
   Revision: "договор(доп.соглашение)"
   is_present: "в наличии"
@@ -120,6 +121,8 @@ ru:
               required: "Не присвоен КОНТРАГЕНТ"
             list_key: 
               blank: "Не присвоен уникальный ключ списка"
+            position:
+              required: "Должность не указана"  
         contragent_address: 
           attributes:
             contragent:
@@ -164,9 +167,11 @@ ru:
             ownership:
               required: "(ownership is required) Форма собственности не указана" 
             inn:
-              blank: "(inn is blank) ИНН не указан"  
+              blank: "(inn is blank) ИНН не указан" 
+              taken: "(inn is taken) такие ИНН+КПП уже есть в базе"
             name: 
-              taken: "(name already taken) Название организации уже использовалось"     
+              taken: "(name already taken) Название организации уже использовалось" 
+              blank: "(name is blank) Название организации не указано"
         order_status:
           attributes:
             name:

@@ -1,4 +1,4 @@
-class Address < NamedRecord
+class Address < ApplicationRecord
   belongs_to :area
 
   validates_associated :area

@@ -11,6 +11,10 @@ module Stateable
       # чтоб избежать ошибки уникальности,
       # иначе создаем запись о новом состоянии
       self.state = state.class.where(state_attributes).first_or_initialize
+      # if state.class.name == "Address"
+      #   print 'state ', self.state.id," "
+      #   puts self.state.value       
+      # end
     end
   end
 end

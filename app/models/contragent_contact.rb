@@ -1,6 +1,6 @@
 # хранение контактов контрагента
 # контакты могут меняться со временем - потому используем MutableData
-class ContragentContact < MutableData
+class ContragentContact < MutableData  
 
   # Не создаем дублей контактов
   include Stateable
@@ -11,6 +11,7 @@ class ContragentContact < MutableData
   validates_associated :contact
   validates :contragent, uniqueness: { scope: :contact }
   alias_attribute :state, :contact # для поддержки MutableData
+  
   accepts_nested_attributes_for :contact
 
   def type

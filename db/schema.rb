@@ -211,6 +211,7 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
     t.string "full_name"
     t.string "inn", limit: 10
     t.string "kpp", limit: 9
+    t.string "division", limit: 3
     t.string "ogrn", limit: 13
     t.string "okpo", limit: 10
     t.string "oktmo", limit: 11
@@ -222,7 +223,7 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["full_name"], name: "index_organizations_on_full_name"
-    t.index ["inn", "kpp"], name: "index_organizations_on_inn_and_kpp", unique: true
+    t.index ["inn", "kpp", "division"], name: "index_organizations_on_inn_and_kpp", unique: true
     t.index ["ownership_id"], name: "index_organizations_on_ownership_id"
   end
 
@@ -382,7 +383,8 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
     t.date "deadline_at", comment: "срок выполнения"
     t.date "funded_at", comment: "дата бухгалтерского закрытия"
     t.date "invoice_at", comment: "дата выставления счета на оплату"
-    t.date "completed_at", comment: "дата закрытия"
+    t.date "completed_at", comment: "дата завершения работ"
+    t.date "closed_at", comment: "дата закрытия этапа"
     t.integer "deadline_kind", comment: "вид срока"
     t.integer "payment_deadline_kind", comment: "вид срока оплаты"
     t.integer "payment_duration", comment: "дней на оплату"
@@ -396,8 +398,9 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
     t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.date "start_at"
-    t.date "payment_at"
+    t.date "start_at", comment: "дата начала выполнения"
+    t.date "payment_at", comment: "дата оплаты"
+    t.date "prepayment_at", comment: "дата предоплаты"
     t.integer "registry_quarter"
     t.integer "registry_year"
     t.index ["contract_id"], name: "index_stages_on_contract_id"
