@@ -1,6 +1,7 @@
 # хранение контактов человека
 # контакты могут меняться со временем - потому используем MutableData
 class PersonContact < MutableData
+  
   # Не создаем дублей контактов
   include Stateable
 
@@ -10,6 +11,7 @@ class PersonContact < MutableData
   validates_associated :contact
   validates :person, uniqueness: { scope: :contact }
   alias_attribute :state, :contact # для поддержки MutableData
+  
   accepts_nested_attributes_for :contact
 
   def type

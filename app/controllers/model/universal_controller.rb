@@ -2,8 +2,16 @@
 class Model::UniversalController < PrivateController
   before_action :prepare_model, only: [:index, :show, :create, :update, :destroy]
   before_action :find_record, only: [:show, :update, :destroy]
+  skip_before_action :authenticate_request, if: :this_is_export? #temporary !!!! used one time
+
   Model::UniversalController::const_set(:SIGNED, 1) #signed status id
   Model::UniversalController::const_set(:CLOSED, 5) #closed status id
+
+  # !!!! used one time, for import data from old data base
+  def this_is_export?
+    !params[:export].blank?
+  end
+
   # POST /model/:model_name
   # доступны параметры:
   #  :select для выбора нужных атрибутов модели,
@@ -25,7 +33,7 @@ class Model::UniversalController < PrivateController
         render json: @res.all.map { |el| get_data_set(el) }
       end
     else
-      render json: @res.count
+      render json: @res.count || 0
     end
   end
 
@@ -54,16 +62,17 @@ class Model::UniversalController < PrivateController
       if @res.save
         check_audit_creation(@res)
         check_attributes(@res, params[params[:model_name]])
-        add_updates("added") if (@res.respond_to? :audits)
+        add_updates("added") if !this_is_export? && (@res.respond_to? :audits)
         if params[:data_set].blank?
           render json: @res
         else
-          render json: get_data_set(@res, true), status: :ok
+          render json: get_data_set(@res, false), status: :ok
         end
       else
         render json: { errors: @res.errors.full_messages }, status: :unprocessable_entity
       end
     rescue ActiveRecord::RecordNotUnique
+      puts(@res.errors.full_messages)
       render json: { errors: ["Новая запись нарушает требования уникальности"] }, status: :unprocessable_entity
     end
   end
@@ -81,11 +90,11 @@ class Model::UniversalController < PrivateController
       if (@res.respond_to? :audits)
         @res.reload
         new_map = create_string_values_map
-        add_updates("updated") if check_audit_updating(new_map, old_map)
+        add_updates("updated") if check_audit_updating(new_map, old_map) && !this_is_export?
         clean_keys(@res.contract) if params[:model_name] === "Revision"
         add_updates("commented") unless params[params[:model_name]][:comments_attributes].blank?
-        add_updates("closed") if params[params[:model_name]][:status_id] == Model::UniversalController::CLOSED
-        add_updates("signed") if params[params[:model_name]][:status_id] == Model::UniversalController::SIGNED
+        add_updates("closed") if params[params[:model_name]][:status_id] == Model::UniversalController::CLOSED  && !this_is_export?
+        add_updates("signed") if params[params[:model_name]][:status_id] == Model::UniversalController::SIGNED  && !this_is_export?
         check_attributes(@res, params[params[:model_name]])
       end
       if params[:data_set].blank?
@@ -170,7 +179,7 @@ class Model::UniversalController < PrivateController
   def get_data_set(obj, update_mode = false)
     # получаем нужный ключ из Класса модели, ID записи и названия набора
     redis_key = "#{params[:model_name]}_#{obj.id}_#{params[:data_set]}"
-    if update_mode
+    if update_mode 
       # удаляем все устаревшие ключи, в случае обновления объекта в базе
       clean_keys(obj)
     else
@@ -181,13 +190,13 @@ class Model::UniversalController < PrivateController
       # если нет - получаем из СУБД данные и генерим карту объекта
       result = obj.custom_data(params[:data_set].to_sym)
       # и кэшируем в REDIS как JSON
-      REDIS.hset redis_key, "value", result.to_json
+      REDIS.hset redis_key, "value", result.to_json if !this_is_export?
     else
       # если да - Парсим JSON и получаем нужную карту объекта
       result = JSON.parse(json_str)
     end
     # обновляем время жизни данных в кэше без использования
-    REDIS.expire(redis_key, Rails.configuration.redis_key_expire.to_i)
+    REDIS.expire(redis_key, Rails.configuration.redis_key_expire.to_i) if !this_is_export?
     result
   end
 
@@ -195,7 +204,7 @@ class Model::UniversalController < PrivateController
   # регистрируем вновь созданные записи, требующие аудит
   def check_audit_creation(obj)
     if (obj.respond_to? :audits) && obj.audits.empty?
-      audit = Audit.new({ action: :added, auditable: obj, user_id: @current_user[:data][:id], detail: obj.head })
+      audit = Audit.new({ action: (this_is_export? ? :imported : :added), auditable: obj, user_id: this_is_export? ? 1 : @current_user[:data][:id], detail: obj.head })
       audit.save
       obj.audits.push(audit)
     end
@@ -221,7 +230,7 @@ class Model::UniversalController < PrivateController
     new_map.each do |k, v|
       before = old_map[k]
       if v != before
-        audit = Audit.new({ action: :updated, auditable_field: k, before: before, after: v, auditable: @res, detail: @res.head, user_id: @current_user[:data][:id] })
+        audit = Audit.new({ action: this_is_export? ? :imported : :updated, auditable_field: k, before: before, after: v, auditable: @res, detail: @res.head, user_id: this_is_export? ? 1 : @current_user[:data][:id] })
         audit.save
         @res.audits.push(audit)
         updated = true

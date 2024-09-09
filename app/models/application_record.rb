@@ -9,7 +9,8 @@ class ApplicationRecord < ActiveRecord::Base
      :item, # элемент меню
      :card, # карточка
      :summary, # аудит изменений
-     :edit # запись для редактирования
+     :edit, # запись для редактирования
+     :uid, # для импорта из старой базы
 ]
   end
 
@@ -48,6 +49,10 @@ class ApplicationRecord < ActiveRecord::Base
 
   def edit
     { id: id }
+  end
+
+  def uid
+    { id: id, name: head, uid: list_key}
   end
 
   #end Дефолтная реализация методов для кастомного рендеринга

@@ -31,6 +31,6 @@ class Comment < ApplicationRecord
 
   # атрибуты для добавления
   def self.permitted_params
-    super | [:content, :profile_id, :_destroy]
+    super | [:content, :profile_id, :created_at, :_destroy]
   end
 end

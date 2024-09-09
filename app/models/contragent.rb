@@ -50,6 +50,15 @@ class Contragent < ApplicationRecord
     super.merge({ requisites: contragent_organization.card, description: description, obj_uuid: obj_uuid, audits: audits.map { |el| el.card } || [], comments: comments.map { |el| el.item } || [], contacts: contragent_contacts.filter { |el| el.used }.map { |el| el.edit } || [], real_addr: real_addr.nil? ? nil : real_addr.edit, registred_addr: registred_addr.nil? ? nil : registred_addr.edit, region: real_addr.nil? ? nil : real_addr.address.area.item, employees: employees.nil? ? nil : employees.map { |el| el.item }, contracts: contracts.nil? ? nil : contracts.map { |el| el.item } })
   end
 
+  # для редактирования контрагента
+  def edit
+    super.merge({ requisites: contragent_organization.card, description: description, obj_uuid: obj_uuid, contacts: contragent_contacts.filter { |el| el.used }.map { |el| el.edit } || [], real_addr: real_addr.nil? ? nil : real_addr.edit, registred_addr: registred_addr.nil? ? nil : registred_addr.edit, employees: employees.nil? ? nil : employees.map { |el| el.edit }})
+  end
+
+  def uid
+    { id: id, name: head, uid: obj_uuid}
+  end
+
   # налоговые и банковские реквизиты контрагента
   def financial
     { bank_name: bank_name, bank_bik: bank_bik, bank_account: bank_account, bank_cor_account: bank_cor_account }.merge(contragent_organization.organization.financial)
