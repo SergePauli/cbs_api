@@ -101,4 +101,5 @@ class User < NamedRecord
   end
 
   # end
+  
 end

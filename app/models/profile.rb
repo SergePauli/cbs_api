@@ -42,6 +42,6 @@ class Profile < MutableData
   def self.permitted_params
     super | [:department_id, :user_id, :position_id, :statuses, :contracts_types, user_attributes: User.permitted_params, position_attributes: Position.permitted_params]
   end
-
+  ransack_alias :person_name, :user_person_person_name_naming_name_or_user_person_person_name_naming_surname_or_user_person_person_name_naming_patrname
   # end
 end

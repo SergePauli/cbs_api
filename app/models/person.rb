@@ -87,6 +87,7 @@ class Person < ApplicationRecord
     { inn: inn }
   end
 
+  
   private
 
   def get_contact_by_type(type)
