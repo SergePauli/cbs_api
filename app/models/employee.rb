@@ -25,11 +25,11 @@ class Employee < MutableData
   end
 
   def item
-    { id: id, priority: priority, name: name, full_name: person.person_name.naming.head, position: position.name, contacts: person.person_contacts.filter { |el| el.used }.map { |el| el.custom_data(:item) } || [], description: description }
+    { id: id, priority: priority, name: name, full_name: person.person_name.naming.head, position: position.nil? ? nil : position.name, contacts: person.person_contacts.filter { |el| el.used }.map { |el| el.custom_data(:item) } || [], description: description }
   end
 
   def card
-    super.merge({description: description, person: person.card, position: position.item, contragent: contragent.item, audits: audits.map { |el| el.item } || [] })
+    super.merge({description: description, person: person.card, position: position.nil? ? nil : position.item, contragent: contragent.nil? ? nil : contragent.item, audits: audits.map { |el| el.item } || [] })
   end
 
   def edit
