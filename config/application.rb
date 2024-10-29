@@ -59,7 +59,7 @@ module CbsApi
 
     #SMTP server (настройки почтового сервера)
     ActionMailer::Base.smtp_settings = {
-      address: "smtp.mail.ru",
+      address: "mail.cbsib.ru",
       domain: ENV.fetch("DOMAIN"),
       port: 465,
       user_name: config.from_mail,
