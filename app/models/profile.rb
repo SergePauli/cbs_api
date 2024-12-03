@@ -7,9 +7,7 @@ class Profile < MutableData
 
   validates_associated :user
   validates_associated :position
-  validates_associated :department
-  validates :statuses, format: { with: /\A\d,(\d,)+\d/, message: "invalid array of statuses" }, allow_nil: true
-  validates :contracts_types, format: { with: /\A\d{1,2},(\d{1,2},)+\d{1,2}/, message: "invalid array of types" }, allow_nil: true
+  validates_associated :department  
   validates :user, uniqueness: { scope: :position }
   alias_attribute :state, :position # для поддержки MutableData
 
