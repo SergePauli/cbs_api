@@ -65,6 +65,7 @@ module CbsApi
       user_name: config.from_mail,
       password: ENV.fetch("MAIL_PASS"),
       authentication: "plain",
+      openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
       ssl: true,
     }
 

@@ -60,9 +60,17 @@ class Model::UniversalController < PrivateController
     @res = @model_class.new permitted_params
     begin
       if @res.save
+        if (!params[:comments].blank?)
+          params[:comments].each do |comment|
+            comment[:commentable] = @res            
+            comment[:user_id] = this_is_export? ? 1 : @current_user[:data][:id]
+            Comment.create comment
+          end  
+          add_updates("commented")
+        end
         check_audit_creation(@res)
         check_attributes(@res, params[params[:model_name]])
-        add_updates("added") if !this_is_export? && (@res.respond_to? :audits)
+        add_updates("added") if !this_is_export? && (@res.respond_to? :audits)        
         if params[:data_set].blank?
           render json: @res
         else
@@ -88,7 +96,7 @@ class Model::UniversalController < PrivateController
     old_map = create_string_values_map if (@res.respond_to? :audits)
     if @res.update(permitted_params)
       if (@res.respond_to? :audits)
-        @res.reload
+        @res.reload          
         new_map = create_string_values_map
         add_updates("updated") if check_audit_updating(new_map, old_map) && !this_is_export?
         clean_keys(@res.contract) if params[:model_name] === "Revision"
