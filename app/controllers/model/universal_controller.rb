@@ -29,12 +29,8 @@ class Model::UniversalController < PrivateController
       @res = @res.includes(params[:includes]) unless params[:includes].blank?
       if params[:data_set].blank?
         render json: @res.all
-      else
-        begin
-          render json: @res.all.map { |el| get_data_set(el) }
-        rescue e
-          render json: { message: e.message }, status: :not_found
-        end    
+      else        
+          render json: @res.all.map { |el| get_data_set(el) }           
       end
     else
       render json: @res.count || 0
