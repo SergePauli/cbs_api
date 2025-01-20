@@ -30,7 +30,11 @@ class Model::UniversalController < PrivateController
       if params[:data_set].blank?
         render json: @res.all
       else
-        render json: @res.all.map { |el| get_data_set(el) }
+        begin
+          render json: @res.all.map { |el| get_data_set(el) }
+        rescue e
+          render json: { message: e.message }, status: :not_found
+        end    
       end
     else
       render json: @res.count || 0
