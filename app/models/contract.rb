@@ -49,7 +49,7 @@ class Contract < ApplicationRecord
       { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, signed_at: to_date_str(signed_at), deadline_at: to_date_str(deadline_at), closed_at: to_date_str(closed_at), external_number: external_number, revision: revision.nil? ? revisions[0].basement : revision.basement, status: status.item, region: contragent.real_addr.nil? ? nil : contragent.real_addr.address.area.item }
     rescue 
       puts "Не найдена ревизия к #{name} или другая ошибка"
-      return {id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, signed_at: to_date_str(signed_at), deadline_at: to_date_str(deadline_at), closed_at: to_date_str(closed_at), external_number: external_number, status: status.item, region: contragent.real_addr.nil? ? nil : contragent.real_addr.address.area.item}
+      return {id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, signed_at: to_date_str(signed_at), deadline_at: to_date_str(deadline_at), closed_at: to_date_str(closed_at), external_number: external_number, status: status.item, region: contragent.real_addr.nil? ? nil : contragent.real_addr.address.area.item, revision: "Не найдена ревизия" }
     end   
   end
 
