@@ -78,8 +78,9 @@ class Contract < ApplicationRecord
   # назначаем сквозной номер контракту
   def generate_order
     return unless order.blank?
-    last_one = Contract.where(year: year, code: code).last
-    self.order = (last_one ? last_one.order : 100) + 1
+    last_one = Contract.where(year: year, code: code).order(:code).last
+    self.order = (last_one ? last_one.order || 0 : 0) + 1
+    puts 'generate order', name
   end
 
   def fix_task_kind
