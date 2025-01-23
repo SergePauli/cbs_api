@@ -79,8 +79,7 @@ class Contract < ApplicationRecord
   def generate_order
     return unless order.blank?
     last_one = Contract.where(year: year, code: code).order(:order).last
-    self.order = (last_one ? last_one.order || 0 : 0) + 1
-    puts 'generate order', name
+    self.order = (last_one ? last_one.order || 0 : 0) + 1    
   end
 
   def fix_task_kind
