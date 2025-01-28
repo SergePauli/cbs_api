@@ -26,7 +26,7 @@ class Comment < ApplicationRecord
 
   # реализация для набора данных card
   def card
-    super.merge({ content: content, commentable: commentable.item, commentable_type: commentable_type, profile: profile.item, user: user.item, person: person.item, department: department.item, when: created_at.strftime("%d.%m.%Y %H:%M") })
+    super.merge({ content: content, commentable: commentable.nil? ? {id: nil, name: 'удален'} : commentable.item, commentable_type: commentable_type, profile: profile.item, user: user.item, person: person.item, department: department.item, when: created_at.strftime("%d.%m.%Y %H:%M") })
   end
 
   # атрибуты для добавления
