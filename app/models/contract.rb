@@ -83,7 +83,7 @@ class Contract < ApplicationRecord
   end
 
   def fix_task_kind
-    return if code.nil? && !(task_kind_id.nil? || task_kind.nil?) 
+    return if code.nil? || !task_kind_id.nil? || !task_kind.nil?
     self.task_kind = TaskKind.find_by(code: code)
     if task_kind
       self.stages[0].task_kind_id = task_kind.id
