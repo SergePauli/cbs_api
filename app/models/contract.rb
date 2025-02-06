@@ -64,7 +64,7 @@ class Contract < ApplicationRecord
   end
 
   ransacker :total_costs do
-    query = "(SELECT SUM(cost) FROM stages WHERE stages.contract_id = contracts.id and stages.priority > 0 GROUP BY stages.contract_id)"
+    query = "(SELECT SUM(stages.cost) FROM stages WHERE stages.contract_id = contracts.id  GROUP BY stages.contract_id)"
     Arel.sql(query)
   end
 

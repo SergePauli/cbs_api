@@ -14,4 +14,9 @@ class Naming < ApplicationRecord
   def self.permitted_params
     super | [:name, :surname, :patrname]
   end
+
+  ransacker :fio do
+    query = "(SELECT concat(namings.surname, ' ',namings.name,' ',namings.patrname))"
+    Arel.sql(query)
+  end
 end
