@@ -311,18 +311,20 @@ class Model::UniversalController < PrivateController
   def add_updates(name)
     users = REDIS.hvals "tokens"
     users.each do |user_id|
-      upd_key = user_id + ":#{name}:" + params[:model_name]
+      m_name = params[:model_name] === "Revision" ? "Contract" : params[:model_name]
+      upd_key = user_id + ":#{name}:" + m_name
       json_str = REDIS.hget "updates", upd_key
+      r_id = params[:model_name] === "Revision" ? @res.contract.id : @res.id
       if !json_str.blank?
         # если да - Парсим JSON и добавляем id объекта
         updated = JSON.parse(json_str)
-        updated.push(@res.id) if !updated.include?(@res.id)
+        updated.push(r_id) if !updated.include?(r_id)
         # и кэшируем в REDIS как JSON
         REDIS.hset "updates", upd_key, updated.to_json
       else
         # если нет - генерим новую карту обновлений
         # и кэшируем в REDIS как JSON
-        REDIS.hset "updates", upd_key, [@res.id].to_json
+        REDIS.hset "updates", upd_key, [r_id].to_json
       end
     end
   end
