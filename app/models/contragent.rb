@@ -15,7 +15,7 @@ class Contragent < ApplicationRecord
   accepts_nested_attributes_for :contragent_contacts, allow_destroy: true
 
   # сотрудники
-  has_many :employees, -> { order("priority DESC") }, inverse_of: :contragent, autosave: true, dependent: :destroy
+  has_many :employees, -> { where(used: true).order("priority DESC") }, inverse_of: :contragent, autosave: true, dependent: :destroy
   accepts_nested_attributes_for :employees, allow_destroy: true
 
   # адреса
