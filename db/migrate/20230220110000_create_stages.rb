@@ -27,6 +27,7 @@ class CreateStages < ActiveRecord::Migration[6.1]
       t.integer :registry_quarter, comment: "квартал реестра"
       t.integer :registry_year, comment: "год реестра"
       t.boolean :is_ride_out, comment: "признак выезда к контрагенту"
+      t.boolean :is_funded, comment: "признак бух.закрытия"
       t.boolean :used, null: false, default: true, comment: "признак активности этапа"
       t.uuid :list_key, null: false, comment: "служебный ключ списка, для логгирования"
       t.timestamps
