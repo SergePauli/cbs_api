@@ -46,7 +46,7 @@ class Contract < ApplicationRecord
   # реализация для набора данных basement
   def basement
     begin
-      { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, signed_at: to_date_str(signed_at), deadline_at: to_date_str(deadline_at), closed_at: to_date_str(closed_at), external_number: external_number, revision: revision.nil? ? revisions[0].basement : revision.basement, status: status.item, region: contragent.real_addr.nil? ? nil : contragent.real_addr.address.area.item }
+      { id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, signed_at: to_date_str(signed_at), deadline_at: to_date_str(deadline_at), closed_at: to_date_str(closed_at), external_number: external_number, revision: revision.nil? ? revisions[0].basement : revision.basement, status: status.item, region: contragent.real_addr.nil? ? nil : contragent.real_addr.address.area.item}
     rescue 
       puts "Не найдена ревизия к #{name} или другая ошибка"
       return {id: id, contragent: contragent.item, task_kind: task_kind.item, cost: cost ? "%.2f" % cost : cost, governmental: governmental, signed_at: to_date_str(signed_at), deadline_at: to_date_str(deadline_at), closed_at: to_date_str(closed_at), external_number: external_number, status: status.item, region: contragent.real_addr.nil? ? nil : contragent.real_addr.address.area.item, revision: "Не найдена ревизия" }
@@ -65,6 +65,19 @@ class Contract < ApplicationRecord
 
   ransacker :total_costs do
     query = "(SELECT SUM(stages.cost) FROM stages WHERE stages.contract_id = contracts.id  GROUP BY stages.contract_id)"
+    Arel.sql(query)
+  end
+
+  ransacker :is_funded do
+    query = "(SELECT CASE 
+              WHEN st.funded_stages = 0 THEN NULL 
+              WHEN st.funded_stages = st.all_stages THEN true 
+              ELSE false 
+            END FROM (SELECT count(*) as all_stages, sum(cast(is_funded as INT)) as funded_stages FROM stages WHERE stages.contract_id = contracts.id) as st)"
+    Arel.sql(query)
+  end
+  ransacker :funded_at do
+    query = "(SELECT MAX(stages.funded_at) FROM stages WHERE stages.contract_id = contracts.id)"
     Arel.sql(query)
   end
 
