@@ -55,7 +55,13 @@ class Contract < ApplicationRecord
 
   # реализация для набора данных card
   def card
-    super.merge(basement).merge({ code: code, order: order, year: year, use_stage: stage ? stage.id : stages[0].id, stages: stages.map { |el| el.edit }, comments: stages.reduce([]) { |comments, el| comments + el.comments ? el.comments.map { |com| com.card } : [] } || [], revisions: revisions.map { |el| el.basement }, expire_at: stages[0].priority > 0 ? to_date_str(deadline_at) : to_date_str(stages[0].deadline_at) })
+    if stages[0].priority > 0
+      if deadline_at.nil?
+        deadline = stages.reduce(nil){|max_date, el| max_date = el.deadline_at if ((max_date.nil? && !el.deadline_at.nil?) || (!(max_date.nil? || el.deadline_at.nil?) && max_date < el.deadline_at))}         
+      end
+      deadline = to_date_str(deadline)   
+    end  
+    super.merge(basement).merge({ code: code, order: order, year: year, use_stage: stage ? stage.id : stages[0].id, stages: stages.map { |el| el.edit }, comments: stages.reduce([]) { |comments, el| comments + el.comments ? el.comments.map { |com| com.card } : [] } || [], revisions: revisions.map { |el| el.basement }, expire_at: stages[0].priority > 0 ? deadline : to_date_str(stages[0].deadline_at) })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
