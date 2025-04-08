@@ -10,7 +10,8 @@ class CreateRevisions < ActiveRecord::Migration[6.1]
       t.boolean :used, null: false, default: true, comment: "признак использования"
       t.integer :priority, comment: "номер ревизии или доп.соглашения"
       t.boolean :is_present, comment: "признак наличия подписаного оригинала"
-      t.string :description, comment: "Описание ревизии или Доп-а"
+      t.boolean :is_signed, comment: "признак подписания документа"
+      t.string :description, comment: "описание ревизии или Доп-а"
 
       t.uuid :list_key, null: false, comment: "служебный ключ списка, для логгирования"
       t.timestamps

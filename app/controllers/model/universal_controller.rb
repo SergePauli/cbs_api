@@ -102,7 +102,7 @@ class Model::UniversalController < PrivateController
         clean_keys(@res.contract) if params[:model_name] === "Revision"
         add_updates("commented") unless params[params[:model_name]][:comments_attributes].blank?
         add_updates("closed") if params[params[:model_name]][:status_id] == Model::UniversalController::CLOSED  && !this_is_export?
-        add_updates("signed") if params[params[:model_name]][:status_id] == Model::UniversalController::SIGNED  && !this_is_export?
+        add_updates("signed") if params[params[:model_name]][:status_id] == Model::UniversalController::SIGNED || params[params[:model_name]][:is_signed]
         check_attributes(@res, params[params[:model_name]])
       end
       if params[:data_set].blank?
@@ -311,10 +311,10 @@ class Model::UniversalController < PrivateController
   def add_updates(name)
     users = REDIS.hvals "tokens"
     users.each do |user_id|
-      m_name = params[:model_name] === "Revision" ? "Contract" : params[:model_name]
+      m_name = params[:model_name] === "Revision" && name!="signed" ? "Contract" : params[:model_name]
       upd_key = user_id + ":#{name}:" + m_name
       json_str = REDIS.hget "updates", upd_key
-      r_id = params[:model_name] === "Revision" ? @res.contract.id : @res.id
+      r_id = params[:model_name] === "Revision" && name!="signed" ? @res.contract.id : @res.id
       if !json_str.blank?
         # если да - Парсим JSON и добавляем id объекта
         updated = JSON.parse(json_str)
