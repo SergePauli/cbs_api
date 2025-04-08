@@ -28,12 +28,12 @@ class Revision < MutableData
 
   # заготовка (минимальный набор)
   def basement
-    { id: id, used: used, priority: priority, list_key: list_key, description: description, protocol_link: protocol_link, scan_link: scan_link, zip_link: zip_link, doc_link: doc_link, is_present: is_present }
+    { id: id, used: used, priority: priority, list_key: list_key, description: description, protocol_link: protocol_link, scan_link: scan_link, zip_link: zip_link, doc_link: doc_link, is_present: is_present, is_signed: is_signed }
   end
 
   # карточка (полный набор)
   def card
-    super.merge({ contract: contract.item, audits: audits }).merge(basement)
+    super.merge({ contract: contract.basement, audits: audits }).merge(basement)
   end
 
   def edit
@@ -41,6 +41,6 @@ class Revision < MutableData
   end
 
   def self.permitted_params
-    super | [:contract_id, :protocol_link, :scan_link, :zip_link, :doc_link, :is_present, :description]
+    super | [:contract_id, :protocol_link, :scan_link, :zip_link, :doc_link, :is_present, :is_signed, :description]
   end
 end

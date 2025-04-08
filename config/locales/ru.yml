@@ -70,6 +70,7 @@ ru:
   is_sended: "отправка"
   ride_out_at: "когда выехали"
   is_ride_out: "выезд"
+  is_signed: "подписан"
   funded_at: "дата БЗ"
   is_funded: "БЗ"
   completed_at: "когда завершено"
