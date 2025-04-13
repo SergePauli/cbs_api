@@ -12,7 +12,7 @@ class ProfileController < PrivateController
       data = {}
       data_keys = el.split(":")
       data["action"] = data_keys[1]
-      data["model"] = I18n.t data_keys[2]
+      data["model"] = (data_keys[2] == 'Revision' && data_keys[1] == 'signed')  ? 'доп' : (I18n.t data_keys[2])
       data["ids"] = JSON.parse(REDIS.hget("updates", el))
       result.push(data)
       REDIS.hdel "updates", el
