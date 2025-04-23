@@ -61,7 +61,7 @@ class Contract < ApplicationRecord
       end
       deadline = to_date_str(deadline)   
     end  
-    super.merge(basement).merge({ code: code, order: order, year: year, use_stage: stage ? stage.id : stages[0].id, stages: stages.map { |el| el.edit }, comments: stages.reduce([]) { |comments, el| comments + el.comments ? el.comments.map { |com| com.card } : [] } || [], revisions: revisions.map { |el| el.basement }, expire_at: stages[0].priority > 0 ? deadline : to_date_str(stages[0].deadline_at) })
+    super.merge(basement).merge({ code: code, order: order, year: year, use_stage: stage ? stage.id : stages[0].id, stages: stages.map { |el| el.edit }, comments: comments.map { |el| el.card } || [], revisions: revisions.map { |el| el.basement }, expire_at: stages[0].priority > 0 ? deadline : to_date_str(stages[0].deadline_at) })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
