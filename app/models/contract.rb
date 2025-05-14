@@ -57,7 +57,9 @@ class Contract < ApplicationRecord
   def card
     if stages[0].priority > 0
       if deadline_at.nil?
-        deadline = stages.reduce(nil){|max_date, el| max_date = el.deadline_at if ((max_date.nil? && !el.deadline_at.nil?) || (!(max_date.nil? || el.deadline_at.nil?) && max_date < el.deadline_at))}         
+        deadline = stages.reduce(nil){|max_date, el| max_date = el.deadline_at if ((max_date.nil? && !el.deadline_at.nil?) || (!(max_date.nil? || el.deadline_at.nil?) && max_date < el.deadline_at))} 
+      else   
+        deadline = deadline_at      
       end
       deadline = to_date_str(deadline)   
     end  
