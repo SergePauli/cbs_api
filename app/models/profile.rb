@@ -22,6 +22,7 @@ class Profile < MutableData
   def card
     super.merge({ user: user.item, position: position.item,
                   department: department ? department.item : nil,
+                  columns_layouts: columns_layouts,
                   statuses: statuses || position.def_statuses || (department ? department.def_statuses : nil),
                   contracts_types: contracts_types || position.def_contracts_types || (department ? department.def_contracts_types : nil) })
   end
@@ -38,7 +39,7 @@ class Profile < MutableData
 
   # получаем массив разрешенных параметров запросов на обновление
   def self.permitted_params
-    super | [:department_id, :user_id, :position_id, :statuses, :contracts_types, user_attributes: User.permitted_params, position_attributes: Position.permitted_params]
+    super | [:department_id, :user_id, :position_id, :statuses, :contracts_types, :columns_layouts, user_attributes: User.permitted_params, position_attributes: Position.permitted_params]
   end
   ransack_alias :person_name, :user_person_person_name_naming_name_or_user_person_person_name_naming_surname_or_user_person_person_name_naming_patrname
   # end
