@@ -324,6 +324,7 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
     t.boolean "used", default: true, null: false
     t.string "statuses"
     t.string "contracts_types"
+    t.string "columns_layouts"
     t.uuid "list_key", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

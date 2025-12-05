@@ -5,30 +5,34 @@ class ProfileController < PrivateController
   # get updates
   def activity
     result = []
-    user_id = REDIS.hget "tokens", cookies[:refresh_token]
-    updates = REDIS.hkeys "updates"
-    updates = updates.select { |el| el.include? user_id }
-    updates.each do |el|
-      data = {}
-      data_keys = el.split(":")
-      data["action"] = data_keys[1]
-      data["model"] = (data_keys[2] == 'Revision' && data_keys[1] == 'signed')  ? 'доп' : (I18n.t data_keys[2])
-      data["ids"] = JSON.parse(REDIS.hget("updates", el))
-      result.push(data)
-      REDIS.hdel "updates", el
-    end
+    user_id = REDIS.hget "tokens", cookies[:refresh_token]   
+    if !user_id.nil?
+      updates = REDIS.hkeys "updates"
+      updates = updates.select { |el| el.include? user_id }
+      updates.each do |el|
+        data = {}
+        data_keys = el.split(":")
+        data["action"] = data_keys[1]
+        data["model"] = (data_keys[2] == 'Revision' && data_keys[1] == 'signed')  ? 'доп' : (I18n.t data_keys[2])
+        data["ids"] = JSON.parse(REDIS.hget("updates", el))
+        result.push(data)
+        REDIS.hdel "updates", el
+      end
+    end  
     render json: result, status: 200
   end
 
   # GET profile/activity_clean
   # clean updates
   def activity_clean
-    user_id = REDIS.hget "tokens", cookies[:refresh_token]
-    updates = REDIS.hkeys "updates"
-    updates = updates.select { |el| el.include? user_id }
-    updates.each do |el|
-      REDIS.hdel "updates", el
-    end
+    user_id = REDIS.hget "tokens", cookies[:refresh_token]   
+    if  ! user_id.nil?
+      updates = REDIS.hkeys "updates"
+      updates = updates.select { |el| !el.nil? && (el.include? user_id) }
+      updates.each do |el|
+        REDIS.hdel "updates", el
+      end
+    end  
     render json: { message: "обновления очищены" }, status: 200
   end
 
