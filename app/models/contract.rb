@@ -71,9 +71,23 @@ class Contract < ApplicationRecord
     super | [:year, :code, :order, :contragent_id, :task_kind_id, :status_id, :governmental, :external_number, :signed_at, :deadline_at, :closed_at] | [stages_attributes: Stage.permitted_params] | [comments_attributes: Comment.permitted_params] | [revisions_attributes: Revision.permitted_params]
   end
 
+  EXPIRATION_DATE_RANSACK_QUERY = <<~SQL.squish
+    ( SELECT COALESCE( contracts.deadline_at,
+      (SELECT MAX(stages.deadline_at) FROM stages WHERE stages.contract_id = contracts.id)
+      ))
+  SQL
+
   ransacker :total_costs do
     query = "(SELECT SUM(stages.cost) FROM stages WHERE stages.contract_id = contracts.id  GROUP BY stages.contract_id)"
     Arel.sql(query)
+  end
+
+  ransacker :expired_at, type: :date do
+    Arel.sql(EXPIRATION_DATE_RANSACK_QUERY)
+  end
+
+  ransacker :deadline_at_or_stage_deadline_at, type: :date do
+    Arel.sql(EXPIRATION_DATE_RANSACK_QUERY)
   end
 
   ransacker :is_funded do
