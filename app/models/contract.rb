@@ -72,8 +72,7 @@ class Contract < ApplicationRecord
   end
 
   EXPIRATION_DATE_RANSACK_QUERY = <<~SQL.squish
-    ( SELECT COALESCE( contracts.deadline_at,
-      (SELECT MAX(stages.deadline_at) FROM stages WHERE stages.contract_id = contracts.id)
+    (SELECT COALESCE( contracts.deadline_at, (SELECT MAX(stages.deadline_at) FROM stages WHERE stages.contract_id = contracts.id)
       ))
   SQL
 
