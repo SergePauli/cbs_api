@@ -55,15 +55,14 @@ class Contract < ApplicationRecord
 
   # реализация для набора данных card
   def card
-    if stages[0].priority > 0
-      if deadline_at.nil?
-        deadline = stages.reduce(nil){|max_date, el| max_date = el.deadline_at if ((max_date.nil? && !el.deadline_at.nil?) || (!(max_date.nil? || el.deadline_at.nil?) && max_date < el.deadline_at))} 
-      else   
-        deadline = deadline_at      
-      end
-      deadline = to_date_str(deadline)   
-    end  
-    super.merge(basement).merge({ code: code, order: order, year: year, use_stage: stage ? stage.id : stages[0].id, stages: stages.map { |el| el.edit }, comments: comments.map { |el| el.card } || [], revisions: revisions.map { |el| el.basement }, expire_at: stages[0].priority > 0 ? deadline : to_date_str(stages[0].deadline_at) })
+    if deadline_at.nil?
+        deadline_ = stages.reduce(nil){|max_date, el| max_date = el.deadline_at if ((max_date.nil? && !el.deadline_at.nil?) || (!(max_date.nil? || el.deadline_at.nil?) && max_date < el.deadline_at))} 
+    else   
+        deadline_ = deadline_at      
+    end
+    deadline_ = to_date_str(deadline_)   
+     
+    super.merge(basement).merge({ code: code, order: order, year: year, use_stage: stage ? stage.id : stages[0].id, stages: stages.map { |el| el.edit }, comments: comments.map { |el| el.card } || [], revisions: revisions.map { |el| el.basement }, expire_at: deadline_ })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
