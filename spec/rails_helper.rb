@@ -1,6 +1,10 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require "spec_helper"
 ENV["RAILS_ENV"] ||= "test"
+ENV["AUTH_JWT_ISSUER"] ||= "cbs_api_test"
+ENV["AUTH_JWT_AUDIENCE"] ||= "cbs_api_test,shared_api_test"
+ENV["AUTH_JWT_HMAC_SECRET"] ||= "test_hmac_secret_for_jwt_please_change"
+ENV["AUTH_JWT_CLOCK_SKEW_SEC"] ||= "30"
 require_relative "../config/environment"
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?

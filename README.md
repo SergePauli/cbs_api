@@ -11,6 +11,12 @@ API на RoR для новой версии "Контракты и контра�
 * Configuration
     
     bundle install   
+
+    # JWT config for inter-service auth
+    AUTH_JWT_ISSUER=cbs_api
+    AUTH_JWT_AUDIENCE=cbs_api,files_api,billing_api
+    AUTH_JWT_HMAC_SECRET=shared_hmac_secret
+    AUTH_JWT_CLOCK_SKEW_SEC=30
     
 
 * Database creation
@@ -29,5 +35,4 @@ API на RoR для новой версии "Контракты и контра�
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions
-
 

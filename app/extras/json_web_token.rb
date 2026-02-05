@@ -4,9 +4,12 @@
 # refresh_token для сессии
 #
 class JsonWebToken
-  # уникальное значение для генерации токенов
-  SECRET = Rails.application.secrets.secret_key_base
   ALGORITHM = "HS256"
+  ISSUER_ENV_KEY = "AUTH_JWT_ISSUER"
+  AUDIENCE_ENV_KEY = "AUTH_JWT_AUDIENCE"
+  SECRET_ENV_KEY = "AUTH_JWT_HMAC_SECRET"
+  CLOCK_SKEW_ENV_KEY = "AUTH_JWT_CLOCK_SKEW_SEC"
+
   # Срок действия токена обновлений в системе в часах
   LIFETIME = 144
   # Срок действия токена доступа в часах
@@ -27,12 +30,22 @@ class JsonWebToken
     end
 
     def secr
-      SECRET || "нет кода"
+      secret!
     end
 
     # валидируем токен
     def validate_token(token, expected_type: nil)
-      body = JWT.decode(token, secret!, true, { algorithm: ALGORITHM, verify_not_before: true, verify_iat: true })[0]
+      decode_options = {
+        algorithm: ALGORITHM,
+        verify_not_before: true,
+        verify_iat: true,
+        verify_iss: true,
+        iss: issuer!,
+        verify_aud: true,
+        aud: audience!,
+        leeway: clock_skew_sec
+      }
+      body = JWT.decode(token, secret!, true, decode_options)[0]
       if expected_type.present? && body["token_type"] != expected_type
         raise JWT::DecodeError, "Недопустимый тип токена"
       end
@@ -42,14 +55,48 @@ class JsonWebToken
     private
 
     def generate_token(payload, exp, token_type, now)
-      exp_payload = { data: payload, exp: exp, nbf: now, iat: now, token_type: token_type }
+      exp_payload = {
+        data: payload,
+        exp: exp,
+        nbf: now,
+        iat: now,
+        iss: issuer!,
+        aud: audience!,
+        token_type: token_type
+      }
       JWT.encode exp_payload, secret!, ALGORITHM
     end
 
     def secret!
-      raise ArgumentError, "JWT secret_key_base is not configured" if SECRET.blank?
+      secret = ENV[SECRET_ENV_KEY].to_s
+      raise ArgumentError, "#{SECRET_ENV_KEY} is not configured" if secret.blank?
 
-      SECRET
+      secret
+    end
+
+    def issuer!
+      issuer = ENV[ISSUER_ENV_KEY].to_s
+      raise ArgumentError, "#{ISSUER_ENV_KEY} is not configured" if issuer.blank?
+
+      issuer
+    end
+
+    def audience!
+      audience = ENV[AUDIENCE_ENV_KEY].to_s.split(",").map(&:strip).reject(&:blank?)
+      raise ArgumentError, "#{AUDIENCE_ENV_KEY} is not configured" if audience.blank?
+
+      audience
+    end
+
+    def clock_skew_sec
+      raw_value = ENV.fetch(CLOCK_SKEW_ENV_KEY, "0")
+      value = Integer(raw_value, 10)
+    rescue ArgumentError, TypeError
+      raise ArgumentError, "#{CLOCK_SKEW_ENV_KEY} must be an integer >= 0"
+    else
+      raise ArgumentError, "#{CLOCK_SKEW_ENV_KEY} must be >= 0" if value.negative?
+
+      value
     end
   end
 end
