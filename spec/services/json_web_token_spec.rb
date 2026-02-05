@@ -18,6 +18,9 @@ RSpec.describe JsonWebToken do
     it "Должен успешно декодироваться" do
       body = JWT.decode(tokens[:refresh], JsonWebToken::SECRET, true, { verify_expiration: false, algorithm: "HS256" })[0]
       expect(body["data"]).to eq "test value"
+      expect(body["token_type"]).to eq "refresh"
+      expect(body["iat"]).to be_present
+      expect(body["nbf"]).to be_present
     end
 
     it "Не должен быть валиден по истечении срока действия" do
@@ -41,6 +44,9 @@ RSpec.describe JsonWebToken do
     it "Должен успешно декодироваться" do
       body = JWT.decode(tokens[:access], JsonWebToken::SECRET, true, { verify_expiration: false, algorithm: "HS256" })[0]
       expect(body["data"]).to eq "test value"
+      expect(body["token_type"]).to eq "access"
+      expect(body["iat"]).to be_present
+      expect(body["nbf"]).to be_present
     end
 
     it "Не должен быть валиден по истечении срока действия" do
@@ -73,6 +79,18 @@ RSpec.describe JsonWebToken do
 
     it "Декодированые данные должны содержать исходный payload" do
       expect(decoded_data[:data]).to eq "test value"
+    end
+
+    it "должен валидировать access токен по типу" do
+      expect {
+        JsonWebToken.validate_token(right_token[:access], expected_type: "access")
+      }.not_to raise_error
+    end
+
+    it "должен отклонять токен с неверным типом" do
+      expect {
+        JsonWebToken.validate_token(right_token[:access], expected_type: "refresh")
+      }.to raise_error(JWT::DecodeError)
     end
   end
   # describe "#save_token" do

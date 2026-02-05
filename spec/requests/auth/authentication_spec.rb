@@ -64,6 +64,15 @@ RSpec.describe "Auth::Authentications", type: :request do
         expect(response.body).to include "Валидация токена обновлений не успешна"
       end
     end
+
+    it "должен возвращать :unauthorized если в cookie передан access токен" do
+      dto = { id: test_user.id, email: test_user.email, role: test_user.role, logged: test_user.last_login }
+      tokens = JsonWebToken.new_tokens(dto)
+      cookies[:refresh_token] = tokens[:access]
+      get "/auth/refresh"
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to include "Валидация токена обновлений не успешна"
+    end
   end
   describe "GET /auth/logout" do
     let (:tokens) {
@@ -84,6 +93,14 @@ RSpec.describe "Auth::Authentications", type: :request do
     it "должен возвращать :bad_request для неавторизованого запроса" do
       get "/auth/logout"
       expect(response).to have_http_status(:bad_request)
+    end
+
+    it "должен возвращать :unauthorized если передан refresh токен как bearer" do
+      cookies[:refresh_token] = tokens[:refresh]
+      headers = { "Authorization" => "Bearer #{tokens[:refresh]}" }
+      get "/auth/logout", headers: headers
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to include "Валидация токена доступа не успешна"
     end
   end
 end
