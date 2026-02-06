@@ -5,7 +5,7 @@ default: &default
   timeout: 5000
   username: <%= ENV.fetch("POSTGRES_USER", "crm") %>
   password: <%= ENV.fetch("POSTGRES_PASSWORD", "Rhyxu1Fu6") %>
-  host: localhost
+  host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
   port: <%= ENV.fetch("POSTGRES_PORT", "5432") %>
 
 development:
