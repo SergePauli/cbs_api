@@ -3,10 +3,10 @@ default: &default
   encoding: unicode  
   pool: 5
   timeout: 5000
-  username: crm
-  password: Rhyxu1Fu6
+  username: <%= ENV.fetch("POSTGRES_USER", "crm") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "Rhyxu1Fu6") %>
   host: localhost
-  port: 5432
+  port: <%= ENV.fetch("POSTGRES_PORT", "5432") %>
 
 development:
   <<: *default
