@@ -12,7 +12,7 @@ module ApplicationCable
       token = cookies[:refresh_token]
       if token
         begin
-          user_data = JsonWebToken.validate_token token
+          user_data = JsonWebToken.validate_token(token, expected_type: "refresh")
           if verified_user = User.find_by(id: user_data["data"]["id"])
             verified_user
           else

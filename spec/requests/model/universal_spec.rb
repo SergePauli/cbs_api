@@ -23,6 +23,10 @@ RSpec.describe "Model::Universals", type: :request do
     { "ACCEPT" => "application/json", "Authorization" => "Bearer #{tokens[:access]}" }
   }
 
+  let (:headers_with_refresh) {
+    { "ACCEPT" => "application/json", "Authorization" => "Bearer #{tokens[:refresh]}" }
+  }
+
   describe "POST model/Person" do
     it "должен возвращать список записей с набором данных для пунтка меню" do
       post "/model/Person", params: { data_set: "item" }, headers: headers
@@ -48,6 +52,12 @@ RSpec.describe "Model::Universals", type: :request do
       post "/model/Person", params: { q: { person_names_naming_surname_eq: test_person.naming.surname }, data_set: "item", offset: 0, limit: 2 }, headers: headers
       expect(response).to have_http_status(:ok)
       expect(response.body).to include test_person.item.to_json
+    end
+
+    it "должен возвращать :unauthorized при использовании refresh токена в Authorization" do
+      post "/model/Person", params: { data_set: "item" }, headers: headers_with_refresh
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.body).to include "Валидация токена доступа не успешна"
     end
   end
   describe "GET model/Person" do

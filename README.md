@@ -11,6 +11,16 @@ API на RoR для новой версии "Контракты и контра�
 * Configuration
     
     bundle install   
+
+    # JWT config for inter-service auth
+    AUTH_JWT_ISSUER=cbs_api
+    AUTH_JWT_AUDIENCE=cbs_api,files_api,billing_api
+    AUTH_JWT_HMAC_SECRET=shared_hmac_secret
+    AUTH_JWT_CLOCK_SKEW_SEC=30
+    # one origin:
+    # CORS_ALLOW_ORIGIN=http://localhost:3000
+    # or CSV list:
+    CORS_ALLOW_ORIGIN=http://cbs:3000,http://192.168.0.3:3000
     
 
 * Database creation
@@ -29,5 +39,3 @@ API на RoR для новой версии "Контракты и контра�
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions
-
-

@@ -1,12 +1,12 @@
 default: &default
   adapter: postgresql
-  encoding: unicode  
+  encoding: unicode
   pool: 5
   timeout: 5000
-  username: crm
-  password: Rhyxu1Fu6
-  host: localhost
-  port: 5433
+  username: <%= ENV.fetch("POSTGRES_USER", "crm") %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", "Rhyxu1Fu6") %>
+  host: <%= ENV.fetch("POSTGRES_HOST", "localhost") %>
+  port: <%= ENV.fetch("POSTGRES_PORT", "5432") %>
 
 development:
   <<: *default

@@ -42,7 +42,7 @@ class Auth::AuthenticationController < PrivateController
     token = cookies[:refresh_token]
     raise ApiError.new("Отсутствует токен обновлений", :unauthorized) if token.blank?
     begin
-      user_data = JsonWebToken.validate_token token
+      user_data = JsonWebToken.validate_token(token, expected_type: "refresh")
     rescue JWT::DecodeError
       raise ApiError.new("Валидация токена обновлений не успешна", :unauthorized)
     end
@@ -64,8 +64,9 @@ class Auth::AuthenticationController < PrivateController
   #get "auth/commer" создаем  токен коммер-клиента
   def commer_token
     token = cookies[:refresh_token]
+    raise ApiError.new("Отсутствует токен обновлений", :unauthorized) if token.blank?
     begin
-      user_data = JsonWebToken.validate_token token
+      user_data = JsonWebToken.validate_token(token, expected_type: "refresh")
     rescue JWT::DecodeError
       raise ApiError.new("Валидация токена обновлений не успешна", :unauthorized)
     end

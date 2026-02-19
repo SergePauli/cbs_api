@@ -20,7 +20,7 @@ class PrivateController < ApplicationController
       raise ApiError.new("Отсутствует токен доступа", :bad_request) unless header
       header = header.split(" ").last
       begin
-        @current_user = JsonWebToken.validate_token header
+        @current_user = JsonWebToken.validate_token(header, expected_type: "access")
       rescue JWT::DecodeError
         raise ApiError.new("Валидация токена доступа не успешна", :unauthorized)
       end

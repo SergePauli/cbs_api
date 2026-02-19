@@ -5,7 +5,7 @@ class Organization < NamedRecord
 
   belongs_to :ownership
   validates :name, presence: true
-  validates :inn, presence: true, format: { with: /[0-9]{10}/, message: "Неверный код ИНН" }
+  validates :inn, presence: true, format: { with: /[0-9]{10}|[0-9]{12}/, message: "Неверный код ИНН" }
   validates :kpp, format: { with: /[0-9]{9}/, message: "Неверный код КПП" }, allow_nil: true
   validates :division, format: { with: /[0-9]{3}/, message: "Неверный код подразделения" }, allow_nil: true
   validates :ogrn, format: { with: /\A1[0-9]{12}/, message: "Неверный код ОГРН" }, allow_nil: true
