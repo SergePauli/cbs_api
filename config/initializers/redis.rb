@@ -1,6 +1,6 @@
 # Получаем настройки соединения с Redis
-redis_host = Rails.application.secrets.redis && Rails.application.secrets.redis["host"] || "localhost"
-redis_port = Rails.application.secrets.redis && Rails.application.secrets.redis["port"] || 6379
+redis_host = ENV["REDIS_ADDR"]&.split(":")&.first || "localhost"
+redis_port = ENV["REDIS_ADDR"]&.split(":")&.last || 6379
 
 # Создаем константу представляющую постоянное соединение с Redis
 REDIS = Redis.new(host: redis_host, port: redis_port.to_i)

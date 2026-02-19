@@ -4,7 +4,7 @@ class CreateOrganizations < ActiveRecord::Migration[6.1]
     create_table :organizations do |t|
       t.string :name, unique: true, null: false
       t.string :full_name, index: true
-      t.string :inn, limit: 10
+      t.string :inn, limit: 12
       t.string :kpp, limit: 9
       t.string :division, limit: 3
       t.string :ogrn, limit: 13

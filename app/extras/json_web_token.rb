@@ -69,8 +69,7 @@ class JsonWebToken
 
     def secret!
       secret = ENV[SECRET_ENV_KEY].to_s
-      raise ArgumentError, "#{SECRET_ENV_KEY} is not configured" if secret.blank?
-
+      raise ArgumentError, "#{SECRET_ENV_KEY} is not configured" if secret.blank?      
       secret
     end
 
