@@ -6,8 +6,11 @@
 # Read more: https://github.com/cyu/rack-cors
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  cors_allow_origin = ENV.fetch("CORS_ALLOW_ORIGIN", "http://localhost:3000")
+  cors_origins = cors_allow_origin.split(",").map(&:strip).reject(&:empty?)
+
   allow do
-    origins "http://localhost:3000"
+    origins(*cors_origins)
     resource "*",
       headers: :any,
       methods: [:get, :post, :put, :patch, :delete, :options, :head],
