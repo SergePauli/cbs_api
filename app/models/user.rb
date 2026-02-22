@@ -30,6 +30,7 @@ class User < NamedRecord
     constant :ADMIN
     constant :USER
     constant :EXCEL
+    constant :INTERN
   end
 
   # хелпер для bcript авторизации
