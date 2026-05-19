@@ -13,6 +13,10 @@ RSpec.describe Email, type: :model do
   it "should check email format" do
     @contact = contacts(:cbs_mail)
     expect(@contact).to be_valid
+    @contact.value = "Info@Test.RU"
+    expect(@contact).to be_valid
+    @contact.value = "info@пример.рф"
+    expect(@contact).to be_valid
     @contact.value = "test"
     expect(@contact).not_to be_valid
     expect(@contact.errors[:value]).not_to be_nil
