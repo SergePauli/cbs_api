@@ -103,6 +103,22 @@ ru:
   revisions: "договор(доп.соглашения)"
   Revision: "договор(доп.соглашение)"
   is_present: "в наличии"
+  Order: "Заказ"
+  order: "заказ"
+  orders: "заказы"
+  StageOrder: "Позиция заказа"
+  stage_order: "позиция заказа"
+  stage_orders: "позиции заказов" 
+  cost_price: "цена"
+  cost: "сумма"
+  price_cost: "цена"
+  amount: "количество"
+  severity: "важность"
+  order_number: "номер счета"
+  requested_at: "счет запрошен"
+  ordered_at: "счет выставлен"
+  received_at: "получено"
+  order_status: "статус заказа"
   activerecord:
     errors:
       models:
@@ -169,8 +185,11 @@ ru:
             ownership:
               required: "(ownership is required) Форма собственности не указана" 
             inn:
+              invalid: "(inn is invalid) ИНН указан неверно"
               blank: "(inn is blank) ИНН не указан" 
               taken: "(inn is taken) такие ИНН+КПП уже есть в базе"
+            kpp:
+              invalid: "(kpp is invalid) КПП указан неверно"
             name: 
               taken: "(name already taken) Название организации уже использовалось" 
               blank: "(name is blank) Название организации не указано"
