@@ -3,31 +3,40 @@ class StageOrder < MutableData
   # аудит изменений
   include Auditable
 
-  belongs_to :stage
+  belongs_to :stage, optional: true
   belongs_to :isecurity_tool
-  belongs_to :organization
-  belongs_to :order_status
-  validates_associated :stage
+  belongs_to :order, optional: true
+  
   validates_associated :isecurity_tool
-  validates_associated :order_status
-  validates_associated :organization
-  validates :stage, uniqueness: { scope: [:stage, :isecurity_tool, :organization] }
+  
+  
 
   accepts_nested_attributes_for :isecurity_tool
-  accepts_nested_attributes_for :organization
-  accepts_nested_attributes_for :order_status
+  accepts_nested_attributes_for :order
+  
 
   alias_attribute :state, :isecurity_tool # для поддержки MutableData
 
+  def head
+    first_part = stage.nil? ? "" : stage.name
+    order_part = order.nil? ? "" : " "+order.name
+    first_part = first_part + order_part
+    second_part = isecurity_tool.nil? ? "" : " "+isecurity_tool.name
+    second_part += amount.nil? ? "" : " к-во: "+(amount.to_i).to_s  
+    first_part + second_part
+  end 
+  
   def name
-    isecurity_tool.name
+   head
   end
 
+  
+
   def card
-    super.merge({ stage: stage.item, isecurity_tool: isecurity_tool.item, organization: organization.item, order_status: order_status.item, amount: amount, requested_at: requested_at, order_number: order_number, ordered_at: ordered_at, payment_at: payment_at, received_at: received_at, description: description })
+    super.merge({ stage: stage.item, severity: severity, isecurity_tool: isecurity_tool.item,  order_status: order.item, amount: amount, cost: cost, description: description })
   end
 
   def self.permitted_params
-    super | [:stage_id, :isecurity_tool_id, :organization_id, :amount, :requested_at, :order_number, :ordered_at, :payment_at, :received_at, :description] | [isecurity_tool_attributes: IsecurityTool.permitted_params] | [organization_attributes: Organization.permitted_params] | [order_status_attributes: OrderStatus.permitted_params]
+    super | [:stage_id, :severity, :isecurity_tool_id, :amount, :price_cost, :cost, :order_id, :description] | [isecurity_tool_attributes: IsecurityTool.permitted_params] 
   end
 end
