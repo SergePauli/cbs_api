@@ -1,0 +1,7 @@
+client_contract:
+  id: 1
+  contract_id: 1
+  employee_id: 3
+  priority: 0
+  used: true
+  list_key: "56847bfa-a7a0-4ba7-8092-90eec765bed1"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_18_094544) do
+ActiveRecord::Schema.define(version: 2026_08_23_000000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,20 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["value", "type"], name: "index_contacts_on_value_and_type", unique: true
+  end
+
+  create_table "contract_responsibles", force: :cascade do |t|
+    t.bigint "contract_id", null: false, comment: "контракт"
+    t.bigint "employee_id", null: false, comment: "ответственное лицо"
+    t.integer "priority", default: 0, null: false, comment: "порядок в списке"
+    t.boolean "used", default: true, null: false, comment: "признак использования"
+    t.uuid "list_key", null: false, comment: "служебный ключ списка, для логгирования"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["contract_id", "employee_id"], name: "index_contract_responsibles_on_contract_id_and_employee_id", unique: true
+    t.index ["contract_id"], name: "index_contract_responsibles_on_contract_id"
+    t.index ["employee_id"], name: "index_contract_responsibles_on_employee_id"
+    t.index ["priority"], name: "index_contract_responsibles_on_priority"
   end
 
   create_table "contracts", force: :cascade do |t|
@@ -454,6 +468,8 @@ ActiveRecord::Schema.define(version: 2023_10_18_094544) do
   end
 
   add_foreign_key "addresses", "areas"
+  add_foreign_key "contract_responsibles", "contracts"
+  add_foreign_key "contract_responsibles", "employees"
   add_foreign_key "contracts", "contragents"
   add_foreign_key "contracts", "statuses"
   add_foreign_key "contracts", "task_kinds"

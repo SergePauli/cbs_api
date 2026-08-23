@@ -13,7 +13,6 @@ class CreateStages < ActiveRecord::Migration[6.1]
       t.date :payment_at, comment: "дата оплаты"
       t.date :prepayment_at, comment: "дата предоплаты"
       t.date :invoice_at, comment: "дата выставления счета на оплату"
-      t.date :closed_at, comment: "дата закрытия"
       t.integer :deadline_kind, comment: "вид срока"
       t.integer :payment_deadline_kind, comment: "вид срока оплаты"
       t.integer :payment_duration, comment: "дней на оплату"

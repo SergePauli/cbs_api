@@ -88,6 +88,14 @@ RSpec.describe Contract, type: :model do
     expect(data[:governmental]).to eq false
     expect(data[:signed_at]).to be_nil
     expect(data[:summary]).not_to be_nil
+    expect(data[:responsibles].first[:employee_id]).to eq employees(:client).id
+  end
+
+  it "не должна позволять сменить контрагента при несовместимых ответственных" do
+    test_one.contragent = contragents(:med_rzd)
+
+    expect(test_one).not_to be_valid
+    expect(test_one.errors[:contragent]).not_to be_empty
   end
   let (:contract_new) {
     Contract.new({ contragent_id: contragents(:kraskom).id, task_kind_id: task_kinds(:exam).id, cost: 30178 })
