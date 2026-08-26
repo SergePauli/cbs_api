@@ -6,6 +6,8 @@ ru:
   type: "тип"
   full_name: "полное наименование"
   Contract: "контракт"
+  ContractResponsible: "ответственное лицо по контракту"
+  contract_responsibles: "ответственные лица контрагента"
   Contragent: "контрагент"
   contragent: "контрагент"
   contragent_addresses: "список адресов"
@@ -295,4 +297,4 @@ ru:
         employee:
           attributes:
              person:
-              invalid: "Неверные персональные данные сотрудника"                                  
+              invalid: "Неверные персональные данные сотрудника"

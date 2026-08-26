@@ -5,6 +5,8 @@ class Employee < MutableData
   belongs_to :contragent, inverse_of: :employees
   belongs_to :person
   belongs_to :position
+  has_many :contract_responsibles, dependent: :restrict_with_error
+  has_many :responsible_contracts, through: :contract_responsibles, source: :contract
   validates_associated :contragent
   validates_associated :person
   validates_associated :position

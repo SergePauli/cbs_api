@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Model::Universals", type: :request do
-  fixtures :users, :people, :contacts, :positions, :contragents, :employees, :profiles
+  fixtures :users, :people, :contacts, :positions, :contragents, :employees, :profiles, :contracts, :contract_responsibles
 
   let (:test_user) {
     REDIS.del "tokens"
@@ -142,6 +142,53 @@ RSpec.describe "Model::Universals", type: :request do
       #puts response.body
       expect(response).to have_http_status(:ok)
       expect(Audit.count).to eq 6
+    end
+  end
+
+  describe "PUT model/Contract/:id" do
+    it "должен назначить ответственное лицо со стороны контрагента" do
+      contract = contracts(:krabcom_01_23_01)
+
+      put "/model/Contract/#{contract.id}", params: {
+        Contract: {
+          id: contract.id,
+          contract_responsibles_attributes: [{
+            employee_id: employees(:user).id,
+            priority: 1,
+            used: true,
+            list_key: SecureRandom.uuid
+          }]
+        },
+        data_set: "card"
+      }, headers: headers
+
+      expect(response).to have_http_status(:ok)
+      expect(contract.reload.responsible_employees).to include(employees(:user))
+      expect(JSON.parse(response.body)["responsibles"].map { |item| item["employee_id"] }).to include(employees(:user).id)
+    end
+
+    it "не должен назначить сотрудника другого контрагента" do
+      contract = contracts(:krabcom_01_23_01)
+      other_employee = Employee.create!(
+        contragent: contragents(:med_rzd),
+        person: people(:admin),
+        position: positions(:admin),
+        list_key: SecureRandom.uuid
+      )
+
+      put "/model/Contract/#{contract.id}", params: {
+        Contract: {
+          id: contract.id,
+          contract_responsibles_attributes: [{
+            employee_id: other_employee.id,
+            used: true,
+            list_key: SecureRandom.uuid
+          }]
+        }
+      }, headers: headers
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(contract.reload.responsible_employees).not_to include(other_employee)
     end
   end
 end

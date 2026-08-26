@@ -27,6 +27,19 @@ class Contract < ApplicationRecord
   belongs_to :contragent
   validates_associated :contragent
 
+  # Ответственные лица за исполнение контракта на стороне контрагента
+  has_many :contract_responsibles,
+           -> { order("priority ASC") },
+           inverse_of: :contract,
+           autosave: true,
+           dependent: :destroy
+  has_many :responsible_employees,
+           through: :contract_responsibles,
+           source: :employee
+  accepts_nested_attributes_for :contract_responsibles, allow_destroy: true
+
+  validate :responsibles_belong_to_contragent
+
   # Статус
   belongs_to :status
   validates_associated :status
@@ -62,12 +75,12 @@ class Contract < ApplicationRecord
     end
     deadline_ = to_date_str(deadline_)   
      
-    super.merge(basement).merge({ code: code, order: order, year: year, use_stage: stage ? stage.id : stages[0].id, stages: stages.map { |el| el.edit }, comments: comments.map { |el| el.card } || [], revisions: revisions.map { |el| el.basement }, expire_at: deadline_ })
+    super.merge(basement).merge({ code: code, order: order, year: year, use_stage: stage ? stage.id : stages[0].id, stages: stages.map { |el| el.edit }, comments: comments.map { |el| el.card } || [], revisions: revisions.map { |el| el.basement }, responsibles: contract_responsibles.map { |el| el.edit }, expire_at: deadline_ })
   end
 
   # получаем массив разрешенных параметров запросов на добавление и изменение
   def self.permitted_params
-    super | [:year, :code, :order, :contragent_id, :task_kind_id, :status_id, :governmental, :external_number, :signed_at, :deadline_at, :closed_at] | [stages_attributes: Stage.permitted_params] | [comments_attributes: Comment.permitted_params] | [revisions_attributes: Revision.permitted_params]
+    super | [:year, :code, :order, :contragent_id, :task_kind_id, :status_id, :governmental, :external_number, :signed_at, :deadline_at, :closed_at] | [stages_attributes: Stage.permitted_params] | [comments_attributes: Comment.permitted_params] | [revisions_attributes: Revision.permitted_params] | [contract_responsibles_attributes: ContractResponsible.permitted_params]
   end
 
   EXPIRATION_DATE_RANSACK_QUERY = <<~SQL.squish
@@ -107,6 +120,16 @@ class Contract < ApplicationRecord
   end
 
   private
+
+  def responsibles_belong_to_contragent
+    invalid_responsible = contract_responsibles.reject(&:marked_for_destruction?).any? do |responsible|
+      responsible.employee && responsible.employee.contragent_id != contragent_id
+    end
+
+    if invalid_responsible
+      errors.add(:contragent, "не соответствует контрагенту назначенных ответственных")
+    end
+  end
 
   # назначаем сквозной номер контракту
   def generate_order
