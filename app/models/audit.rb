@@ -1,5 +1,6 @@
 class Audit < ApplicationRecord
 
+  	
   # Персонализация авторства
   include Personable
 
@@ -7,7 +8,12 @@ class Audit < ApplicationRecord
   belongs_to :user
 
   enum action: [:added, :updated, :removed, :archived, :imported]
+  AUDITABLE_CLASSES = {
+    "Stage"    => Stage,
+    "Contract" => Contract
+  }.freeze
 
+  before_validation :resolve_auditable, on: :create
   validates :action, presence: true, inclusion: { in: actions.keys }
   validates :user, presence: true
   validates_associated :user
@@ -37,6 +43,19 @@ class Audit < ApplicationRecord
 
   # атрибуты для добавления
   def self.permitted_params
-    super | [:action, :auditable_field, :detail, :before, :after, :user_id, :_destroy]
+    super | [:auditable_type, :auditable_id, :action, :auditable_field, :detail, :before, :after, :user_id, :person_id,:_destroy]
   end
+ private
+   def resolve_auditable
+     auditable_class = AUDITABLE_CLASSES[auditable_type]
+
+     unless auditable_class
+       errors.add(:auditable_type, "не поддерживается")
+      return
+     end
+
+     self.auditable = auditable_class.find_by(id: auditable_id)
+
+     errors.add(:auditable, "не найден") unless auditable
+   end
 end

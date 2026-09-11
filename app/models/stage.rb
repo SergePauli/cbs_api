@@ -99,6 +99,7 @@ class Stage < MutableData
 
   # кастомная валидация  статуса (в случае если статус указан, но неверно, мы узнаем об этом)
   def validate_status
-    errors.add(:status, ["(status invalid) Указано невалидное значение id статуса"]) if status_id != nil && status.nil?
-  end
-end
+    return if status_id.nil?
+    return if Status.exists?(id: status_id)
+    errors.add(:status_id, "(status invalid) Указано невалидное значение id статуса")
+  end end
